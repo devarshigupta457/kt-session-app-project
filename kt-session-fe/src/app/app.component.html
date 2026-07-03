@@ -1,0 +1,9 @@
+<div class="add-message" *ngIf="message">{{ message }}</div>
+<div class="container">
+    <app-header></app-header>
+    <main [@routeFade]="prepareRoute(outlet)">
+        <router-outlet #outlet="outlet"></router-outlet>
+    </main>
+</div>
+<app-footer></app-footer>
+<app-add-course-modal></app-add-course-modal>

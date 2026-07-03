@@ -1,0 +1,19 @@
+{
+  "seller": [
+    {
+      "name": "devagupta",
+      "password": "Deva@123",
+      "email": "deva@gmail.com",
+      "id": 1
+    }
+  ],
+  "course": [
+    {
+      "id": 1,
+      "title": "JavaScript",
+      "price": 1000,
+      "description": "Learn JavaScript from scratch",
+      "link": "https://example.com/javascript-course.jpg"
+    }
+  ]
+}

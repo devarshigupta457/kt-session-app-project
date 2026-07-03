@@ -1,0 +1,15 @@
+<div class="cart-wrap">
+  <h1>Your Favourites Cources, It's a great way to keep track of your learning!</h1>
+
+  <p *ngIf="!items.length" class="cart-empty">Your have not saved any course to Favourites...</p>
+
+  <ul class="cart-list" *ngIf="items.length">
+    <li *ngFor="let item of items" class="cart-item">
+      <div>
+        <span class="cart-title">{{ item.title }}</span>
+        <span class="cart-price">₹{{ item.price }}</span>
+      </div>
+      <button class="cart-remove" (click)="remove(item.id)">Remove</button>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apache Kafka — Interview Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f6f8;
+    --surface:#ffffff;
+    --ink:#15202e;
+    --ink-soft:#3c4a5c;
+    --muted:#6c7789;
+    --line:#e4e8ee;
+    --line-strong:#cfd6df;
+    --accent:#0e7c86;
+    --accent-deep:#0a5b63;
+    --accent-wash:#e3f1f2;
+    --amber:#b45309;
+    --amber-wash:#fbf0e2;
+    --code-bg:#111823;
+    --code-fg:#dbe3ec;
+    --code-dim:#7c8ba0;
+    --code-key:#7fd8c9;
+    --code-str:#e0b878;
+    --code-com:#5e6b7e;
+    --radius:10px;
+    --maxw:1180px;
+    --sidebar:262px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+    font-size:16px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent-deep);text-decoration:none}
+  a:hover{text-decoration:underline}
+  :focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:3px}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:var(--ink);
+    color:#eef2f6;
+    padding:56px 28px 46px;
+    border-bottom:3px solid var(--accent);
+  }
+  .hero-inner{max-width:var(--maxw);margin:0 auto}
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--code-key);margin:0 0 14px;
+  }
+  .hero h1{
+    font-family:"Space Grotesk",sans-serif;
+    font-weight:700;font-size:clamp(2rem,5vw,3.3rem);
+    line-height:1.02;margin:0 0 14px;letter-spacing:-.02em;
+  }
+  .hero h1 .light{color:#9fb0c2;font-weight:500}
+  .hero p.sub{color:#aebccb;max-width:52ch;margin:0 0 30px;font-size:1.02rem}
+  .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+  .tags span{
+    font-family:"IBM Plex Mono",monospace;font-size:12px;
+    padding:5px 11px;border:1px solid #33445a;border-radius:100px;color:#c5d1de;
+  }
+
+  /* ---------- SIGNATURE: partition-log lanes ---------- */
+  .log{margin:34px 0 4px;font-family:"IBM Plex Mono",monospace;font-size:12.5px}
+  .log-label{color:var(--code-com);margin-bottom:10px;letter-spacing:.04em}
+  .log-label b{color:var(--code-str);font-weight:600}
+  .lane{display:flex;align-items:center;gap:10px;margin:7px 0}
+  .lane .pid{color:var(--code-key);width:26px;flex:none}
+  .cells{display:flex;gap:5px;flex-wrap:wrap}
+  .cell{
+    width:32px;height:26px;display:grid;place-items:center;
+    border:1px solid #33445a;border-radius:5px;color:#8fa0b3;
+    background:#1a2534;font-size:11px;
+  }
+  .cell.head{border-color:var(--accent);color:var(--code-key);background:#12303266}
+
+  /* ---------- LAYOUT ---------- */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;
+        display:grid;grid-template-columns:var(--sidebar) 1fr;gap:44px;align-items:start}
+  /* ---------- TOC ---------- */
+  .toc{
+    position:sticky;top:0;max-height:100vh;overflow-y:auto;
+    padding:34px 4px 40px;
+  }
+  .toc h2{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 14px;font-weight:600;
+  }
+  .toc ol{list-style:none;margin:0 0 22px;padding:0;counter-reset:t}
+  .toc .grp{
+    font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:.82rem;
+    color:var(--ink);text-transform:uppercase;letter-spacing:.05em;
+    margin:18px 0 8px;padding-left:2px;
+  }
+  .toc a{
+    display:block;color:var(--ink-soft);font-size:.9rem;line-height:1.35;
+    padding:5px 10px 5px 12px;border-left:2px solid transparent;border-radius:0 6px 6px 0;
+  }
+  .toc a:hover{background:#eaeef3;text-decoration:none}
+  .toc a.active{color:var(--accent-deep);border-left-color:var(--accent);
+                background:var(--accent-wash);font-weight:600}
+
+  /* ---------- MAIN ---------- */
+  main{padding:34px 0 90px;min-width:0}
+  .part{scroll-margin-top:20px;margin-bottom:16px}
+  .part-head{
+    display:flex;align-items:baseline;gap:16px;margin:52px 0 6px;
+    padding-top:26px;border-top:1px solid var(--line-strong);
+  }
+  .part:first-of-type .part-head{border-top:none;padding-top:0;margin-top:4px}
+  .part-num{
+    font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:12px;
+    color:#fff;background:var(--accent);padding:4px 9px;border-radius:6px;
+    flex:none;letter-spacing:.05em;
+  }
+  .part-head h2{
+    font-family:"Space Grotesk",sans-serif;font-weight:700;
+    font-size:clamp(1.4rem,3vw,2rem);letter-spacing:-.01em;margin:0;line-height:1.1;
+  }
+  section.card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 30px;margin:18px 0;scroll-margin-top:20px;
+  }
+  section.card > h3{
+    font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:1.24rem;
+    margin:0 0 14px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:11px;
+  }
+  section.card > h3 .n{
+    font-family:"IBM Plex Mono",monospace;font-size:.72em;color:var(--accent);
+    font-weight:600;flex:none;
+  }
+  h4{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:1rem;
+     margin:22px 0 8px;color:var(--ink)}
+  p{margin:0 0 14px}
+  section.card p:last-child{margin-bottom:0}
+  strong{font-weight:600;color:var(--ink)}
+  code{
+    font-family:"IBM Plex Mono",monospace;font-size:.86em;
+    background:#eef1f5;color:#0c3f44;padding:2px 6px;border-radius:5px;
+    border:1px solid #e0e5ec;
+  }
+
+  ul,ol.list{margin:6px 0 16px;padding-left:22px}
+  li{margin:6px 0}
+  li::marker{color:var(--accent)}
+
+  /* ---------- TABLES ---------- */
+  .tbl-scroll{overflow-x:auto;margin:14px 0 18px;border-radius:8px;border:1px solid var(--line)}
+  table{border-collapse:collapse;width:100%;font-size:.92rem}
+  th,td{padding:11px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+  thead th{
+    background:#f0f3f6;font-family:"IBM Plex Mono",monospace;font-size:.76rem;
+    letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;
+    border-bottom:1.5px solid var(--line-strong);
+  }
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:#f8fafb}
+  td code{background:#eef1f5}
+
+  /* ---------- CODE BLOCKS ---------- */
+  .code{
+    position:relative;background:var(--code-bg);border-radius:9px;margin:14px 0 18px;
+    overflow:hidden;border:1px solid #1e293a;
+  }
+  .code .lang{
+    position:absolute;top:0;right:0;font-family:"IBM Plex Mono",monospace;
+    font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--code-dim);background:#0b111a;padding:5px 12px;border-radius:0 9px 0 9px;
+  }
+  pre{margin:0;padding:18px 20px;overflow-x:auto}
+  pre code{
+    background:none;border:none;padding:0;color:var(--code-fg);
+    font-size:13px;line-height:1.6;white-space:pre;
+  }
+  .code .k{color:var(--code-key)}
+  .code .s{color:var(--code-str)}
+  .code .c{color:var(--code-com);font-style:italic}
+  .code .a{color:#9db4d0}
+
+  /* ---------- CALLOUTS ---------- */
+  .note{
+    border-left:3px solid var(--accent);background:var(--accent-wash);
+    padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0;font-size:.95rem;
+  }
+  .note.gold{border-left-color:var(--amber);background:var(--amber-wash)}
+  .note .lbl{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;font-weight:600;display:block;margin-bottom:4px;
+  }
+  .note .lbl{color:var(--accent-deep)}
+  .note.gold .lbl{color:var(--amber)}
+  .note p:last-child{margin-bottom:0}
+
+  /* ---------- Q&A ---------- */
+  .qa{display:flex;flex-direction:column;gap:10px}
+  details.q{
+    background:var(--surface);border:1px solid var(--line);border-radius:9px;
+    overflow:hidden;
+  }
+  details.q[open]{border-color:var(--line-strong)}
+  summary{
+    cursor:pointer;list-style:none;padding:15px 20px;font-weight:600;
+    display:flex;gap:12px;align-items:flex-start;color:var(--ink);
+  }
+  summary::-webkit-details-marker{display:none}
+  summary .qmark{
+    font-family:"IBM Plex Mono",monospace;color:var(--accent);font-weight:600;
+    flex:none;transition:transform .2s ease;
+  }
+  @media (prefers-reduced-motion: reduce){summary .qmark{transition:none}}
+  details.q[open] summary .qmark{transform:rotate(90deg);color:var(--amber)}
+  summary:hover{background:#f8fafb}
+  .answer{padding:0 20px 18px 47px;color:var(--ink-soft);font-size:.95rem}
+  .answer p{margin:0}
+
+  /* ---------- FLOW DIAGRAM ---------- */
+  .flow{
+    font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--code-fg);
+    background:var(--code-bg);border-radius:9px;padding:20px;overflow-x:auto;
+    line-height:1.9;border:1px solid #1e293a;
+  }
+  .flow .box{color:var(--code-key)}
+  .flow .arr{color:var(--code-com)}
+
+  /* ---------- TIPS FOOTER ---------- */
+  .tips{background:var(--ink);color:#e7edf3;border-radius:var(--radius);
+        padding:30px 32px;margin:30px 0 0}
+  .tips h3{font-family:"Space Grotesk",sans-serif;color:#fff;margin:0 0 16px;font-size:1.25rem}
+  .tips ol{counter-reset:tp;list-style:none;padding:0;margin:0}
+  .tips li{
+    counter-increment:tp;padding-left:40px;position:relative;margin:11px 0;color:#c6d2df;
+  }
+  .tips li::before{
+    content:counter(tp);position:absolute;left:0;top:1px;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--ink);
+    background:var(--code-key);width:24px;height:24px;border-radius:6px;display:grid;place-items:center;
+  }
+  .tips strong{color:#fff}
+  .signoff{text-align:center;color:var(--muted);font-size:.85rem;margin:26px 0 0;
+           font-family:"IBM Plex Mono",monospace}
+
+  /* ---------- MOBILE ---------- */
+  .toc-toggle{display:none}
+  @media (max-width:960px){
+    .wrap{grid-template-columns:1fr;gap:0;padding:0 18px}
+    .toc{position:static;max-height:none;padding:0;
+         border:1px solid var(--line);border-radius:10px;background:var(--surface);
+         margin:22px 0 6px;overflow:hidden}
+    .toc-body{display:none;padding:6px 12px 16px}
+    .toc-body.open{display:block}
+    .toc-toggle{
+      display:flex;width:100%;justify-content:space-between;align-items:center;
+      background:none;border:none;padding:15px 16px;cursor:pointer;
+      font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:.95rem;color:var(--ink);
+    }
+    .toc-toggle .chev{transition:transform .2s ease;color:var(--accent)}
+    .toc-toggle[aria-expanded="true"] .chev{transform:rotate(180deg)}
+    main{padding:14px 0 70px}
+    .hero{padding:44px 20px 38px}
+    section.card{padding:22px 18px}
+    .answer{padding-left:20px}
+  }
+
+  /* ---------- PRINT ---------- */
+  @media print{
+    body{background:#fff;font-size:11.5pt}
+    .hero{background:#fff;color:#000;border-bottom:2px solid #000;padding:0 0 18px}
+    .hero .eyebrow,.hero h1 .light,.hero p.sub{color:#333}
+    .hero h1{color:#000}
+    .tags,.log{display:none}
+    .wrap{display:block;padding:0;max-width:100%}
+    .toc{display:none}
+    .code,.flow{background:#f3f4f6;color:#111;border:1px solid #ccc}
+    .code .lang{background:#e5e7eb;color:#555}
+    pre code,.code .k,.code .s,.code .c,.code .a,.flow .box,.flow .arr{color:#111}
+    .tips{background:#fff;color:#000;border:1px solid #000}
+    .tips h3,.tips strong{color:#000}
+    .tips li{color:#000}
+    .tips li::before{background:#000;color:#fff}
+    details.q{border:1px solid #bbb}
+    details.q .answer{display:block!important}
+    summary .qmark{transform:rotate(90deg)}
+    section.card{border:1px solid #ddd;break-inside:avoid}
+    .part-head{break-after:avoid}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">Interview Notes · 3.5 yrs experience</p>
+    <h1>Apache Kafka <span class="light">from the log up</span></h1>
+    <p class="sub">Core concepts, Spring Boot integration, and hands-on implementation — written plainly, with code you can talk through under pressure.</p>
+    <div class="tags">
+      <span>Core Concepts</span><span>Spring Boot</span><span>Implementation</span><span>Q&amp;A</span><span>Config Cheat Sheet</span>
+    </div>
+
+    <div class="log" aria-hidden="true">
+      <div class="log-label">TOPIC <b>orders</b> — split into partitions, each an ordered, offset-indexed log</div>
+      <div class="lane"><span class="pid">P0</span><div class="cells"><span class="cell head">0</span><span class="cell">1</span><span class="cell">2</span><span class="cell">3</span></div></div>
+      <div class="lane"><span class="pid">P1</span><div class="cells"><span class="cell head">0</span><span class="cell">1</span><span class="cell">2</span></div></div>
+      <div class="lane"><span class="pid">P2</span><div class="cells"><span class="cell head">0</span><span class="cell">1</span></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- ============ TOC ============ -->
+  <nav class="toc" aria-label="Table of contents">
+    <button class="toc-toggle" aria-expanded="false" aria-controls="tocBody">
+      <span>Contents</span><span class="chev">▾</span>
+    </button>
+    <div class="toc-body" id="tocBody">
+      <h2>On this page</h2>
+      <div class="grp">Part 1 · Core</div>
+      <ol>
+        <li><a href="#what-is-kafka">1. What is Kafka?</a></li>
+        <li><a href="#building-blocks">2. Building blocks</a></li>
+        <li><a href="#topics-partitions">3. Topics, partitions &amp; offsets</a></li>
+        <li><a href="#producers">4. Producer configs</a></li>
+        <li><a href="#consumers">5. Consumers &amp; groups</a></li>
+        <li><a href="#offsets">6. Offset management</a></li>
+        <li><a href="#delivery">7. Delivery semantics</a></li>
+        <li><a href="#replication">8. Replication &amp; ISR</a></li>
+        <li><a href="#retention">9. Retention &amp; compaction</a></li>
+        <li><a href="#kraft">10. Zookeeper vs KRaft</a></li>
+        <li><a href="#ecosystem">11. Ecosystem</a></li>
+      </ol>
+      <div class="grp">Part 2 · Spring Boot</div>
+      <ol>
+        <li><a href="#sb-dep">Dependency &amp; config</a></li>
+        <li><a href="#sb-producer">Producer</a></li>
+        <li><a href="#sb-consumer">Consumer</a></li>
+        <li><a href="#sb-ack">Manual acknowledgment</a></li>
+        <li><a href="#sb-dlt">Error handling &amp; DLT</a></li>
+        <li><a href="#sb-topic">Creating topics</a></li>
+      </ol>
+      <div class="grp">Part 3 · Implement</div>
+      <ol>
+        <li><a href="#impl-docker">Run locally (Docker)</a></li>
+        <li><a href="#impl-cli">CLI commands</a></li>
+        <li><a href="#impl-flow">End-to-end flow</a></li>
+      </ol>
+      <div class="grp">Part 4 · Q&amp;A</div>
+      <ol><li><a href="#quickfire">Quick-fire questions</a></li></ol>
+      <div class="grp">Part 5 · Reference</div>
+      <ol>
+        <li><a href="#cheatsheet">Config cheat sheet</a></li>
+        <li><a href="#final-tips">Final tips</a></li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ============ MAIN ============ -->
+  <main>
+
+    <!-- ===== PART 1 ===== -->
+    <div class="part">
+      <div class="part-head"><span class="part-num">PART 1</span><h2>Core Concepts</h2></div>
+
+      <section class="card" id="what-is-kafka">
+        <h3><span class="n">01</span>What is Kafka?</h3>
+        <p>Kafka is a <strong>distributed event-streaming platform</strong> used to publish, store, and process streams of records in real time. Think of it as a super-fast, durable, distributed message queue / commit log: producers write messages, Kafka stores them, and consumers read them — all at massive scale.</p>
+        <h4>Why companies use it</h4>
+        <ul>
+          <li>Decouples systems — the producer doesn't need to know the consumer.</li>
+          <li>Handles millions of messages per second.</li>
+          <li>Stores data durably — messages aren't deleted after reading, unlike a normal queue.</li>
+          <li>Multiple consumers can read the same data independently.</li>
+        </ul>
+        <p><strong>Common use cases:</strong> log aggregation, event sourcing, real-time analytics, microservice communication, tracking user activity, streaming ETL.</p>
+      </section>
+
+      <section class="card" id="building-blocks">
+        <h3><span class="n">02</span>Core Building Blocks</h3>
+        <div class="tbl-scroll"><table>
+          <thead><tr><th>Term</th><th>Simple meaning</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Producer</strong></td><td>App that sends / writes messages.</td></tr>
+            <tr><td><strong>Consumer</strong></td><td>App that reads messages.</td></tr>
+            <tr><td><strong>Broker</strong></td><td>A single Kafka server. Stores data and serves requests.</td></tr>
+            <tr><td><strong>Cluster</strong></td><td>A group of brokers working together.</td></tr>
+            <tr><td><strong>Topic</strong></td><td>A named category / feed where messages go (like a table name).</td></tr>
+            <tr><td><strong>Partition</strong></td><td>A topic is split into partitions for parallelism &amp; scale.</td></tr>
+            <tr><td><strong>Offset</strong></td><td>A unique sequential ID for each message inside a partition.</td></tr>
+            <tr><td><strong>Consumer Group</strong></td><td>A set of consumers sharing the work of reading a topic.</td></tr>
+            <tr><td><strong>Zookeeper / KRaft</strong></td><td>Manages cluster metadata &amp; coordination.</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section class="card" id="topics-partitions">
+        <h3><span class="n">03</span>Topics, Partitions &amp; Offsets</h3>
+        <p>A <strong>topic</strong> is a logical stream of messages. Internally it's divided into <strong>partitions</strong>, and each message gets an <strong>offset</strong> — its position number within a partition.</p>
+        <div class="code"><span class="lang">layout</span><pre><code>Topic: "orders"
+
+Partition 0:  [msg0][msg1][msg2][msg3]   ->  offsets 0,1,2,3
+Partition 1:  [msg0][msg1][msg2]         ->  offsets 0,1,2
+Partition 2:  [msg0][msg1]               ->  offsets 0,1</code></pre></div>
+        <h4>Key points to say in an interview</h4>
+        <ul>
+          <li>Ordering is <strong>guaranteed only within a partition</strong>, not across the whole topic.</li>
+          <li>Partitions allow <strong>parallelism</strong>: more partitions means more consumers can read in parallel.</li>
+          <li>Messages with the <strong>same key</strong> always land in the <strong>same partition</strong>, keeping per-key ordering (e.g. all events for <code>customerId=101</code> stay in order).</li>
+        </ul>
+        <h4>How Kafka decides the partition</h4>
+        <ol class="list">
+          <li>If a partition is specified &rarr; use it.</li>
+          <li>Else if a key is given &rarr; <code>hash(key) % numberOfPartitions</code>.</li>
+          <li>Else &rarr; round-robin (sticky partitioning in newer versions).</li>
+        </ol>
+      </section>
+
+      <section class="card" id="producers">
+        <h3><span class="n">04</span>Producers — Important Configs</h3>
+        <p>A producer sends messages to a topic. The most-asked producer topic is <code>acks</code> — the delivery guarantee.</p>
+        <div class="tbl-scroll"><table>
+          <thead><tr><th><code>acks</code> value</th><th>Meaning</th><th>Guarantee</th></tr></thead>
+          <tbody>
+            <tr><td><code>acks=0</code></td><td>Fire and forget. Don't wait for ack.</td><td>Fastest, can lose data.</td></tr>
+            <tr><td><code>acks=1</code></td><td>Wait for the leader to write.</td><td>Medium. Can lose data if the leader crashes before replication.</td></tr>
+            <tr><td><code>acks=all</code> (<code>-1</code>)</td><td>Wait for leader + all in-sync replicas.</td><td>Strongest, no data loss.</td></tr>
+          </tbody>
+        </table></div>
+        <h4>Other key producer configs</h4>
+        <ul>
+          <li><code>retries</code> &rarr; how many times to retry on failure.</li>
+          <li><code>enable.idempotence=true</code> &rarr; prevents duplicate messages on retry (exactly-once at the producer side).</li>
+          <li><code>batch.size</code> &amp; <code>linger.ms</code> &rarr; batch messages for throughput.</li>
+          <li><code>compression.type</code> (snappy, gzip, lz4) &rarr; reduce network usage.</li>
+        </ul>
+      </section>
+
+      <section class="card" id="consumers">
+        <h3><span class="n">05</span>Consumers &amp; Consumer Groups</h3>
+        <p>A <strong>consumer group</strong> is how Kafka scales reading and shares load.</p>
+        <div class="note"><span class="lbl">The Rule</span><p>Within a consumer group, <strong>each partition is read by exactly one consumer.</strong></p></div>
+        <div class="code"><span class="lang">example</span><pre><code>Topic "orders" has 3 partitions (P0, P1, P2)
+
+Consumer Group "order-service" with 3 consumers:
+  Consumer A -> P0
+  Consumer B -> P1
+  Consumer C -> P2      (perfectly balanced)
+
+Add a 4th consumer -> it stays IDLE (no free partition).
+A consumer dies     -> its partition is reassigned (rebalancing).</code></pre></div>
+        <div class="note gold"><span class="lbl">Interview gold</span>
+          <ul style="margin:0">
+            <li>Useful consumers in a group &le; number of partitions.</li>
+            <li><strong>Different consumer groups</strong> each get their own copy of all messages — two teams can read the same topic independently.</li>
+            <li><strong>Rebalancing</strong> redistributes partitions when consumers join/leave. Consumption pauses briefly during a rebalance (a known pain point).</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card" id="offsets">
+        <h3><span class="n">06</span>Offset Management &amp; Commits</h3>
+        <p>The <strong>offset</strong> tells Kafka where a consumer has read up to. Consumers commit offsets so that after a restart they resume from the right place.</p>
+        <h4>Commit strategies</h4>
+        <ul>
+          <li><strong>Auto commit</strong> (<code>enable.auto.commit=true</code>) — committed automatically at intervals. Easy but risky: may commit before processing (data loss) or reprocess (duplicates).</li>
+          <li><strong>Manual commit</strong> — you commit after successfully processing. Safer, more control.
+            <ul>
+              <li><code>commitSync()</code> &rarr; blocking, reliable.</li>
+              <li><code>commitAsync()</code> &rarr; non-blocking, faster, no retry on failure.</li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+      <section class="card" id="delivery">
+        <h3><span class="n">07</span>Delivery Semantics</h3>
+        <div class="tbl-scroll"><table>
+          <thead><tr><th>Semantic</th><th>Meaning</th><th>How to achieve</th></tr></thead>
+          <tbody>
+            <tr><td><strong>At most once</strong></td><td>May be lost, never duplicated.</td><td>Commit offset <em>before</em> processing.</td></tr>
+            <tr><td><strong>At least once</strong></td><td>Never lost, but may be duplicated.</td><td>Commit offset <em>after</em> processing (common default).</td></tr>
+            <tr><td><strong>Exactly once</strong></td><td>No loss, no duplicates.</td><td>Idempotent producer + transactions (<code>transactional.id</code>) + read-process-write.</td></tr>
+          </tbody>
+        </table></div>
+        <div class="note"><span class="lbl">In practice</span><p>Most real systems use <strong>at-least-once</strong> and make the consumer <strong>idempotent</strong> — safe to process the same message twice, e.g. using a unique message ID or an upsert.</p></div>
+      </section>
+
+      <section class="card" id="replication">
+        <h3><span class="n">08</span>Replication, Leader / Follower &amp; ISR</h3>
+        <p>For fault tolerance, each partition is <strong>replicated</strong> across brokers.</p>
+        <ul>
+          <li><strong>Leader</strong> — handles all reads/writes for that partition.</li>
+          <li><strong>Followers</strong> — copy data from the leader.</li>
+          <li><strong>ISR (In-Sync Replicas)</strong> — replicas fully caught up with the leader.</li>
+          <li><strong>Replication factor = 3</strong> is standard (1 leader + 2 followers). Survives failure of up to 2 brokers.</li>
+        </ul>
+        <p>If the leader dies, one of the ISR followers becomes the new leader automatically.</p>
+        <div class="note gold"><span class="lbl">Durability combo</span><p><code>min.insync.replicas</code> is the minimum replicas that must acknowledge a write when <code>acks=all</code>. The classic durable setup: <code>replication.factor=3</code>, <code>min.insync.replicas=2</code>, <code>acks=all</code>.</p></div>
+      </section>
+
+      <section class="card" id="retention">
+        <h3><span class="n">09</span>Retention &amp; Log Compaction</h3>
+        <p>Unlike a normal queue, Kafka <strong>keeps messages even after they are read.</strong></p>
+        <ul>
+          <li><strong>Time-based retention</strong>: <code>retention.ms</code> (e.g. keep 7 days).</li>
+          <li><strong>Size-based retention</strong>: <code>retention.bytes</code>.</li>
+          <li><strong>Log compaction</strong> (<code>cleanup.policy=compact</code>): keeps only the latest value for each key. Great for "current state" topics, e.g. the latest profile per user.</li>
+        </ul>
+      </section>
+
+      <section class="card" id="kraft">
+        <h3><span class="n">10</span>Zookeeper vs KRaft</h3>
+        <ul>
+          <li><strong>Older Kafka</strong> used <strong>Zookeeper</strong> for metadata, leader election, and config.</li>
+          <li><strong>Newer Kafka</strong> (2.8+, default in 3.x/4.x) uses <strong>KRaft</strong> (Kafka Raft) — Zookeeper is removed and Kafka manages its own metadata. Simpler, faster, fewer moving parts.</li>
+        </ul>
+        <div class="note"><span class="lbl">If asked "Is Zookeeper still needed?"</span><p>"New versions use KRaft mode and don't need Zookeeper, but many production clusters still run Zookeeper."</p></div>
+      </section>
+
+      <section class="card" id="ecosystem">
+        <h3><span class="n">11</span>Kafka Ecosystem</h3>
+        <ul>
+          <li><strong>Kafka Streams</strong> — Java library to process/transform streams (map, filter, join, aggregate) inside your app.</li>
+          <li><strong>Kafka Connect</strong> — ready-made connectors to move data in/out (DB &rarr; Kafka, Kafka &rarr; S3) without writing code.</li>
+          <li><strong>Schema Registry</strong> — stores Avro/Protobuf/JSON schemas so producers and consumers agree on message format and can evolve safely.</li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- ===== PART 2 ===== -->
+    <div class="part">
+      <div class="part-head"><span class="part-num">PART 2</span><h2>Kafka with Spring Boot</h2></div>
+      <p style="margin:0 0 4px;color:var(--ink-soft)">Spring Boot makes Kafka easy via <code>spring-kafka</code>. You mainly work with two things: <code>KafkaTemplate</code> to send messages, and <code>@KafkaListener</code> to receive them.</p>
+
+      <section class="card" id="sb-dep">
+        <h3><span class="n">01</span>Dependency &amp; Configuration</h3>
+        <h4>Maven dependency</h4>
+        <div class="code"><span class="lang">xml</span><pre><code>&lt;<span class="k">dependency</span>&gt;
+    &lt;<span class="k">groupId</span>&gt;org.springframework.kafka&lt;/<span class="k">groupId</span>&gt;
+    &lt;<span class="k">artifactId</span>&gt;spring-kafka&lt;/<span class="k">artifactId</span>&gt;
+&lt;/<span class="k">dependency</span>&gt;</code></pre></div>
+        <h4>application.yml</h4>
+        <div class="code"><span class="lang">yaml</span><pre><code><span class="k">spring</span>:
+  <span class="k">kafka</span>:
+    <span class="k">bootstrap-servers</span>: localhost:9092
+    <span class="k">producer</span>:
+      <span class="k">key-serializer</span>: org.apache.kafka.common.serialization.StringSerializer
+      <span class="k">value-serializer</span>: org.springframework.kafka.support.serializer.JsonSerializer
+      <span class="k">acks</span>: all
+    <span class="k">consumer</span>:
+      <span class="k">group-id</span>: order-service
+      <span class="k">auto-offset-reset</span>: earliest      <span class="c"># start from beginning if no committed offset</span>
+      <span class="k">key-deserializer</span>: org.apache.kafka.common.serialization.StringDeserializer
+      <span class="k">value-deserializer</span>: org.springframework.kafka.support.serializer.JsonDeserializer
+      <span class="k">properties</span>:
+        <span class="k">spring.json.trusted.packages</span>: <span class="s">"*"</span></code></pre></div>
+        <div class="note"><span class="lbl">auto-offset-reset</span><p><code>earliest</code> reads all existing messages; <code>latest</code> reads only new ones.</p></div>
+      </section>
+
+      <section class="card" id="sb-producer">
+        <h3><span class="n">02</span>Producer with <code>KafkaTemplate</code></h3>
+        <div class="code"><span class="lang">java</span><pre><code><span class="a">@Service</span>
+<span class="k">public class</span> OrderProducer {
+
+    <span class="k">private final</span> KafkaTemplate&lt;String, Order&gt; kafkaTemplate;
+
+    <span class="k">public</span> OrderProducer(KafkaTemplate&lt;String, Order&gt; kafkaTemplate) {
+        <span class="k">this</span>.kafkaTemplate = kafkaTemplate;
+    }
+
+    <span class="k">public void</span> sendOrder(Order order) {
+        <span class="c">// key = customerId keeps same-customer messages ordered</span>
+        kafkaTemplate.send(<span class="s">"orders"</span>, order.getCustomerId(), order);
+    }
+}</code></pre></div>
+        <h4>Async result handling (success / failure)</h4>
+        <div class="code"><span class="lang">java</span><pre><code>kafkaTemplate.send(<span class="s">"orders"</span>, order.getCustomerId(), order)
+    .whenComplete((result, ex) -&gt; {
+        <span class="k">if</span> (ex == <span class="k">null</span>) {
+            System.out.println(<span class="s">"Sent to partition "</span> +
+                result.getRecordMetadata().partition());
+        } <span class="k">else</span> {
+            System.out.println(<span class="s">"Failed: "</span> + ex.getMessage());
+        }
+    });</code></pre></div>
+      </section>
+
+      <section class="card" id="sb-consumer">
+        <h3><span class="n">03</span>Consumer with <code>@KafkaListener</code></h3>
+        <div class="code"><span class="lang">java</span><pre><code><span class="a">@Service</span>
+<span class="k">public class</span> OrderConsumer {
+
+    <span class="a">@KafkaListener</span>(topics = <span class="s">"orders"</span>, groupId = <span class="s">"order-service"</span>)
+    <span class="k">public void</span> consume(Order order) {
+        System.out.println(<span class="s">"Received order: "</span> + order.getId());
+        <span class="c">// ... process the order (save to DB, call service, etc.)</span>
+    }
+}</code></pre></div>
+        <h4>Getting full metadata (offset, partition, key)</h4>
+        <div class="code"><span class="lang">java</span><pre><code><span class="a">@KafkaListener</span>(topics = <span class="s">"orders"</span>, groupId = <span class="s">"order-service"</span>)
+<span class="k">public void</span> consume(ConsumerRecord&lt;String, Order&gt; record) {
+    System.out.println(<span class="s">"Key: "</span>       + record.key());
+    System.out.println(<span class="s">"Value: "</span>     + record.value());
+    System.out.println(<span class="s">"Partition: "</span> + record.partition());
+    System.out.println(<span class="s">"Offset: "</span>    + record.offset());
+}</code></pre></div>
+      </section>
+
+      <section class="card" id="sb-ack">
+        <h3><span class="n">04</span>Manual Acknowledgment (safer processing)</h3>
+        <p>Set the container to manual mode, then ack only after successful processing.</p>
+        <div class="code"><span class="lang">yaml</span><pre><code><span class="k">spring</span>:
+  <span class="k">kafka</span>:
+    <span class="k">listener</span>:
+      <span class="k">ack-mode</span>: manual</code></pre></div>
+        <div class="code"><span class="lang">java</span><pre><code><span class="a">@KafkaListener</span>(topics = <span class="s">"orders"</span>, groupId = <span class="s">"order-service"</span>)
+<span class="k">public void</span> consume(Order order, Acknowledgment ack) {
+    <span class="k">try</span> {
+        processOrder(order);   <span class="c">// do the work</span>
+        ack.acknowledge();     <span class="c">// commit offset ONLY after success</span>
+    } <span class="k">catch</span> (Exception e) {
+        <span class="c">// don't ack -> message will be re-delivered</span>
+        log.error(<span class="s">"Processing failed, will retry"</span>, e);
+    }
+}</code></pre></div>
+      </section>
+
+      <section class="card" id="sb-dlt">
+        <h3><span class="n">05</span>Error Handling + Retry + Dead Letter Topic</h3>
+        <p>This shows senior-level knowledge. Spring can auto-retry, and if it keeps failing, push the message to a <strong>Dead Letter Topic (DLT)</strong> so it's not lost.</p>
+        <div class="code"><span class="lang">java</span><pre><code><span class="a">@Configuration</span>
+<span class="k">public class</span> KafkaErrorConfig {
+
+    <span class="a">@Bean</span>
+    <span class="k">public</span> DefaultErrorHandler errorHandler(KafkaTemplate&lt;String, Object&gt; template) {
+        <span class="c">// On repeated failure, send to &lt;topic&gt;.DLT</span>
+        DeadLetterPublishingRecoverer recoverer =
+                <span class="k">new</span> DeadLetterPublishingRecoverer(template);
+
+        <span class="c">// Retry 3 times, 1 second apart, then send to DLT</span>
+        FixedBackOff backOff = <span class="k">new</span> FixedBackOff(1000L, 3L);
+        <span class="k">return new</span> DefaultErrorHandler(recoverer, backOff);
+    }
+}</code></pre></div>
+        <h4>Consume from the Dead Letter Topic</h4>
+        <div class="code"><span class="lang">java</span><pre><code><span class="a">@KafkaListener</span>(topics = <span class="s">"orders.DLT"</span>, groupId = <span class="s">"dlt-group"</span>)
+<span class="k">public void</span> consumeDlt(Order failedOrder) {
+    log.warn(<span class="s">"Order landed in DLT: {}"</span>, failedOrder.getId());
+    <span class="c">// alert / store for manual inspection</span>
+}</code></pre></div>
+        <h4>Simpler declarative version with <code>@RetryableTopic</code></h4>
+        <div class="code"><span class="lang">java</span><pre><code><span class="a">@RetryableTopic</span>(attempts = <span class="s">"4"</span>, backoff = <span class="a">@Backoff</span>(delay = 2000))
+<span class="a">@KafkaListener</span>(topics = <span class="s">"orders"</span>, groupId = <span class="s">"order-service"</span>)
+<span class="k">public void</span> consume(Order order) {
+    processOrder(order); <span class="c">// auto retries, then DLT created automatically</span>
+}</code></pre></div>
+      </section>
+
+      <section class="card" id="sb-topic">
+        <h3><span class="n">06</span>Creating Topics from Spring Boot</h3>
+        <div class="code"><span class="lang">java</span><pre><code><span class="a">@Configuration</span>
+<span class="k">public class</span> TopicConfig {
+
+    <span class="a">@Bean</span>
+    <span class="k">public</span> NewTopic ordersTopic() {
+        <span class="k">return</span> TopicBuilder.name(<span class="s">"orders"</span>)
+                .partitions(3)
+                .replicas(3)
+                .build();
+    }
+}</code></pre></div>
+      </section>
+    </div>
+
+    <!-- ===== PART 3 ===== -->
+    <div class="part">
+      <div class="part-head"><span class="part-num">PART 3</span><h2>How to Implement</h2></div>
+
+      <section class="card" id="impl-docker">
+        <h3><span class="n">Step 1</span>Run Kafka locally with Docker</h3>
+        <div class="code"><span class="lang">docker-compose.yml · KRaft mode</span><pre><code><span class="k">services</span>:
+  <span class="k">kafka</span>:
+    <span class="k">image</span>: apache/kafka:latest
+    <span class="k">ports</span>:
+      - <span class="s">"9092:9092"</span>
+    <span class="k">environment</span>:
+      <span class="k">KAFKA_NODE_ID</span>: 1
+      <span class="k">KAFKA_PROCESS_ROLES</span>: broker,controller
+      <span class="k">KAFKA_LISTENERS</span>: PLAINTEXT://:9092,CONTROLLER://:9093
+      <span class="k">KAFKA_ADVERTISED_LISTENERS</span>: PLAINTEXT://localhost:9092
+      <span class="k">KAFKA_CONTROLLER_QUORUM_VOTERS</span>: 1@localhost:9093
+      <span class="k">KAFKA_CONTROLLER_LISTENER_NAMES</span>: CONTROLLER
+      <span class="k">KAFKA_LISTENER_SECURITY_PROTOCOL_MAP</span>: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      <span class="k">KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR</span>: 1</code></pre></div>
+        <p>Run it: <code>docker compose up -d</code></p>
+      </section>
+
+      <section class="card" id="impl-cli">
+        <h3><span class="n">Step 2</span>Useful CLI Commands</h3>
+        <div class="code"><span class="lang">bash</span><pre><code><span class="c"># Create a topic</span>
+kafka-topics.sh --create --topic orders --partitions 3 \
+  --replication-factor 1 --bootstrap-server localhost:9092
+
+<span class="c"># List topics</span>
+kafka-topics.sh --list --bootstrap-server localhost:9092
+
+<span class="c"># Describe a topic (partitions, leader, ISR)</span>
+kafka-topics.sh --describe --topic orders --bootstrap-server localhost:9092
+
+<span class="c"># Produce messages from console</span>
+kafka-console-producer.sh --topic orders --bootstrap-server localhost:9092
+
+<span class="c"># Consume messages from console</span>
+kafka-console-consumer.sh --topic orders --from-beginning \
+  --bootstrap-server localhost:9092
+
+<span class="c"># Check consumer group lag (very common in production!)</span>
+kafka-consumer-groups.sh --describe --group order-service \
+  --bootstrap-server localhost:9092</code></pre></div>
+        <div class="note gold"><span class="lbl">Consumer lag</span><p>Lag = latest offset &minus; committed offset — how far behind a consumer is. High lag means the consumer is too slow or stuck. Interviewers love this metric.</p></div>
+      </section>
+
+      <section class="card" id="impl-flow">
+        <h3><span class="n">Step 3</span>End-to-End Flow in a Real Project</h3>
+        <div class="flow" aria-hidden="true"><span class="box">[Order API]</span> <span class="arr">--produce--&gt;</span> <span class="box">[Kafka topic "orders"]</span> <span class="arr">--consume--&gt;</span> <span class="box">[Inventory Service]</span>
+                                     <span class="arr">|</span>
+                                     <span class="arr">+--consume--&gt;</span> <span class="box">[Notification Service]</span>
+                                     <span class="arr">|</span>
+                                     <span class="arr">+--consume--&gt;</span> <span class="box">[Analytics Service]</span></div>
+        <p>One event, many independent consumers — this is the power of Kafka for event-driven microservices.</p>
+      </section>
+    </div>
+
+    <!-- ===== PART 4 ===== -->
+    <div class="part">
+      <div class="part-head"><span class="part-num">PART 4</span><h2>Quick-Fire Q&amp;A</h2></div>
+      <p style="margin:0 0 6px;color:var(--ink-soft)" id="quickfire">Tap a question to reveal the answer — try answering out loud first.</p>
+
+      <div class="qa">
+        <details class="q"><summary><span class="qmark">&gt;</span>Difference between Kafka and a traditional message queue (RabbitMQ)?</summary>
+          <div class="answer"><p>Kafka keeps messages after they're read (log-based, replayable) and scales via partitions; multiple consumer groups can read the same data. RabbitMQ typically deletes a message once acknowledged and is a "smart broker, dumb consumer" model. Kafka is "dumb broker, smart consumer" — the consumer tracks its own offset.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>How does Kafka guarantee ordering?</summary>
+          <div class="answer"><p>Only within a partition. Use the same key for messages that must stay ordered.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>What happens if a consumer in a group fails?</summary>
+          <div class="answer"><p>A rebalance happens; its partitions are reassigned to other consumers in the group.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>Can two consumers read the same partition?</summary>
+          <div class="answer"><p>Not within the same consumer group. But consumers in different groups can.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>How do you avoid duplicate processing?</summary>
+          <div class="answer"><p>Use idempotent consumers (unique message key + upsert / dedup table), or exactly-once semantics with transactions.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>How to increase throughput?</summary>
+          <div class="answer"><p>More partitions, batching (<code>linger.ms</code>, <code>batch.size</code>), compression, and more consumers (up to partition count).</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>What is consumer lag and why does it matter?</summary>
+          <div class="answer"><p>It's how many messages the consumer hasn't processed yet. Rising lag means consumers can't keep up — a key monitoring metric.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>What is the ISR?</summary>
+          <div class="answer"><p>In-Sync Replicas — replicas fully caught up with the leader; used for failover and durability guarantees with <code>acks=all</code>.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>Why can't you have more consumers than partitions (in one group)?</summary>
+          <div class="answer"><p>Each partition is assigned to only one consumer per group, so extra consumers stay idle.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>How do you handle a poison message (keeps failing)?</summary>
+          <div class="answer"><p>Retry with backoff, then route it to a Dead Letter Topic (DLT) for later inspection instead of blocking the partition.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>What did you use Kafka for in your projects? <em>(prepare your own real story)</em></summary>
+          <div class="answer"><p>Example — "We used Kafka to decouple our order service from inventory, notification, and analytics services. Orders were keyed by <code>customerId</code> to preserve per-customer ordering, we used <code>acks=all</code> with replication factor 3 for durability, manual acknowledgment for reliable processing, and a DLT for failed messages. We monitored consumer lag in Grafana."</p></div>
+        </details>
+      </div>
+    </div>
+
+    <!-- ===== PART 5 ===== -->
+    <div class="part">
+      <div class="part-head"><span class="part-num">PART 5</span><h2>Config Cheat Sheet</h2></div>
+
+      <section class="card" id="cheatsheet">
+        <h3><span class="n">memorize</span>The configs interviewers probe</h3>
+        <div class="tbl-scroll"><table>
+          <thead><tr><th>Config</th><th>Purpose</th><th>Common value</th></tr></thead>
+          <tbody>
+            <tr><td><code>acks</code></td><td>Producer durability</td><td><code>all</code></td></tr>
+            <tr><td><code>enable.idempotence</code></td><td>No duplicate on retry</td><td><code>true</code></td></tr>
+            <tr><td><code>retries</code></td><td>Producer retry count</td><td>high / MAX</td></tr>
+            <tr><td><code>replication.factor</code></td><td>Copies of each partition</td><td><code>3</code></td></tr>
+            <tr><td><code>min.insync.replicas</code></td><td>Min replicas for <code>acks=all</code></td><td><code>2</code></td></tr>
+            <tr><td><code>enable.auto.commit</code></td><td>Auto vs manual offset commit</td><td><code>false</code> (manual)</td></tr>
+            <tr><td><code>auto.offset.reset</code></td><td>Where to start reading</td><td><code>earliest</code></td></tr>
+            <tr><td><code>max.poll.records</code></td><td>Messages per poll</td><td>tune for throughput</td></tr>
+            <tr><td><code>group.id</code></td><td>Consumer group name</td><td>per service</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <div class="tips" id="final-tips">
+        <h3>Final tips for the interview</h3>
+        <ol>
+          <li>Always mention <strong>partitions</strong> when talking about scaling &amp; ordering.</li>
+          <li>Know the <strong>acks + replication + min.insync.replicas</strong> durability combo.</li>
+          <li>Be ready to explain <strong>consumer groups &amp; rebalancing</strong> clearly.</li>
+          <li>Explain <strong>delivery semantics</strong> and how you'd make a consumer <strong>idempotent</strong>.</li>
+          <li>Have <strong>one real project story</strong> ready (see Part 4, last question).</li>
+          <li>Mention <strong>consumer lag</strong> monitoring — it signals production experience.</li>
+        </ol>
+      </div>
+      <p class="signoff">// good luck — go talk through the log</p>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // Mobile TOC toggle
+  var toggle = document.querySelector('.toc-toggle');
+  var tocBody = document.getElementById('tocBody');
+  if (toggle) {
+    toggle.addEventListener('click', function () {
+      var open = tocBody.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    // Collapse after choosing a link on mobile
+    tocBody.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        if (window.matchMedia('(max-width:960px)').matches) {
+          tocBody.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  }
+
+  // Scroll-spy: highlight active TOC link
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var map = {};
+  links.forEach(function (l) {
+    var id = l.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if (el) map[id] = l;
+  });
+  var targets = Object.keys(map).map(function (id) { return document.getElementById(id); });
+  var current = null;
+  function setActive(id) {
+    if (current === id) return;
+    current = id;
+    links.forEach(function (l) { l.classList.remove('active'); });
+    if (map[id]) map[id].classList.add('active');
+  }
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) setActive(e.target.id);
+    });
+  }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+  targets.forEach(function (t) { observer.observe(t); });
+</script>
+</body>
+</html>

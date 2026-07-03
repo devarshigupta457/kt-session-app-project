@@ -1,0 +1,25 @@
+<section class="hero">
+    <h1 class="home-head-line">
+        <span class="marquee"><span class="marquee-track">Welcome to the KTSession page&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;Welcome to the KTSession page&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;</span></span>
+    </h1>
+    <p class="hero-sub">Learn in-demand tech skills with structured courses and real, practitioner-written interview notes.</p>
+    <div class="hero-actions">
+        <a class="hero-cta" routerLink="/courses">Browse Courses</a>
+        <button *ngIf="auth.isAdmin$ | async" type="button" class="hero-cta hero-cta-secondary" (click)="addNewCourse()">+ Add Course</button>
+    </div>
+</section>
+
+<section class="features">
+    <div class="feature-card">
+        <h3>📚 Curated Notes</h3>
+        <p>Interview-ready notes for Kafka, Java, and more — written plainly, with code you can actually talk through.</p>
+    </div>
+    <div class="feature-card">
+        <h3>🛒 Simple Enrollment</h3>
+        <p>Add a course to your cart and start learning in seconds — no clutter, no friction.</p>
+    </div>
+    <div class="feature-card">
+        <h3>🧑‍💻 Built by Sellers</h3>
+        <p>Instructors list and manage their own courses through the Seller portal.</p>
+    </div>
+</section>

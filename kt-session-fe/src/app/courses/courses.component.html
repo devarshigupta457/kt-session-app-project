@@ -1,0 +1,52 @@
+<div class="courses-wrap">
+  <div class="courses-head">
+    <h1>Select course and start your Learning...</h1>
+  </div>
+
+  <div class="course-grid">
+    <div class="course-card" *ngFor="let course of courses" (click)="openCourse(course)">
+        
+      <h3>{{ course.title }}</h3>
+      <p>{{ course.description }}</p>
+      <div class="course-footer">
+        <span class="price">₹{{ course.price }}</span>
+        <div class="course-actions">
+          <button
+            class="cart-btn"
+            [class.added]="isInCart(course)"
+            (click)="addToCart(course, $event)">
+            {{ isInCart(course) ? 'Added ✓' : 'Favourites' }}
+          </button>
+          <button
+            class="open-btn"
+            (click)="openCourse(course, $event)">
+            Open Course
+          </button>
+          <button
+            *ngIf="auth.isAdmin$ | async"
+            class="edit-btn"
+            (click)="editCourse(course, $event)">
+            Edit
+          </button>
+          <button
+            *ngIf="auth.isAdmin$ | async"
+            class="delete-btn"
+            (click)="deleteCourse(course, $event)">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="trending-panel" *ngIf="trendingCourses.length">
+    <span class="trending-badge">🔥 Trending</span>
+    <h3>Recommended for you</h3>
+    <ul class="trending-list">
+      <li *ngFor="let t of trendingCourses">
+        <span>{{ t.title }}</span>
+        <button (click)="openCourse(t, $event)">Open</button>
+      </li>
+    </ul>
+  </div>
+</div>

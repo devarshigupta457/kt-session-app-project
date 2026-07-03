@@ -1,0 +1,15 @@
+
+.add-message {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: #e6f4ea;
+  color: #1e7d34;
+  border: 1px solid #b7e1c1;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}

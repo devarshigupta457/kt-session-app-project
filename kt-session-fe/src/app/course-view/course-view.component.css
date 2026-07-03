@@ -1,0 +1,7 @@
+.course-frame{
+    width: 100%;
+    height: calc(100vh - 170px);
+    border: none;
+    border-radius: 8px;
+    display: block;
+}

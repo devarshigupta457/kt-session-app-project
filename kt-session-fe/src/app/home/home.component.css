@@ -1,0 +1,104 @@
+.home-head-line{
+   color: #174064;
+}
+
+/* Smooth CSS marquee (replaces deprecated <marquee>) */
+.marquee{
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.marquee-track{
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee-scroll 14s linear infinite;
+}
+.marquee:hover .marquee-track{
+    animation-play-state: paused;
+}
+@keyframes marquee-scroll{
+    from { transform: translateX(0); }
+    to   { transform: translateX(-100%); }
+}
+
+.hero{
+    text-align: center;
+    padding: 40px 10px 50px;
+}
+.hero .home-head-line{
+    animation: fade-up 0.5s ease-out both;
+}
+.hero-sub{
+    color: #3c4a5c;
+    font-size: 1.05rem;
+    max-width: 60ch;
+    margin: 10px auto 24px;
+    animation: fade-up 0.5s ease-out 0.12s both;
+}
+.hero-actions{
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fade-up 0.5s ease-out 0.24s both;
+}
+.hero-cta{
+    display: inline-block;
+    background: #174064;
+    color: #fff;
+    text-decoration: none;
+    font: inherit;
+    font-weight: 600;
+    padding: 12px 28px;
+    border-radius: 6px;
+    border: 2px solid #174064;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.hero-cta:hover{
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 16px rgba(23, 64, 100, 0.3);
+}
+.hero-cta-secondary{
+    background: #fff;
+    color: #174064;
+}
+.hero-cta-secondary:hover{
+    background: #eef2f6;
+}
+
+.features{
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-bottom: 20px;
+}
+.feature-card{
+    flex: 1 1 260px;
+    max-width: 320px;
+    background: #f4f6f8;
+    border: 1px solid #e4e8ee;
+    border-radius: 10px;
+    padding: 22px;
+    animation: fade-up 0.5s ease-out both;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.feature-card:nth-child(1){ animation-delay: 0.30s; }
+.feature-card:nth-child(2){ animation-delay: 0.40s; }
+.feature-card:nth-child(3){ animation-delay: 0.50s; }
+.feature-card:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(23, 64, 100, 0.14);
+}
+.feature-card h3{
+    margin: 0 0 10px;
+    color: #174064;
+    font-size: 1.1rem;
+}
+.feature-card p{
+    margin: 0;
+    color: #3c4a5c;
+    font-size: .92rem;
+    line-height: 1.5;
+}

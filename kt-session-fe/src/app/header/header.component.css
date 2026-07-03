@@ -1,0 +1,114 @@
+.nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 5%;
+    background: #174064;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    z-index: 1000;
+}
+.nav-brand{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.nav-brand .logo{
+    height: 44px;
+    width: 44px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+.nav-brand .logo:hover{
+    transform: scale(1.08) rotate(-4deg);
+}
+.nav h1{
+    color: #f4f5f6;
+    margin: 0;
+    font-size: clamp(1.4rem, 5vw, 40px);
+}
+
+@media (max-width: 600px){
+    .nav-brand .logo{
+        height: 34px;
+        width: 34px;
+    }
+    .nav li{
+        padding-left: 12px;
+        padding-top: 0;
+    }
+}
+.nav ul{
+    display: inline-flex;
+    list-style-type: none;
+    margin: 0%;
+    padding: 0%;
+}
+.nav li{
+    padding-left: 15px;
+    padding-top: 15px;
+}
+.nav li a{
+    position: relative;
+    text-decoration: none;
+    color:#f4f5f6;
+    padding-bottom: 3px;
+}
+.nav li a::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: #f4f5f6;
+    transition: width 0.25s ease;
+}
+.nav li a:hover::after{
+    width: 100%;
+}
+.nav-social{
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+.nav-social a{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #f4f5f6;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.nav-social a::after{
+    display: none;
+}
+.nav-social a:hover{
+    transform: translateY(-2px) scale(1.12);
+    opacity: 0.85;
+}
+.nav .nav-search{
+    flex:1;
+    display: flex;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 5px;
+}
+.nav .nav-search input{
+    flex:1;
+    color:#f4f5f6;
+    border: 1px solid #f4f5f6;
+    height: 35px;
+    border-right: 0px;
+}
+.nav .nav-search button{
+    color:#f4f5f6;
+    border: 1px solid #f4f5f6;
+    height: 35px;
+    border-left: 0px;
+}

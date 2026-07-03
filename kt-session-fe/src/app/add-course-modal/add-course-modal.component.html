@@ -1,0 +1,19 @@
+<div class="modal-backdrop" *ngIf="isOpen" (click)="close()">
+  <form class="add-course-form" (click)="$event.stopPropagation()" (ngSubmit)="addCourse()">
+    <div class="add-course-form-head">
+      <h3>{{ editMode ? 'Edit Course' : 'Add New Course' }}</h3>
+      <button type="button" class="add-form-cancel" (click)="close()" aria-label="Close">✕</button>
+    </div>
+        <input type="text" placeholder="id" name="id" [(ngModel)]="newCourse.id" [readonly]="editMode" required/>
+    <input type="text" placeholder="Title" name="title" [(ngModel)]="newCourse.title" required />
+    <textarea placeholder="Description" name="description" [(ngModel)]="newCourse.description" required></textarea>
+    <input type="text" placeholder="Price" name="price" [(ngModel)]="newCourse.price" />
+     <input type="text" placeholder="Course link" name="link" [(ngModel)]="newCourse.link" required />
+    <label class="trending-check">
+      <input type="checkbox" name="trending" [(ngModel)]="newCourse.trending" /> Mark as trending
+    </label>
+    <button type="submit" class="open-btn" [disabled]="saving" *ngIf="!saving?'fill Dta':'ok'">
+      {{ saving ? 'Saving...' : (editMode ? 'Update Course' : 'Save Course') }}
+    </button >
+  </form>
+</div>
