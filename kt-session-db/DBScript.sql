@@ -27,3 +27,10 @@ WHERE
     USERNAME = 'admin';
 INSERT INTO users (username, password, role, full_name)
 VALUES ('admin', '$2a$10$XiCQ1j87FLg/AHFj5WlwR.bILtKck5ev4otqNYZCMz9IhUkpCjOP.', 'ADMIN', 'Administrator');
+
+
+CREATE TABLE KTS_FAV_COURSE (
+    ID VARCHAR(36) PRIMARY KEY,
+    USER_ID VARCHAR(36) NOT NULL,
+    COURSE_ID VARCHAR(36) NOT NULL
+);
