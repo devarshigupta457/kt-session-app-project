@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CartService, CartItem } from '../services/cart.service';
 import { Course } from '../services/CourseService';
 import { Router } from '@angular/router';
@@ -9,9 +9,11 @@ import { Router } from '@angular/router';
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css']
 })
-export class CartComponent {
+export class CartComponent implements OnInit {
 
-    courses: Course[] = [];
+  courses: Course[] = [];
+  loading = false;
+  error = '';
 
 
   constructor(public cartService: CartService,
@@ -19,12 +21,30 @@ export class CartComponent {
     
   ) {}
 
+  ngOnInit(): void {
+    this.loading = true;
+    this.error = '';
+    this.cartService.fetchFavorites().subscribe({
+      next: () => {
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+        this.error = 'loading your favourites. Please try again.';
+      }
+    });
+  }
+
   get items(): CartItem[] {
     return this.cartService.getItems();
   }
 
   remove(id: number): void {
-    this.cartService.removeItem(id);
+    this.cartService.removeItem(id).subscribe({
+      error: () => {
+        this.error = 'Could not remove this course from favourites. Please try again.';
+      }
+    });
   }
 
   openCourse(course: Course, event?: Event): void {

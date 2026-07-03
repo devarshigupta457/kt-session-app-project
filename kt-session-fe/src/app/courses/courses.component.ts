@@ -87,7 +87,18 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
   addToCart(course: Course, event: Event): void {
     event.stopPropagation();
-    this.cartService.addItem(course);
+    if (!this.auth.isLoggedIn) {
+      this.router.navigate(['/login'], { queryParams: { returnUrl: '/courses' } });
+      return;
+    }
+    if (!this.auth.currentUser?.userId) {
+      alert('Could not find your user id. Please log in again.');
+      return;
+    }
+
+    this.cartService.addItem(course).subscribe({
+      error: () => alert('Could not add this course to favourites. Please try again.')
+    });
   }
 
   openCourse(course: Course, event?: Event): void {

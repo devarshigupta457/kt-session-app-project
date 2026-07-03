@@ -1,9 +1,11 @@
 <div class="cart-wrap">
-  <h1>Your Favourites Cources, It's a great way to keep track of your learning!</h1>
+  <h1>Your Favourite Courses, It's a great way to keep track of your learning!</h1>
 
-  <p *ngIf="!items.length" class="cart-empty">Your have not saved any course to Favourites...</p>
+  <p *ngIf="loading" class="cart-empty">Loading your favourites...</p>
+  <p *ngIf="error" class="cart-error">{{ error }}</p>
+  <p *ngIf="!loading && !items.length" class="cart-empty">You have not saved any course to Favourites...</p>
 
-  <ul class="cart-list" *ngIf="items.length">
+  <ul class="cart-list" *ngIf="!loading && items.length">
     <li *ngFor="let item of items" class="cart-item">
       <div>
         <span class="cart-title">{{ item.title }}</span>

@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export interface AuthUser {
+  userId?: number;
   username: string;
   role: string;
   token?: string;
@@ -31,6 +32,7 @@ export class AuthService {
     return this.http.post<any>('/kt-session/login', { username, password }).pipe(
       map(res => {
         const user: AuthUser = {
+          userId: this.readUserId(res),
           username,
           role: (res && res.data.role) ? res.data.role : 'USER',
           token: res ? res.data.token : undefined
@@ -50,6 +52,7 @@ export class AuthService {
     return this.http.post<any>('/kt-session/signup', { username, email, password, fullName }).pipe(
       map(res => {
         const user: AuthUser = {
+          userId: this.readUserId(res),
           username,
           role: (res && res.data.role) ? res.data.role : 'USER',
           token: res ? res.data.token : undefined,
@@ -84,6 +87,12 @@ export class AuthService {
   private setUser(user: AuthUser): void {
     localStorage.setItem(this.storageKey, JSON.stringify(user));
     this.userSubject.next(user);
+  }
+
+  private readUserId(res: any): number | undefined {
+    const data = res?.data || res;
+    const id = data?.userId ?? data?.id ?? data?.user?.id ?? data?.user?.userId;
+    return typeof id === 'number' ? id : Number(id) || undefined;
   }
 
   private readStored(): AuthUser | null {

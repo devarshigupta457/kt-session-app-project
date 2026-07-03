@@ -13,6 +13,11 @@
   color: #667;
 }
 
+.cart-error {
+  color: #c0392b;
+  font-weight: 600;
+}
+
 .cart-list {
   list-style: none;
   margin: 0;
