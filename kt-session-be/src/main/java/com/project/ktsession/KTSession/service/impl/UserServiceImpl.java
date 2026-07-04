@@ -44,12 +44,12 @@ public class UserServiceImpl implements UserService {
         User savedUser = repository.save(user);
 
         // Publish Kafka event
-        kafkaProducerService.publish(
-                new UserRegisteredEvent(
-                        savedUser.getFullName(),
-                        savedUser.getEmail()
-                )
-        );
+        // kafkaProducerService.publish(
+        //         new UserRegisteredEvent(
+        //                 savedUser.getFullName(),
+        //                 savedUser.getEmail()
+        //         )
+        // );
 
         LoginResponse response = modelMapper.map(savedUser, LoginResponse.class);
         response.setMessage("Registration Successful");
