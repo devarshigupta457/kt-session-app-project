@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS — Interview Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f6f8;--surface:#ffffff;--ink:#15202e;--ink-soft:#3c4a5c;--muted:#6c7789;
+    --line:#e4e8ee;--line-strong:#cfd6df;--accent:#0e7c86;--accent-deep:#0a5b63;
+    --accent-wash:#e3f1f2;--amber:#b45309;--amber-wash:#fbf0e2;--code-bg:#111823;
+    --code-fg:#dbe3ec;--code-dim:#7c8ba0;--code-key:#7fd8c9;--code-str:#e0b878;
+    --code-com:#5e6b7e;--radius:10px;--maxw:1180px;--sidebar:262px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;font-size:16px;
+    line-height:1.62;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent-deep);text-decoration:none}
+  a:hover{text-decoration:underline}
+  :focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:3px}
+  .hero{background:var(--ink);color:#eef2f6;padding:56px 28px 46px;border-bottom:3px solid var(--accent)}
+  .hero-inner{max-width:var(--maxw);margin:0 auto}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--code-key);margin:0 0 14px}
+  .hero h1{font-family:"Space Grotesk",sans-serif;font-weight:700;
+    font-size:clamp(2rem,5vw,3.3rem);line-height:1.02;margin:0 0 14px;letter-spacing:-.02em}
+  .hero h1 .light{color:#9fb0c2;font-weight:500}
+  .hero p.sub{color:#aebccb;max-width:56ch;margin:0 0 30px;font-size:1.02rem}
+  .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+  .tags span{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:5px 11px;
+    border:1px solid #33445a;border-radius:100px;color:#c5d1de}
+  .pipe{margin:36px 0 4px;display:flex;align-items:stretch;gap:12px;flex-wrap:wrap;
+    font-family:"IBM Plex Mono",monospace}
+  .stage{display:flex;flex-direction:column;gap:3px;padding:11px 15px;border:1px solid #33445a;
+    border-radius:8px;background:#1a2534;min-width:104px}
+  .stage.lead{border-color:var(--accent);background:#12303266}
+  .st-file{color:var(--code-str);font-size:13px;font-weight:500}
+  .stage.lead .st-file{color:var(--code-key)}
+  .st-cap{color:var(--code-com);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase}
+  .pipe-arr{display:flex;align-items:center;color:var(--code-dim);font-size:12px;
+    letter-spacing:.04em;white-space:nowrap}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;display:grid;
+    grid-template-columns:var(--sidebar) 1fr;gap:44px;align-items:start}
+  .toc{position:sticky;top:0;max-height:100vh;overflow-y:auto;padding:34px 4px 40px}
+  .toc h2{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 14px;font-weight:600}
+  .toc ol{list-style:none;margin:0 0 22px;padding:0}
+  .toc .grp{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:.82rem;color:var(--ink);
+    text-transform:uppercase;letter-spacing:.05em;margin:18px 0 8px;padding-left:2px}
+  .toc a{display:block;color:var(--ink-soft);font-size:.9rem;line-height:1.35;
+    padding:5px 10px 5px 12px;border-left:2px solid transparent;border-radius:0 6px 6px 0}
+  .toc a:hover{background:#eaeef3;text-decoration:none}
+  .toc a.active{color:var(--accent-deep);border-left-color:var(--accent);
+    background:var(--accent-wash);font-weight:600}
+  main{padding:34px 0 90px;min-width:0}
+  .part{scroll-margin-top:20px;margin-bottom:16px}
+  .part-head{display:flex;align-items:baseline;gap:16px;margin:52px 0 6px;padding-top:26px;
+    border-top:1px solid var(--line-strong)}
+  .part:first-of-type .part-head{border-top:none;padding-top:0;margin-top:4px}
+  .part-num{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:12px;color:#fff;
+    background:var(--accent);padding:4px 9px;border-radius:6px;flex:none;letter-spacing:.05em}
+  .part-head h2{font-family:"Space Grotesk",sans-serif;font-weight:700;
+    font-size:clamp(1.4rem,3vw,2rem);letter-spacing:-.01em;margin:0;line-height:1.1}
+  section.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 30px;margin:18px 0;scroll-margin-top:20px}
+  section.card > h3{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:1.24rem;
+    margin:0 0 14px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:11px}
+  section.card > h3 .n{font-family:"IBM Plex Mono",monospace;font-size:.72em;color:var(--accent);
+    font-weight:600;flex:none}
+  h4{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:1rem;margin:22px 0 8px;color:var(--ink)}
+  p{margin:0 0 14px}
+  section.card p:last-child{margin-bottom:0}
+  strong{font-weight:600;color:var(--ink)}
+  code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:#eef1f5;color:#0c3f44;
+    padding:2px 6px;border-radius:5px;border:1px solid #e0e5ec}
+  ul,ol.list{margin:6px 0 16px;padding-left:22px}
+  li{margin:6px 0}
+  li::marker{color:var(--accent)}
+  .tbl-scroll{overflow-x:auto;margin:14px 0 18px;border-radius:8px;border:1px solid var(--line)}
+  table{border-collapse:collapse;width:100%;font-size:.92rem}
+  th,td{padding:11px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+  thead th{background:#f0f3f6;font-family:"IBM Plex Mono",monospace;font-size:.76rem;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--ink-soft);font-weight:600;border-bottom:1.5px solid var(--line-strong)}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:#f8fafb}
+  td code{background:#eef1f5}
+  .code{position:relative;background:var(--code-bg);border-radius:9px;margin:14px 0 18px;
+    overflow:hidden;border:1px solid #1e293a}
+  .code .lang{position:absolute;top:0;right:0;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--code-dim);background:#0b111a;
+    padding:5px 12px;border-radius:0 9px 0 9px}
+  pre{margin:0;padding:18px 20px;overflow-x:auto}
+  pre code{background:none;border:none;padding:0;color:var(--code-fg);font-size:13px;
+    line-height:1.6;white-space:pre}
+  .code .k{color:var(--code-key)}
+  .code .s{color:var(--code-str)}
+  .code .c{color:var(--code-com);font-style:italic}
+  .code .a{color:#9db4d0}
+  .note{border-left:3px solid var(--accent);background:var(--accent-wash);padding:14px 18px;
+    border-radius:0 8px 8px 0;margin:16px 0;font-size:.95rem}
+  .note.gold{border-left-color:var(--amber);background:var(--amber-wash)}
+  .note .lbl{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;font-weight:600;display:block;margin-bottom:4px;color:var(--accent-deep)}
+  .note.gold .lbl{color:var(--amber)}
+  .note p:last-child{margin-bottom:0}
+  .note ul{margin:0}
+  .qa{display:flex;flex-direction:column;gap:10px}
+  details.q{background:var(--surface);border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  details.q[open]{border-color:var(--line-strong)}
+  summary{cursor:pointer;list-style:none;padding:15px 20px;font-weight:600;display:flex;gap:12px;
+    align-items:flex-start;color:var(--ink)}
+  summary::-webkit-details-marker{display:none}
+  summary .qmark{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-weight:600;flex:none;
+    transition:transform .2s ease}
+  @media (prefers-reduced-motion: reduce){summary .qmark{transition:none}}
+  details.q[open] summary .qmark{transform:rotate(90deg);color:var(--amber)}
+  summary:hover{background:#f8fafb}
+  .answer{padding:0 20px 18px 47px;color:var(--ink-soft);font-size:.95rem}
+  .answer p{margin:0 0 10px}
+  .answer p:last-child{margin:0}
+  .flow{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--code-fg);
+    background:var(--code-bg);border-radius:9px;padding:20px;overflow-x:auto;line-height:1.9;
+    border:1px solid #1e293a}
+  .flow .box{color:var(--code-key)}
+  .flow .arr{color:var(--code-com)}
+  .flow .hl{color:var(--code-str)}
+  .tips{background:var(--ink);color:#e7edf3;border-radius:var(--radius);padding:30px 32px;margin:30px 0 0}
+  .tips h3{font-family:"Space Grotesk",sans-serif;color:#fff;margin:0 0 16px;font-size:1.25rem}
+  .tips ol{counter-reset:tp;list-style:none;padding:0;margin:0}
+  .tips li{counter-increment:tp;padding-left:40px;position:relative;margin:11px 0;color:#c6d2df}
+  .tips li::before{content:counter(tp);position:absolute;left:0;top:1px;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--ink);
+    background:var(--code-key);width:24px;height:24px;border-radius:6px;display:grid;place-items:center}
+  .tips strong{color:#fff}
+  .signoff{text-align:center;color:var(--muted);font-size:.85rem;margin:26px 0 0;
+    font-family:"IBM Plex Mono",monospace}
+  .toc-toggle{display:none}
+  @media (max-width:960px){
+    .wrap{grid-template-columns:1fr;gap:0;padding:0 18px}
+    .toc{position:static;max-height:none;padding:0;border:1px solid var(--line);border-radius:10px;
+      background:var(--surface);margin:22px 0 6px;overflow:hidden}
+    .toc-body{display:none;padding:6px 12px 16px}
+    .toc-body.open{display:block}
+    .toc-toggle{display:flex;width:100%;justify-content:space-between;align-items:center;background:none;
+      border:none;padding:15px 16px;cursor:pointer;font-family:"Space Grotesk",sans-serif;font-weight:600;
+      font-size:.95rem;color:var(--ink)}
+    .toc-toggle .chev{transition:transform .2s ease;color:var(--accent)}
+    .toc-toggle[aria-expanded="true"] .chev{transform:rotate(180deg)}
+    main{padding:14px 0 70px}
+    .hero{padding:44px 20px 38px}
+    section.card{padding:22px 18px}
+    .answer{padding-left:20px}
+  }
+  @media print{
+    body{background:#fff;font-size:11.5pt}
+    .hero{background:#fff;color:#000;border-bottom:2px solid #000;padding:0 0 18px}
+    .hero .eyebrow,.hero h1 .light,.hero p.sub{color:#333}
+    .hero h1{color:#000}
+    .tags,.pipe{display:none}
+    .wrap{display:block;padding:0;max-width:100%}
+    .toc{display:none}
+    .code,.flow{background:#f3f4f6;color:#111;border:1px solid #ccc}
+    .code .lang{background:#e5e7eb;color:#555}
+    pre code,.code .k,.code .s,.code .c,.code .a,.flow .box,.flow .arr,.flow .hl{color:#111}
+    .tips{background:#fff;color:#000;border:1px solid #000}
+    .tips h3,.tips strong,.tips li{color:#000}
+    .tips li::before{background:#000;color:#fff}
+    details.q{border:1px solid #bbb}
+    details.q .answer{display:block!important}
+    summary .qmark{transform:rotate(90deg)}
+    section.card{border:1px solid #ddd;break-inside:avoid}
+    .part-head{break-after:avoid}
+  }
+</style>
+</head>
+<body>
+<header class="hero"><div class="hero-inner"><p class="eyebrow">Interview Notes · Front-end</p><h1>CSS <span class="light">styling the box model</span></h1><p class="sub">Selectors, specificity, the box model, Flexbox and Grid, and responsive design &mdash; the presentation layer, explained the way interviewers ask about it.</p><div class="tags"><span>Fundamentals</span><span>Box Model</span><span>Layout</span><span>Responsive</span><span>Visual</span><span>Q&amp;A</span></div><div class="pipe" aria-hidden="true"><div class="stage"><span class="st-file">margin</span><span class="st-cap">outside</span></div><span class="pipe-arr">&rarr;</span><div class="stage"><span class="st-file">border</span><span class="st-cap">edge</span></div><span class="pipe-arr">&rarr;</span><div class="stage"><span class="st-file">padding</span><span class="st-cap">inside</span></div><span class="pipe-arr">&rarr;</span><div class="stage lead"><span class="st-file">content</span><span class="st-cap">the box</span></div></div></div></header>
+<div class="wrap">
+<nav class="toc" aria-label="Table of contents"><button class="toc-toggle" aria-expanded="false" aria-controls="tocBody"><span>Contents</span><span class="chev">&#9662;</span></button><div class="toc-body" id="tocBody"><h2>On this page</h2><div class="grp">Part 1 · Fundamentals</div><ol><li><a href="#what">1. How CSS works</a></li><li><a href="#selectors">2. Selectors</a></li><li><a href="#specificity">3. Specificity &amp; cascade</a></li><li><a href="#inherit">4. Inheritance</a></li></ol><div class="grp">Part 2 · Box Model</div><ol><li><a href="#boxmodel">5. The box model</a></li><li><a href="#sizing">6. box-sizing &amp; display</a></li></ol><div class="grp">Part 3 · Layout</div><ol><li><a href="#flex">7. Flexbox</a></li><li><a href="#grid">8. Grid</a></li><li><a href="#position">9. Positioning</a></li></ol><div class="grp">Part 4 · Responsive</div><ol><li><a href="#units">10. Units</a></li><li><a href="#responsive">11. Media queries</a></li></ol><div class="grp">Part 5 · Visual</div><ol><li><a href="#pseudo">12. Pseudo-classes &amp; elements</a></li><li><a href="#vars">13. Variables &amp; motion</a></li></ol><div class="grp">Part 6 · Q&amp;A</div><ol><li><a href="#quickfire">Quick-fire questions</a></li></ol><div class="grp">Part 7 · Reference</div><ol><li><a href="#cheatsheet">Cheat sheet</a></li><li><a href="#final-tips">Final tips</a></li></ol></div></nav>
+<main><div class="part"><div class="part-head"><span class="part-num">PART 1</span><h2>Fundamentals</h2></div><section class="card" id="what"><h3><span class="n">01</span>How CSS Works</h3><p><strong>CSS (Cascading Style Sheets)</strong> controls presentation. A rule is a <strong>selector</strong> plus a block of <strong>declarations</strong> (<code>property: value</code>).</p><div class='code'><span class='lang'>css</span><pre><code><span class='a'>.btn</span> {
+  <span class='k'>color</span>: <span class='s'>white</span>;
+  <span class='k'>padding</span>: <span class='s'>8px 16px</span>;
+}</code></pre></div><p>Three ways to include it: <strong>external</strong> (<code>&lt;link&gt;</code>, best), <strong>internal</strong> (<code>&lt;style&gt;</code>), and <strong>inline</strong> (<code>style=""</code>, avoid).</p></section><section class="card" id="selectors"><h3><span class="n">02</span>Selectors</h3><div class='tbl-scroll'><table><thead><tr><th>Selector</th><th>Matches</th></tr></thead><tbody><tr><td><code>.class</code></td><td>Elements with that class</td></tr><tr><td><code>#id</code></td><td>The element with that id</td></tr><tr><td><code>div p</code></td><td>Descendant: p inside div</td></tr><tr><td><code>div &gt; p</code></td><td>Direct child</td></tr><tr><td><code>a:hover</code></td><td>Pseudo-class state</td></tr><tr><td><code>[type="text"]</code></td><td>Attribute selector</td></tr></tbody></table></div></section><section class="card" id="specificity"><h3><span class="n">03</span>Specificity &amp; the Cascade</h3><p>When rules conflict, the browser picks the winner by <strong>specificity</strong>, then source order.</p><div class='flow' aria-hidden='true'>inline style   =  <span class='hl'>1,0,0,0</span>
+#id            =  <span class='hl'>0,1,0,0</span>
+.class :hover [attr] = <span class='hl'>0,0,1,0</span>
+element ::before  =  <span class='hl'>0,0,0,1</span></div><div class='note gold'><span class='lbl'>!important</span><p><code>!important</code> overrides specificity &mdash; use it sparingly; it's a common source of un-maintainable CSS.</p></div></section><section class="card" id="inherit"><h3><span class="n">04</span>Inheritance</h3><p>Some properties inherit from parent to child by default (<strong>text-related</strong>: <code>color</code>, <code>font-family</code>, <code>line-height</code>); most box/layout properties (<code>margin</code>, <code>border</code>, <code>width</code>) do not.</p><p>Force it with keywords: <code>inherit</code>, <code>initial</code>, <code>unset</code>.</p></section></div><div class="part"><div class="part-head"><span class="part-num">PART 2</span><h2>The Box Model</h2></div><section class="card" id="boxmodel"><h3><span class="n">05</span>The Box Model</h3><p>Every element is a box of four layers, from inside out:</p><div class='flow' aria-hidden='true'><span class='arr'>+-------------- margin --------------+</span>
+<span class='arr'>|</span>  <span class='arr'>+---------- border ----------+</span>  <span class='arr'>|</span>
+<span class='arr'>|</span>  <span class='arr'>|</span>  <span class='arr'>+------ padding ------+</span>  <span class='arr'>|</span>  <span class='arr'>|</span>
+<span class='arr'>|</span>  <span class='arr'>|</span>  <span class='arr'>|</span>   <span class='box'>content</span>       <span class='arr'>|</span>  <span class='arr'>|</span>  <span class='arr'>|</span>
+<span class='arr'>|</span>  <span class='arr'>|</span>  <span class='arr'>+---------------------+</span>  <span class='arr'>|</span>  <span class='arr'>|</span>
+<span class='arr'>|</span>  <span class='arr'>+----------------------------+</span>  <span class='arr'>|</span>
+<span class='arr'>+------------------------------------+</span></div><div class='note'><span class='lbl'>Margin collapse</span><p>Vertical margins between adjacent block elements collapse into the larger of the two &mdash; not their sum.</p></div></section><section class="card" id="sizing"><h3><span class="n">06</span>box-sizing &amp; display</h3><div class='code'><span class='lang'>css</span><pre><code><span class='c'>/* width includes padding + border -- almost always what you want */</span>
+<span class='a'>*</span> { <span class='k'>box-sizing</span>: <span class='s'>border-box</span>; }</code></pre></div><p>Default <code>content-box</code> means <code>width</code> is content only, so padding/border get <em>added</em>, breaking layouts. <code>border-box</code> fixes this.</p><p><strong>display</strong>: <code>block</code>, <code>inline</code>, <code>inline-block</code>, <code>flex</code>, <code>grid</code>, <code>none</code> (removes from layout).</p></section></div><div class="part"><div class="part-head"><span class="part-num">PART 3</span><h2>Layout</h2></div><section class="card" id="flex"><h3><span class="n">07</span>Flexbox (1-D layout)</h3><div class='code'><span class='lang'>css</span><pre><code><span class='a'>.row</span> {
+  <span class='k'>display</span>: <span class='s'>flex</span>;
+  <span class='k'>justify-content</span>: <span class='s'>space-between</span>; <span class='c'>/* main axis */</span>
+  <span class='k'>align-items</span>: <span class='s'>center</span>;         <span class='c'>/* cross axis */</span>
+  <span class='k'>gap</span>: <span class='s'>12px</span>;
+}</code></pre></div><p>Flexbox lays out items in <strong>one dimension</strong> (a row or column). Key child property: <code>flex: 1</code> to grow and share space.</p></section><section class="card" id="grid"><h3><span class="n">08</span>Grid (2-D layout)</h3><div class='code'><span class='lang'>css</span><pre><code><span class='a'>.grid</span> {
+  <span class='k'>display</span>: <span class='s'>grid</span>;
+  <span class='k'>grid-template-columns</span>: <span class='s'>repeat(3, 1fr)</span>;
+  <span class='k'>gap</span>: <span class='s'>16px</span>;
+}</code></pre></div><div class='note gold'><span class='lbl'>Flex vs Grid</span><p>Use <strong>Flexbox</strong> for a single row/column of content that flows; use <strong>Grid</strong> for two-dimensional page layouts with rows <em>and</em> columns. <code>fr</code> = a fraction of free space.</p></div></section><section class="card" id="position"><h3><span class="n">09</span>Positioning</h3><div class='tbl-scroll'><table><thead><tr><th>Value</th><th>Behaviour</th></tr></thead><tbody><tr><td><code>static</code></td><td>Default; normal flow.</td></tr><tr><td><code>relative</code></td><td>Offset from its normal spot; keeps its space.</td></tr><tr><td><code>absolute</code></td><td>Removed from flow; positioned vs nearest positioned ancestor.</td></tr><tr><td><code>fixed</code></td><td>Positioned vs the viewport; stays on scroll.</td></tr><tr><td><code>sticky</code></td><td>Relative until a scroll threshold, then sticks.</td></tr></tbody></table></div></section></div><div class="part"><div class="part-head"><span class="part-num">PART 4</span><h2>Responsive Design</h2></div><section class="card" id="units"><h3><span class="n">10</span>Units</h3><div class='tbl-scroll'><table><thead><tr><th>Unit</th><th>Relative to</th></tr></thead><tbody><tr><td><code>px</code></td><td>Absolute pixels</td></tr><tr><td><code>%</code></td><td>Parent element</td></tr><tr><td><code>em</code></td><td>Parent's font-size (compounds)</td></tr><tr><td><code>rem</code></td><td>Root font-size (predictable &mdash; preferred)</td></tr><tr><td><code>vw</code> / <code>vh</code></td><td>1% of viewport width / height</td></tr></tbody></table></div></section><section class="card" id="responsive"><h3><span class="n">11</span>Media Queries (mobile-first)</h3><div class='code'><span class='lang'>css</span><pre><code><span class='c'>/* base styles = mobile */</span>
+<span class='a'>.card</span> { <span class='k'>width</span>: <span class='s'>100%</span>; }
+
+<span class='c'>/* enhance for larger screens */</span>
+<span class='k'>@media</span> (<span class='k'>min-width</span>: <span class='s'>768px</span>) {
+  <span class='a'>.card</span> { <span class='k'>width</span>: <span class='s'>50%</span>; }
+}</code></pre></div><div class='note'><span class='lbl'>Mobile-first</span><p>Write base styles for small screens, then layer on <code>min-width</code> queries. Simpler than overriding desktop styles downward.</p></div></section></div><div class="part"><div class="part-head"><span class="part-num">PART 5</span><h2>Visual &amp; Modern</h2></div><section class="card" id="pseudo"><h3><span class="n">12</span>Pseudo-classes &amp; Elements</h3><ul><li><strong>Pseudo-classes</strong> (single colon) target a state: <code>:hover</code>, <code>:focus</code>, <code>:nth-child(2)</code>, <code>:first-child</code>, <code>:not()</code>.</li><li><strong>Pseudo-elements</strong> (double colon) target a sub-part: <code>::before</code>, <code>::after</code>, <code>::placeholder</code>.</li></ul></section><section class="card" id="vars"><h3><span class="n">13</span>Custom Properties &amp; Motion</h3><div class='code'><span class='lang'>css</span><pre><code><span class='a'>:root</span> { <span class='k'>--accent</span>: <span class='s'>#0e7c86</span>; }
+<span class='a'>.btn</span> {
+  <span class='k'>background</span>: <span class='s'>var(--accent)</span>;
+  <span class='k'>transition</span>: <span class='s'>background .2s ease</span>;
+}</code></pre></div><p>CSS variables (<code>--name</code> / <code>var()</code>) cascade and can change at runtime. Use <code>transition</code> for state changes and <code>@keyframes</code> + <code>animation</code> for sequences.</p><div class='note gold'><span class='lbl'>Perf</span><p>Animate <code>transform</code> and <code>opacity</code> &mdash; they're GPU-accelerated and don't trigger layout reflow.</p></div></section></div><div class="part"><div class="part-head"><span class="part-num">PART 6</span><h2>Quick-Fire Q&amp;A</h2></div><p style='margin:0 0 6px;color:var(--ink-soft)' id='quickfire'>Tap a question to reveal the answer.</p><div class="qa"><details class="q"><summary><span class="qmark">&gt;</span>What does the C in CSS stand for, and why does it matter?</summary><div class="answer"><p>Cascading. Multiple rules can target one element; the cascade decides the winner using specificity, importance, and source order.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>How is specificity calculated?</summary><div class="answer"><p>Inline (1000) &gt; id (100) &gt; class/attribute/pseudo-class (10) &gt; element/pseudo-element (1). Higher total wins; ties break by source order.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>What is box-sizing: border-box?</summary><div class="answer"><p>It makes an element's <code>width</code>/<code>height</code> include padding and border, so boxes size predictably. Most projects set it globally.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>Flexbox vs Grid?</summary><div class="answer"><p>Flexbox is one-dimensional (a row or column); Grid is two-dimensional (rows and columns). Use Grid for page layout, Flexbox for component alignment.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>position: absolute vs fixed?</summary><div class="answer"><p>Absolute positions relative to the nearest positioned ancestor and scrolls with content; fixed positions relative to the viewport and stays put.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>em vs rem?</summary><div class="answer"><p><code>em</code> is relative to the element's/parent's font-size and can compound; <code>rem</code> is relative to the root, so it's predictable.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>What is margin collapsing?</summary><div class="answer"><p>Adjacent vertical margins between block elements merge into the larger single margin rather than adding together.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>How do you make a site responsive?</summary><div class="answer"><p>Fluid units and layouts (%, fr, flex/grid), the viewport meta tag, and mobile-first media queries with <code>min-width</code>.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>Which properties are cheapest to animate?</summary><div class="answer"><p><code>transform</code> and <code>opacity</code> &mdash; they avoid layout/paint and run on the compositor.</p></div></details></div></div><div class="part"><div class="part-head"><span class="part-num">PART 7</span><h2>Reference</h2></div><section class="card" id="cheatsheet"><h3><span class="n">memorize</span>Facts interviewers probe</h3><div class='tbl-scroll'><table><thead><tr><th>Topic</th><th>Remember</th></tr></thead><tbody><tr><td>Specificity</td><td>inline &gt; id &gt; class &gt; element</td></tr><tr><td>Box sizing</td><td>border-box includes padding + border</td></tr><tr><td>Flex vs Grid</td><td>1-D vs 2-D</td></tr><tr><td>Flex axes</td><td>justify-content = main, align-items = cross</td></tr><tr><td>Units</td><td>rem = predictable, em compounds</td></tr><tr><td>Responsive</td><td>mobile-first, min-width queries</td></tr><tr><td>Position</td><td>relative keeps space, absolute doesn't</td></tr><tr><td>Animate</td><td>transform &amp; opacity for performance</td></tr></tbody></table></div></section><div class="tips" id="final-tips"><h3>Final tips for the interview</h3><ol><li>Be fluent in <strong>specificity and the cascade</strong> &mdash; it's the #1 CSS question.</li><li>Explain the <strong>box model</strong> and why <code>border-box</code> helps.</li><li>Choose <strong>Flexbox vs Grid</strong> deliberately and say why.</li><li>Default to <strong>mobile-first, rem-based, responsive</strong> thinking.</li><li>Know <strong>positioning contexts</strong> cold, especially absolute vs fixed vs sticky.</li><li>Mention <strong>performance</strong>: animate transform/opacity, avoid layout thrash.</li></ol></div></div><p class="signoff">// good luck — style with intent</p></main>
+</div>
+<script>
+  var toggle = document.querySelector('.toc-toggle');
+  var tocBody = document.getElementById('tocBody');
+  if (toggle) {
+    toggle.addEventListener('click', function () {
+      var open = tocBody.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    tocBody.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        if (window.matchMedia('(max-width:960px)').matches) {
+          tocBody.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  }
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var map = {};
+  links.forEach(function (l) {
+    var id = l.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if (el) map[id] = l;
+  });
+  var targets = Object.keys(map).map(function (id) { return document.getElementById(id); });
+  var current = null;
+  function setActive(id) {
+    if (current === id) return;
+    current = id;
+    links.forEach(function (l) { l.classList.remove('active'); });
+    if (map[id]) map[id].classList.add('active');
+  }
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) setActive(e.target.id); });
+  }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+  targets.forEach(function (t) { observer.observe(t); });
+</script>
+</body>
+</html>

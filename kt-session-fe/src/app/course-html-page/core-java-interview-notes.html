@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Core Java — Interview Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f6f8;
+    --surface:#ffffff;
+    --ink:#15202e;
+    --ink-soft:#3c4a5c;
+    --muted:#6c7789;
+    --line:#e4e8ee;
+    --line-strong:#cfd6df;
+    --accent:#0e7c86;
+    --accent-deep:#0a5b63;
+    --accent-wash:#e3f1f2;
+    --amber:#b45309;
+    --amber-wash:#fbf0e2;
+    --code-bg:#111823;
+    --code-fg:#dbe3ec;
+    --code-dim:#7c8ba0;
+    --code-key:#7fd8c9;
+    --code-str:#e0b878;
+    --code-com:#5e6b7e;
+    --radius:10px;
+    --maxw:1180px;
+    --sidebar:262px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+    font-size:16px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent-deep);text-decoration:none}
+  a:hover{text-decoration:underline}
+  :focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:3px}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:var(--ink);
+    color:#eef2f6;
+    padding:56px 28px 46px;
+    border-bottom:3px solid var(--accent);
+  }
+  .hero-inner{max-width:var(--maxw);margin:0 auto}
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--code-key);margin:0 0 14px;
+  }
+  .hero h1{
+    font-family:"Space Grotesk",sans-serif;
+    font-weight:700;font-size:clamp(2rem,5vw,3.3rem);
+    line-height:1.02;margin:0 0 14px;letter-spacing:-.02em;
+  }
+  .hero h1 .light{color:#9fb0c2;font-weight:500}
+  .hero p.sub{color:#aebccb;max-width:54ch;margin:0 0 30px;font-size:1.02rem}
+  .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+  .tags span{
+    font-family:"IBM Plex Mono",monospace;font-size:12px;
+    padding:5px 11px;border:1px solid #33445a;border-radius:100px;color:#c5d1de;
+  }
+
+  /* ---------- SIGNATURE: compile -> run pipeline ---------- */
+  .pipe{
+    margin:36px 0 4px;display:flex;align-items:stretch;gap:14px;flex-wrap:wrap;
+    font-family:"IBM Plex Mono",monospace;
+  }
+  .stage{
+    display:flex;flex-direction:column;gap:3px;padding:11px 15px;
+    border:1px solid #33445a;border-radius:8px;background:#1a2534;min-width:118px;
+  }
+  .stage.lead{border-color:var(--accent);background:#12303266}
+  .st-file{color:var(--code-str);font-size:13px;font-weight:500}
+  .stage.lead .st-file{color:var(--code-key)}
+  .st-cap{color:var(--code-com);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+  .pipe-arr{
+    display:flex;align-items:center;color:var(--code-dim);font-size:12px;
+    letter-spacing:.04em;white-space:nowrap;
+  }
+
+  /* ---------- LAYOUT ---------- */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;
+        display:grid;grid-template-columns:var(--sidebar) 1fr;gap:44px;align-items:start}
+  /* ---------- TOC ---------- */
+  .toc{position:sticky;top:0;max-height:100vh;overflow-y:auto;padding:34px 4px 40px}
+  .toc h2{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 14px;font-weight:600;
+  }
+  .toc ol{list-style:none;margin:0 0 22px;padding:0}
+  .toc .grp{
+    font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:.82rem;
+    color:var(--ink);text-transform:uppercase;letter-spacing:.05em;
+    margin:18px 0 8px;padding-left:2px;
+  }
+  .toc a{
+    display:block;color:var(--ink-soft);font-size:.9rem;line-height:1.35;
+    padding:5px 10px 5px 12px;border-left:2px solid transparent;border-radius:0 6px 6px 0;
+  }
+  .toc a:hover{background:#eaeef3;text-decoration:none}
+  .toc a.active{color:var(--accent-deep);border-left-color:var(--accent);
+                background:var(--accent-wash);font-weight:600}
+
+  /* ---------- MAIN ---------- */
+  main{padding:34px 0 90px;min-width:0}
+  .part{scroll-margin-top:20px;margin-bottom:16px}
+  .part-head{
+    display:flex;align-items:baseline;gap:16px;margin:52px 0 6px;
+    padding-top:26px;border-top:1px solid var(--line-strong);
+  }
+  .part:first-of-type .part-head{border-top:none;padding-top:0;margin-top:4px}
+  .part-num{
+    font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:12px;
+    color:#fff;background:var(--accent);padding:4px 9px;border-radius:6px;
+    flex:none;letter-spacing:.05em;
+  }
+  .part-head h2{
+    font-family:"Space Grotesk",sans-serif;font-weight:700;
+    font-size:clamp(1.4rem,3vw,2rem);letter-spacing:-.01em;margin:0;line-height:1.1;
+  }
+  section.card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 30px;margin:18px 0;scroll-margin-top:20px;
+  }
+  section.card > h3{
+    font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:1.24rem;
+    margin:0 0 14px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:11px;
+  }
+  section.card > h3 .n{
+    font-family:"IBM Plex Mono",monospace;font-size:.72em;color:var(--accent);
+    font-weight:600;flex:none;
+  }
+  h4{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:1rem;
+     margin:22px 0 8px;color:var(--ink)}
+  p{margin:0 0 14px}
+  section.card p:last-child{margin-bottom:0}
+  strong{font-weight:600;color:var(--ink)}
+  code{
+    font-family:"IBM Plex Mono",monospace;font-size:.86em;
+    background:#eef1f5;color:#0c3f44;padding:2px 6px;border-radius:5px;
+    border:1px solid #e0e5ec;
+  }
+  ul,ol.list{margin:6px 0 16px;padding-left:22px}
+  li{margin:6px 0}
+  li::marker{color:var(--accent)}
+
+  /* ---------- TABLES ---------- */
+  .tbl-scroll{overflow-x:auto;margin:14px 0 18px;border-radius:8px;border:1px solid var(--line)}
+  table{border-collapse:collapse;width:100%;font-size:.92rem}
+  th,td{padding:11px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+  thead th{
+    background:#f0f3f6;font-family:"IBM Plex Mono",monospace;font-size:.76rem;
+    letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;
+    border-bottom:1.5px solid var(--line-strong);
+  }
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:#f8fafb}
+  td code{background:#eef1f5}
+
+  /* ---------- CODE BLOCKS ---------- */
+  .code{position:relative;background:var(--code-bg);border-radius:9px;margin:14px 0 18px;
+        overflow:hidden;border:1px solid #1e293a}
+  .code .lang{
+    position:absolute;top:0;right:0;font-family:"IBM Plex Mono",monospace;
+    font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--code-dim);background:#0b111a;padding:5px 12px;border-radius:0 9px 0 9px;
+  }
+  pre{margin:0;padding:18px 20px;overflow-x:auto}
+  pre code{background:none;border:none;padding:0;color:var(--code-fg);
+           font-size:13px;line-height:1.6;white-space:pre}
+  .code .k{color:var(--code-key)}
+  .code .s{color:var(--code-str)}
+  .code .c{color:var(--code-com);font-style:italic}
+  .code .a{color:#9db4d0}
+
+  /* ---------- CALLOUTS ---------- */
+  .note{border-left:3px solid var(--accent);background:var(--accent-wash);
+        padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0;font-size:.95rem}
+  .note.gold{border-left-color:var(--amber);background:var(--amber-wash)}
+  .note .lbl{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;font-weight:600;display:block;margin-bottom:4px;color:var(--accent-deep);
+  }
+  .note.gold .lbl{color:var(--amber)}
+  .note p:last-child{margin-bottom:0}
+  .note ul{margin:0}
+
+  /* ---------- Q&A ---------- */
+  .qa{display:flex;flex-direction:column;gap:10px}
+  details.q{background:var(--surface);border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  details.q[open]{border-color:var(--line-strong)}
+  summary{cursor:pointer;list-style:none;padding:15px 20px;font-weight:600;
+          display:flex;gap:12px;align-items:flex-start;color:var(--ink)}
+  summary::-webkit-details-marker{display:none}
+  summary .qmark{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-weight:600;
+                 flex:none;transition:transform .2s ease}
+  @media (prefers-reduced-motion: reduce){summary .qmark{transition:none}}
+  details.q[open] summary .qmark{transform:rotate(90deg);color:var(--amber)}
+  summary:hover{background:#f8fafb}
+  .answer{padding:0 20px 18px 47px;color:var(--ink-soft);font-size:.95rem}
+  .answer p{margin:0 0 10px}
+  .answer p:last-child{margin:0}
+
+  /* ---------- DIAGRAM ---------- */
+  .flow{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--code-fg);
+        background:var(--code-bg);border-radius:9px;padding:20px;overflow-x:auto;
+        line-height:1.9;border:1px solid #1e293a}
+  .flow .box{color:var(--code-key)}
+  .flow .arr{color:var(--code-com)}
+  .flow .hl{color:var(--code-str)}
+
+  /* ---------- TIPS FOOTER ---------- */
+  .tips{background:var(--ink);color:#e7edf3;border-radius:var(--radius);padding:30px 32px;margin:30px 0 0}
+  .tips h3{font-family:"Space Grotesk",sans-serif;color:#fff;margin:0 0 16px;font-size:1.25rem}
+  .tips ol{counter-reset:tp;list-style:none;padding:0;margin:0}
+  .tips li{counter-increment:tp;padding-left:40px;position:relative;margin:11px 0;color:#c6d2df}
+  .tips li::before{
+    content:counter(tp);position:absolute;left:0;top:1px;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--ink);
+    background:var(--code-key);width:24px;height:24px;border-radius:6px;display:grid;place-items:center;
+  }
+  .tips strong{color:#fff}
+  .signoff{text-align:center;color:var(--muted);font-size:.85rem;margin:26px 0 0;
+           font-family:"IBM Plex Mono",monospace}
+
+  /* ---------- MOBILE ---------- */
+  .toc-toggle{display:none}
+  @media (max-width:960px){
+    .wrap{grid-template-columns:1fr;gap:0;padding:0 18px}
+    .toc{position:static;max-height:none;padding:0;border:1px solid var(--line);
+         border-radius:10px;background:var(--surface);margin:22px 0 6px;overflow:hidden}
+    .toc-body{display:none;padding:6px 12px 16px}
+    .toc-body.open{display:block}
+    .toc-toggle{display:flex;width:100%;justify-content:space-between;align-items:center;
+      background:none;border:none;padding:15px 16px;cursor:pointer;
+      font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:.95rem;color:var(--ink)}
+    .toc-toggle .chev{transition:transform .2s ease;color:var(--accent)}
+    .toc-toggle[aria-expanded="true"] .chev{transform:rotate(180deg)}
+    main{padding:14px 0 70px}
+    .hero{padding:44px 20px 38px}
+    section.card{padding:22px 18px}
+    .answer{padding-left:20px}
+  }
+
+  /* ---------- PRINT ---------- */
+  @media print{
+    body{background:#fff;font-size:11.5pt}
+    .hero{background:#fff;color:#000;border-bottom:2px solid #000;padding:0 0 18px}
+    .hero .eyebrow,.hero h1 .light,.hero p.sub{color:#333}
+    .hero h1{color:#000}
+    .tags,.pipe{display:none}
+    .wrap{display:block;padding:0;max-width:100%}
+    .toc{display:none}
+    .code,.flow{background:#f3f4f6;color:#111;border:1px solid #ccc}
+    .code .lang{background:#e5e7eb;color:#555}
+    pre code,.code .k,.code .s,.code .c,.code .a,.flow .box,.flow .arr,.flow .hl{color:#111}
+    .tips{background:#fff;color:#000;border:1px solid #000}
+    .tips h3,.tips strong,.tips li{color:#000}
+    .tips li::before{background:#000;color:#fff}
+    details.q{border:1px solid #bbb}
+    details.q .answer{display:block!important}
+    summary .qmark{transform:rotate(90deg)}
+    section.card{border:1px solid #ddd;break-inside:avoid}
+    .part-head{break-after:avoid}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">Interview Notes · 3.5 yrs experience</p>
+    <h1>Core Java <span class="light">compile once, run anywhere</span></h1>
+    <p class="sub">OOP, memory, collections, concurrency, and modern Java — the fundamentals interviewers keep circling back to, in plain language with code you can talk through.</p>
+    <div class="tags">
+      <span>OOP</span><span>Memory &amp; GC</span><span>Collections</span><span>Concurrency</span><span>Java 8+</span><span>Q&amp;A</span>
+    </div>
+
+    <div class="pipe" aria-hidden="true">
+      <div class="stage lead"><span class="st-file">Main.java</span><span class="st-cap">source</span></div>
+      <span class="pipe-arr">javac &rarr;</span>
+      <div class="stage"><span class="st-file">Main.class</span><span class="st-cap">bytecode</span></div>
+      <span class="pipe-arr">JVM &rarr;</span>
+      <div class="stage"><span class="st-file">running</span><span class="st-cap">any OS</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- ============ TOC ============ -->
+  <nav class="toc" aria-label="Table of contents">
+    <button class="toc-toggle" aria-expanded="false" aria-controls="tocBody">
+      <span>Contents</span><span class="chev">&#9662;</span>
+    </button>
+    <div class="toc-body" id="tocBody">
+      <h2>On this page</h2>
+      <div class="grp">Part 1 · Language &amp; OOP</div>
+      <ol>
+        <li><a href="#jvm">1. JVM, JRE, JDK &amp; bytecode</a></li>
+        <li><a href="#oop">2. Four pillars of OOP</a></li>
+        <li><a href="#class-object">3. Class, object &amp; access</a></li>
+        <li><a href="#abstract-interface">4. Abstract class vs interface</a></li>
+        <li><a href="#overload-override">5. Overloading vs overriding</a></li>
+        <li><a href="#keywords">6. static, final, this, super</a></li>
+      </ol>
+      <div class="grp">Part 2 · Types &amp; Memory</div>
+      <ol>
+        <li><a href="#primitives">7. Primitives &amp; wrappers</a></li>
+        <li><a href="#strings">8. String, pool &amp; immutability</a></li>
+        <li><a href="#memory">9. Stack, heap &amp; GC</a></li>
+        <li><a href="#equals">10. == vs equals &amp; hashCode</a></li>
+        <li><a href="#pass-by-value">11. Pass by value</a></li>
+      </ol>
+      <div class="grp">Part 3 · Collections</div>
+      <ol>
+        <li><a href="#collections">12. Collections hierarchy</a></li>
+        <li><a href="#internals">13. Lists &amp; maps internals</a></li>
+        <li><a href="#comparable">14. Comparable vs Comparator</a></li>
+        <li><a href="#generics">15. Generics &amp; wildcards</a></li>
+        <li><a href="#iterators">16. Fail-fast vs fail-safe</a></li>
+      </ol>
+      <div class="grp">Part 4 · Exceptions &amp; Concurrency</div>
+      <ol>
+        <li><a href="#exceptions">17. Exception handling</a></li>
+        <li><a href="#threads">18. Threads &amp; lifecycle</a></li>
+        <li><a href="#sync">19. synchronized &amp; volatile</a></li>
+        <li><a href="#executors">20. Executors &amp; utilities</a></li>
+      </ol>
+      <div class="grp">Part 5 · Modern Java (8+)</div>
+      <ol>
+        <li><a href="#lambdas">21. Lambdas &amp; functional interfaces</a></li>
+        <li><a href="#streams">22. Stream API</a></li>
+        <li><a href="#optional">23. Optional &amp; friends</a></li>
+      </ol>
+      <div class="grp">Part 6 · Q&amp;A</div>
+      <ol><li><a href="#quickfire">Quick-fire questions</a></li></ol>
+      <div class="grp">Part 7 · Reference</div>
+      <ol>
+        <li><a href="#cheatsheet">Cheat sheet</a></li>
+        <li><a href="#final-tips">Final tips</a></li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ============ MAIN ============ -->
+  <main>
+
+    <!-- ===== PART 1 ===== -->
+    <div class="part">
+      <div class="part-head"><span class="part-num">PART 1</span><h2>Language &amp; OOP Fundamentals</h2></div>
+
+      <section class="card" id="jvm">
+        <h3><span class="n">01</span>JVM, JRE, JDK &amp; Bytecode</h3>
+        <p>Java's headline feature is <strong>"write once, run anywhere."</strong> Your <code>.java</code> source is compiled by <code>javac</code> into platform-neutral <strong>bytecode</strong> (<code>.class</code>), which the <strong>JVM</strong> interprets/JIT-compiles for whatever OS it runs on.</p>
+        <div class="tbl-scroll"><table>
+          <thead><tr><th>Term</th><th>What it is</th></tr></thead>
+          <tbody>
+            <tr><td><strong>JVM</strong></td><td>Java Virtual Machine — runs bytecode, manages memory &amp; garbage collection. Platform-specific.</td></tr>
+            <tr><td><strong>JRE</strong></td><td>Java Runtime Environment — JVM + core libraries. Enough to <em>run</em> Java apps.</td></tr>
+            <tr><td><strong>JDK</strong></td><td>Java Development Kit — JRE + dev tools (<code>javac</code>, <code>jar</code>, debugger). Enough to <em>build</em> apps.</td></tr>
+          </tbody>
+        </table></div>
+        <div class="note"><span class="lbl">One-liner</span><p>JDK &supe; JRE &supe; JVM. The JIT (Just-In-Time) compiler inside the JVM converts hot bytecode to native machine code at runtime for speed.</p></div>
+      </section>
+
+      <section class="card" id="oop">
+        <h3><span class="n">02</span>Four Pillars of OOP</h3>
+        <div class="tbl-scroll"><table>
+          <thead><tr><th>Pillar</th><th>Meaning</th><th>In Java</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Encapsulation</strong></td><td>Bundle data + behaviour, hide internals.</td><td><code>private</code> fields + public getters/setters.</td></tr>
+            <tr><td><strong>Inheritance</strong></td><td>Reuse via an "is-a" relationship.</td><td><code>extends</code> a class, <code>implements</code> an interface.</td></tr>
+            <tr><td><strong>Polymorphism</strong></td><td>One interface, many forms.</td><td>Overriding (runtime) &amp; overloading (compile-time).</td></tr>
+            <tr><td><strong>Abstraction</strong></td><td>Expose <em>what</em>, hide <em>how</em>.</td><td>Abstract classes &amp; interfaces.</td></tr>
+          </tbody>
+        </table></div>
+        <div class="note gold"><span class="lbl">Interview gold</span><p>Encapsulation is about <em>access</em> (hiding data); abstraction is about <em>design</em> (hiding implementation detail behind a contract). Interviewers love this distinction.</p></div>
+      </section>
+
+      <section class="card" id="class-object">
+        <h3><span class="n">03</span>Class, Object &amp; Access Modifiers</h3>
+        <p>A <strong>class</strong> is a blueprint; an <strong>object</strong> is a runtime instance created with <code>new</code>.</p>
+        <div class="tbl-scroll"><table>
+          <thead><tr><th>Modifier</th><th>Same class</th><th>Same package</th><th>Subclass</th><th>Everywhere</th></tr></thead>
+          <tbody>
+            <tr><td><code>private</code></td><td>&#10003;</td><td>&#10007;</td><td>&#10007;</td><td>&#10007;</td></tr>
+            <tr><td><em>default</em> (none)</td><td>&#10003;</td><td>&#10003;</td><td>&#10007;</td><td>&#10007;</td></tr>
+            <tr><td><code>protected</code></td><td>&#10003;</td><td>&#10003;</td><td>&#10003;</td><td>&#10007;</td></tr>
+            <tr><td><code>public</code></td><td>&#10003;</td><td>&#10003;</td><td>&#10003;</td><td>&#10003;</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section class="card" id="abstract-interface">
+        <h3><span class="n">04</span>Abstract Class vs Interface</h3>
+        <div class="tbl-scroll"><table>
+          <thead><tr><th></th><th>Abstract class</th><th>Interface</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Instantiate?</strong></td><td>No</td><td>No</td></tr>
+            <tr><td><strong>State (fields)</strong></td><td>Yes, any kind</td><td>Only <code>public static final</code> constants</td></tr>
+            <tr><td><strong>Constructors</strong></td><td>Yes</td><td>No</td></tr>
+            <tr><td><strong>Methods</strong></td><td>Abstract + concrete</td><td>Abstract, <code>default</code>, <code>static</code> (8+), <code>private</code> (9+)</td></tr>
+            <tr><td><strong>Multiple inheritance</strong></td><td>No (single <code>extends</code>)</td><td>Yes (<code>implements</code> many)</td></tr>
+          </tbody>
+        </table></div>
+        <div class="note"><span class="lbl">When to use which</span><p>Use an <strong>interface</strong> for a capability/contract that unrelated types can share (<code>Comparable</code>, <code>Runnable</code>). Use an <strong>abstract class</strong> when related classes share state and common code.</p></div>
+      </section>
+
+      <section class="card" id="overload-override">
+        <h3><span class="n">05</span>Overloading vs Overriding</h3>
+        <div class="tbl-scroll"><table>
+          <thead><tr><th></th><th>Overloading</th><th>Overriding</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Where</strong></td><td>Same class</td><td>Subclass</td></tr>
+            <tr><td><strong>Signature</strong></td><td>Same name, different params</td><td>Same name &amp; params</td></tr>
+            <tr><td><strong>Resolved</strong></td><td>Compile-time (static)</td><td>Runtime (dynamic dispatch)</td></tr>
+            <tr><td><strong>Return type</strong></td><td>Can differ</td><td>Same or covariant</td></tr>
+          </tbody>
+        </table></div>
+        <div class="code"><span class="lang">java</span><pre><code><span class="k">class</span> Animal { String sound() { <span class="k">return</span> <span class="s">"..."</span>; } }
+
+<span class="k">class</span> Dog <span class="k">extends</span> Animal {
+    <span class="a">@Override</span> String sound() { <span class="k">return</span> <span class="s">"Woof"</span>; }   <span class="c">// overriding</span>
+    String sound(<span class="k">int</span> times) { <span class="k">return</span> <span class="s">"Woof".repeat(times)</span>; } <span class="c">// overloading</span>
+}</code></pre></div>
+      </section>
+
+      <section class="card" id="keywords">
+        <h3><span class="n">06</span>static, final, this, super</h3>
+        <ul>
+          <li><code>static</code> — belongs to the <strong>class</strong>, not an instance. Shared across all objects; accessed via the class name. Used for constants, utility methods, counters.</li>
+          <li><code>final</code> — <strong>variable</strong>: can't be reassigned; <strong>method</strong>: can't be overridden; <strong>class</strong>: can't be extended (e.g. <code>String</code>).</li>
+          <li><code>this</code> — reference to the current object (disambiguate fields, chain constructors with <code>this(...)</code>).</li>
+          <li><code>super</code> — reference to the parent (call <code>super()</code> constructor or <code>super.method()</code>).</li>
+        </ul>
+        <div class="note gold"><span class="lbl">Gotcha</span><p><code>final</code> on a reference means the <em>reference</em> can't change, but the object it points to can still mutate — <code>final List&lt;X&gt; l</code> can still have items added.</p></div>
+      </section>
+    </div>
+
+    <!-- ===== PART 2 ===== -->
+    <div class="part">
+      <div class="part-head"><span class="part-num">PART 2</span><h2>Types, Strings &amp; Memory</h2></div>
+
+      <section class="card" id="primitives">
+        <h3><span class="n">07</span>Primitives, Wrappers &amp; Autoboxing</h3>
+        <p>Java has 8 primitives (<code>byte short int long float double char boolean</code>) stored by value, plus <strong>wrapper</strong> objects (<code>Integer</code>, <code>Long</code>&hellip;) for use in generics/collections.</p>
+        <div class="code"><span class="lang">java</span><pre><code>Integer boxed = 5;      <span class="c">// autoboxing: int -> Integer</span>
+<span class="k">int</span> back = boxed;        <span class="c">// unboxing: Integer -> int</span>
+List&lt;Integer&gt; nums = <span class="k">new</span> ArrayList&lt;&gt;(); <span class="c">// collections need objects</span></code></pre></div>
+        <div class="note gold"><span class="lbl">Cache gotcha</span><p><code>Integer</code> caches values &minus;128..127, so <code>Integer.valueOf(100) == valueOf(100)</code> is <code>true</code> but <code>200 == 200</code> (as Integers) is <code>false</code>. Always compare wrappers with <code>.equals()</code>.</p></div>
+      </section>
+
+      <section class="card" id="strings">
+        <h3><span class="n">08</span>String, the Pool &amp; Immutability</h3>
+        <p><code>String</code> is <strong>immutable</strong> — every "change" creates a new object. String literals live in the <strong>String pool</strong> and are reused.</p>
+        <div class="code"><span class="lang">java</span><pre><code>String a = <span class="s">"hi"</span>;              <span class="c">// pooled</span>
+String b = <span class="s">"hi"</span>;              <span class="c">// same pooled object -> a == b is true</span>
+String c = <span class="k">new</span> String(<span class="s">"hi"</span>);  <span class="c">// new heap object -> a == c is false</span></code></pre></div>
+        <h4>StringBuilder vs StringBuffer</h4>
+        <div class="tbl-scroll"><table>
+          <thead><tr><th></th><th>String</th><th>StringBuilder</th><th>StringBuffer</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Mutable</strong></td><td>No</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td><strong>Thread-safe</strong></td><td>Yes (immutable)</td><td>No</td><td>Yes (synchronized)</td></tr>
+            <tr><td><strong>Use when</strong></td><td>Fixed text</td><td>Heavy edits, single thread</td><td>Heavy edits, shared thread</td></tr>
+          </tbody>
+        </table></div>
+        <div class="note"><span class="lbl">Why immutable matters</span><p>Immutability makes <code>String</code> safe to share and cache, thread-safe by default, and usable as a reliable <code>HashMap</code> key.</p></div>
+      </section>
+
+      <section class="card" id="memory">
+        <h3><span class="n">09</span>Stack, Heap &amp; Garbage Collection</h3>
+        <div class="flow" aria-hidden="true"><span class="hl">STACK</span> (per thread)              <span class="hl">HEAP</span> (shared)
+<span class="arr">+--------------------+</span         <span class="arr">+---------------------+</span>
+<span class="arr">|</span> main() frame        <span class="arr">|</span>        <span class="arr">|</span>  <span class="box">new User(...)</span>      <span class="arr">|</span>
+<span class="arr">|</span>   int x = 5          <span class="arr">|</span>        <span class="arr">|</span>  <span class="box">new int[1000]</span>     <span class="arr">|</span>
+<span class="arr">|</span>   User u  ----------+|--------&gt;|  (objects live here) <span class="arr">|</span>
+<span class="arr">+--------------------+</span>        <span class="arr">+---------------------+</span>
+   values &amp; references            objects &amp; instance data</div>
+        <ul>
+          <li><strong>Stack</strong> — one per thread; holds method frames, local primitives, and object <em>references</em>. Freed automatically when a method returns.</li>
+          <li><strong>Heap</strong> — shared; holds all objects. Cleaned by the <strong>garbage collector</strong>.</li>
+        </ul>
+        <div class="note"><span class="lbl">Garbage collection</span><p>An object is eligible for GC when nothing reachable references it. Modern GCs (G1, ZGC) use generations — most objects die young in the <em>Young</em> generation; survivors are promoted to <em>Old</em>. You never <code>free()</code> manually.</p></div>
+      </section>
+
+      <section class="card" id="equals">
+        <h3><span class="n">10</span>== vs equals() and the hashCode Contract</h3>
+        <ul>
+          <li><code>==</code> compares <strong>references</strong> for objects (or raw values for primitives).</li>
+          <li><code>equals()</code> compares <strong>logical equality</strong> (you override it for value semantics).</li>
+        </ul>
+        <div class="note gold"><span class="lbl">The contract</span><p>If you override <code>equals()</code>, you <strong>must</strong> override <code>hashCode()</code>. Equal objects must return equal hash codes — otherwise they get lost in <code>HashMap</code>/<code>HashSet</code>.</p></div>
+        <div class="code"><span class="lang">java</span><pre><code><span class="a">@Override</span> <span class="k">public boolean</span> equals(Object o) {
+    <span class="k">if</span> (<span class="k">this</span> == o) <span class="k">return true</span>;
+    <span class="k">if</span> (!(o <span class="k">instanceof</span> User u)) <span class="k">return false</span>;
+    <span class="k">return</span> id == u.id &amp;&amp; Objects.equals(name, u.name);
+}
+<span class="a">@Override</span> <span class="k">public int</span> hashCode() { <span class="k">return</span> Objects.hash(id, name); }</code></pre></div>
+      </section>
+
+      <section class="card" id="pass-by-value">
+        <h3><span class="n">11</span>Java is Always Pass-by-Value</h3>
+        <p>Java <strong>always</strong> passes arguments by value. For objects, the <em>value of the reference</em> is copied — so you can mutate the object, but reassigning the parameter doesn't affect the caller.</p>
+        <div class="code"><span class="lang">java</span><pre><code><span class="k">void</span> tweak(StringBuilder sb, <span class="k">int</span> n) {
+    sb.append(<span class="s">"!"</span>);   <span class="c">// caller SEES this (same object)</span>
+    sb = <span class="k">null</span>;        <span class="c">// caller does NOT see this (copy of reference)</span>
+    n = 99;           <span class="c">// caller does NOT see this (primitive copy)</span>
+}</code></pre></div>
+      </section>
+    </div>
+
+    <!-- ===== PART 3 ===== -->
+    <div class="part">
+      <div class="part-head"><span class="part-num">PART 3</span><h2>Collections &amp; Generics</h2></div>
+
+      <section class="card" id="collections">
+        <h3><span class="n">12</span>Collections Hierarchy</h3>
+        <div class="flow" aria-hidden="true"><span class="box">Iterable</span>
+  <span class="arr">└─</span> <span class="box">Collection</span>
+       <span class="arr">├─</span> <span class="box">List</span>   → ArrayList, LinkedList, Vector   <span class="arr">(ordered, duplicates)</span>
+       <span class="arr">├─</span> <span class="box">Set</span>    → HashSet, LinkedHashSet, TreeSet <span class="arr">(no duplicates)</span>
+       <span class="arr">└─</span> <span class="box">Queue</span>  → LinkedList, PriorityQueue, ArrayDeque
+
+<span class="box">Map</span> <span class="arr">(separate root)</span> → HashMap, LinkedHashMap, TreeMap, Hashtable  <span class="arr">(key → value)</span></div>
+        <div class="note"><span class="lbl">Quick picks</span><p><code>ArrayList</code> for indexed access · <code>LinkedHashSet</code> for unique + insertion order · <code>TreeMap</code> for sorted keys · <code>ArrayDeque</code> for stacks/queues.</p></div>
+      </section>
+
+      <section class="card" id="internals">
+        <h3><span class="n">13</span>Lists &amp; Maps — Internals</h3>
+        <h4>ArrayList vs LinkedList</h4>
+        <div class="tbl-scroll"><table>
+          <thead><tr><th>Operation</th><th>ArrayList</th><th>LinkedList</th></tr></thead>
+          <tbody>
+            <tr><td>Random access <code>get(i)</code></td><td>O(1)</td><td>O(n)</td></tr>
+            <tr><td>Add/remove at end</td><td>Amortized O(1)</td><td>O(1)</td></tr>
+            <tr><td>Add/remove in middle</td><td>O(n) (shift)</td><td>O(n) (traverse) + O(1) relink</td></tr>
+            <tr><td>Backed by</td><td>Dynamic array</td><td>Doubly-linked nodes</td></tr>
+          </tbody>
+        </table></div>
+        <h4>HashMap internals</h4>
+        <ul>
+          <li>Array of <strong>buckets</strong>; index = <code>hash(key) &amp; (capacity-1)</code>.</li>
+          <li>Collisions chain in a <strong>linked list</strong>, which converts to a balanced <strong>tree</strong> once a bucket exceeds 8 entries (Java 8+) for O(log n) lookups.</li>
+          <li>Default capacity <strong>16</strong>, load factor <strong>0.75</strong> — it resizes (doubles) when 75% full.</li>
+        </ul>
+        <h4>HashMap vs Hashtable vs ConcurrentHashMap</h4>
+        <div class="tbl-scroll"><table>
+          <thead><tr><th></th><th>HashMap</th><th>Hashtable</th><th>ConcurrentHashMap</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Thread-safe</strong></td><td>No</td><td>Yes (whole map)</td><td>Yes (bucket-level)</td></tr>
+            <tr><td><strong>Null key/value</strong></td><td>1 null key, many null values</td><td>None</td><td>None</td></tr>
+            <tr><td><strong>Performance</strong></td><td>Fast</td><td>Slow (legacy)</td><td>Fast under concurrency</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section class="card" id="comparable">
+        <h3><span class="n">14</span>Comparable vs Comparator</h3>
+        <div class="tbl-scroll"><table>
+          <thead><tr><th></th><th>Comparable</th><th>Comparator</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Method</strong></td><td><code>compareTo(o)</code></td><td><code>compare(a, b)</code></td></tr>
+            <tr><td><strong>Where</strong></td><td>Inside the class (natural order)</td><td>Separate/external</td></tr>
+            <tr><td><strong>How many</strong></td><td>One ordering</td><td>Many orderings</td></tr>
+          </tbody>
+        </table></div>
+        <div class="code"><span class="lang">java</span><pre><code><span class="c">// natural order via Comparable</span>
+<span class="k">class</span> User <span class="k">implements</span> Comparable&lt;User&gt; {
+    <span class="k">public int</span> compareTo(User o) { <span class="k">return</span> Integer.compare(age, o.age); }
+}
+<span class="c">// custom orders via Comparator (Java 8 style)</span>
+users.sort(Comparator.comparing(User::getName)
+                     .thenComparing(User::getAge).reversed());</code></pre></div>
+      </section>
+
+      <section class="card" id="generics">
+        <h3><span class="n">15</span>Generics &amp; Wildcards</h3>
+        <p>Generics give <strong>compile-time type safety</strong> and remove casts. At runtime the type is erased (<strong>type erasure</strong>) — the JVM sees raw types.</p>
+        <div class="code"><span class="lang">java</span><pre><code>List&lt;? <span class="k">extends</span> Number&gt; producer;  <span class="c">// read from it (upper bound)</span>
+List&lt;? <span class="k">super</span> Integer&gt;  consumer;  <span class="c">// write to it (lower bound)</span></code></pre></div>
+        <div class="note gold"><span class="lbl">PECS</span><p><strong>P</strong>roducer <strong>E</strong>xtends, <strong>C</strong>onsumer <strong>S</strong>uper. Use <code>? extends T</code> when a structure produces values you read; <code>? super T</code> when it consumes values you write.</p></div>
+      </section>
+
+      <section class="card" id="iterators">
+        <h3><span class="n">16</span>Fail-Fast vs Fail-Safe Iterators</h3>
+        <ul>
+          <li><strong>Fail-fast</strong> (<code>ArrayList</code>, <code>HashMap</code>): throw <code>ConcurrentModificationException</code> if the collection is structurally modified during iteration. They track a <code>modCount</code>.</li>
+          <li><strong>Fail-safe</strong> (<code>CopyOnWriteArrayList</code>, <code>ConcurrentHashMap</code>): iterate over a copy/snapshot, so concurrent edits don't throw — but you may not see the latest data.</li>
+        </ul>
+        <div class="note"><span class="lbl">Safe removal</span><p>To remove while iterating a fail-fast list, use the iterator's own <code>iterator.remove()</code> or <code>removeIf(...)</code>.</p></div>
+      </section>
+    </div>
+
+    <!-- ===== PART 4 ===== -->
+    <div class="part">
+      <div class="part-head"><span class="part-num">PART 4</span><h2>Exceptions &amp; Concurrency</h2></div>
+
+      <section class="card" id="exceptions">
+        <h3><span class="n">17</span>Exception Handling</h3>
+        <div class="flow" aria-hidden="true"><span class="box">Throwable</span>
+  <span class="arr">├─</span> <span class="box">Error</span>       → JVM problems (OutOfMemoryError) — don't catch
+  <span class="arr">└─</span> <span class="box">Exception</span>
+        <span class="arr">├─</span> <span class="box">checked</span>    → IOException, SQLException — compiler forces handling
+        <span class="arr">└─</span> <span class="box">RuntimeException</span> (unchecked) → NPE, IllegalArgument, ...</div>
+        <ul>
+          <li><strong>Checked</strong>: must be caught or declared with <code>throws</code>. Recoverable, external conditions.</li>
+          <li><strong>Unchecked</strong> (<code>RuntimeException</code>): programming bugs; not forced by the compiler.</li>
+          <li><code>throw</code> raises an exception; <code>throws</code> declares one in a signature.</li>
+          <li><code>finally</code> always runs (except <code>System.exit()</code> / JVM crash) — used for cleanup.</li>
+        </ul>
+        <div class="code"><span class="lang">java</span><pre><code><span class="c">// try-with-resources: auto-closes anything AutoCloseable</span>
+<span class="k">try</span> (BufferedReader r = Files.newBufferedReader(path)) {
+    <span class="k">return</span> r.readLine();
+} <span class="k">catch</span> (IOException e) {
+    <span class="k">throw new</span> UncheckedIOException(e);
+}   <span class="c">// r.close() called automatically, even on exception</span></code></pre></div>
+      </section>
+
+      <section class="card" id="threads">
+        <h3><span class="n">18</span>Threads &amp; Lifecycle</h3>
+        <p>Create a thread by implementing <code>Runnable</code> (preferred) or <code>Callable</code> (returns a value), rather than extending <code>Thread</code>.</p>
+        <div class="flow" aria-hidden="true"><span class="box">NEW</span> <span class="arr">--start()--&gt;</span> <span class="box">RUNNABLE</span> <span class="arr">&lt;--&gt;</span> <span class="box">RUNNING</span> <span class="arr">--run() ends--&gt;</span> <span class="box">TERMINATED</span>
+                        <span class="arr">|</span>
+          <span class="arr">wait/lock/sleep ->  BLOCKED / WAITING / TIMED_WAITING</span></div>
+        <div class="code"><span class="lang">java</span><pre><code>Runnable task = () -&gt; System.out.println(<span class="s">"run on "</span> +
+        Thread.currentThread().getName());
+<span class="k">new</span> Thread(task).start();   <span class="c">// start() spawns a thread; run() would NOT</span></code></pre></div>
+        <div class="note gold"><span class="lbl">Classic trap</span><p>Calling <code>run()</code> directly executes on the <em>current</em> thread. Only <code>start()</code> creates a new one.</p></div>
+      </section>
+
+      <section class="card" id="sync">
+        <h3><span class="n">19</span>synchronized, volatile, wait/notify</h3>
+        <div class="tbl-scroll"><table>
+          <thead><tr><th>Tool</th><th>Guarantees</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td><code>synchronized</code></td><td>Mutual exclusion + visibility</td><td>One thread in the block at a time (intrinsic lock).</td></tr>
+            <tr><td><code>volatile</code></td><td>Visibility only</td><td>Reads/writes hit main memory; NOT atomic for <code>i++</code>.</td></tr>
+            <tr><td><code>wait()/notify()</code></td><td>Thread coordination</td><td>Called inside <code>synchronized</code> on the same monitor.</td></tr>
+          </tbody>
+        </table></div>
+        <div class="note"><span class="lbl">Visibility vs atomicity</span><p><code>volatile</code> fixes <em>visibility</em> (threads see the latest value) but not <em>atomicity</em>. For counters use <code>AtomicInteger</code> or <code>synchronized</code>.</p></div>
+      </section>
+
+      <section class="card" id="executors">
+        <h3><span class="n">20</span>Executors &amp; Concurrency Utilities</h3>
+        <p>Prefer the <strong>Executor framework</strong> over raw threads — it pools and reuses threads instead of creating one per task.</p>
+        <div class="code"><span class="lang">java</span><pre><code>ExecutorService pool = Executors.newFixedThreadPool(4);
+Future&lt;Integer&gt; f = pool.submit(() -&gt; expensiveCalc()); <span class="c">// Callable</span>
+Integer result = f.get();   <span class="c">// blocks until done</span>
+pool.shutdown();</code></pre></div>
+        <h4>Useful utilities (<code>java.util.concurrent</code>)</h4>
+        <ul>
+          <li><code>AtomicInteger</code>/<code>AtomicLong</code> — lock-free counters via CAS (compare-and-swap).</li>
+          <li><code>ReentrantLock</code> — explicit lock with <code>tryLock()</code>, fairness, conditions.</li>
+          <li><code>ConcurrentHashMap</code>, <code>CopyOnWriteArrayList</code> — thread-safe collections.</li>
+          <li><code>CountDownLatch</code>, <code>CompletableFuture</code> — coordinate and compose async work.</li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- ===== PART 5 ===== -->
+    <div class="part">
+      <div class="part-head"><span class="part-num">PART 5</span><h2>Modern Java (8+)</h2></div>
+
+      <section class="card" id="lambdas">
+        <h3><span class="n">21</span>Lambdas &amp; Functional Interfaces</h3>
+        <p>A <strong>functional interface</strong> has exactly one abstract method (<code>@FunctionalInterface</code>). A <strong>lambda</strong> is a concise implementation of it.</p>
+        <div class="code"><span class="lang">java</span><pre><code>Runnable r = () -&gt; System.out.println(<span class="s">"hi"</span>);
+Function&lt;String,Integer&gt; len = String::length;   <span class="c">// method reference</span>
+BiFunction&lt;Integer,Integer,Integer&gt; add = (a,b) -&gt; a + b;</code></pre></div>
+        <div class="note"><span class="lbl">Built-in interfaces</span><p><code>Supplier&lt;T&gt;</code> (gives), <code>Consumer&lt;T&gt;</code> (takes), <code>Function&lt;T,R&gt;</code> (transforms), <code>Predicate&lt;T&gt;</code> (tests &rarr; boolean).</p></div>
+      </section>
+
+      <section class="card" id="streams">
+        <h3><span class="n">22</span>The Stream API</h3>
+        <p>Streams process collections declaratively. <strong>Intermediate</strong> ops (<code>map</code>, <code>filter</code>) are <em>lazy</em>; a <strong>terminal</strong> op (<code>collect</code>, <code>forEach</code>, <code>reduce</code>) triggers execution.</p>
+        <div class="code"><span class="lang">java</span><pre><code>List&lt;String&gt; names = users.stream()
+    .filter(u -&gt; u.getAge() &gt; 18)      <span class="c">// intermediate (lazy)</span>
+    .map(User::getName)               <span class="c">// intermediate (lazy)</span>
+    .sorted()
+    .collect(Collectors.toList());    <span class="c">// terminal -> runs the pipeline</span>
+
+Map&lt;String,List&lt;User&gt;&gt; byCity = users.stream()
+    .collect(Collectors.groupingBy(User::getCity));</code></pre></div>
+        <div class="note gold"><span class="lbl">Key point</span><p>Streams don't mutate the source and can't be reused after a terminal op. Use <code>parallelStream()</code> only for large, CPU-bound, stateless work.</p></div>
+      </section>
+
+      <section class="card" id="optional">
+        <h3><span class="n">23</span>Optional &amp; Friends</h3>
+        <p><code>Optional&lt;T&gt;</code> models "maybe a value" to avoid <code>NullPointerException</code> — use it as a return type, not for fields or parameters.</p>
+        <div class="code"><span class="lang">java</span><pre><code>Optional&lt;User&gt; found = repo.findById(id);
+String name = found.map(User::getName)
+                   .orElse(<span class="s">"Unknown"</span>);
+found.ifPresent(u -&gt; notify(u));   <span class="c">// avoid found.get() without a check</span></code></pre></div>
+        <p>Other 8+ wins worth naming: the <strong>new Date/Time API</strong> (<code>LocalDate</code>, <code>LocalDateTime</code>, immutable &amp; thread-safe), <strong>default methods</strong> on interfaces, and <strong>method references</strong> (<code>Class::method</code>).</p>
+      </section>
+    </div>
+
+    <!-- ===== PART 6 ===== -->
+    <div class="part">
+      <div class="part-head"><span class="part-num">PART 6</span><h2>Quick-Fire Q&amp;A</h2></div>
+      <p style="margin:0 0 6px;color:var(--ink-soft)" id="quickfire">Tap a question to reveal the answer — try answering out loud first.</p>
+
+      <div class="qa">
+        <details class="q"><summary><span class="qmark">&gt;</span>Why is String immutable?</summary>
+          <div class="answer"><p>For security, thread-safety, caching (the string pool), and safe use as hash keys. Any "modification" returns a new String.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>Difference between <code>==</code> and <code>equals()</code>?</summary>
+          <div class="answer"><p><code>==</code> compares references (or primitive values); <code>equals()</code> compares logical content when overridden.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>Why override hashCode() when you override equals()?</summary>
+          <div class="answer"><p>Hash-based collections use <code>hashCode()</code> to find the bucket, then <code>equals()</code> within it. If equal objects have different hash codes they'll be stored in different buckets and can't be found.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>Abstract class or interface — how do you choose?</summary>
+          <div class="answer"><p>Interface for a shared capability across unrelated types and when you need multiple inheritance of type. Abstract class when related classes share state and implementation.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>Is Java pass-by-value or pass-by-reference?</summary>
+          <div class="answer"><p>Always pass-by-value. For objects the value copied is the reference, so you can mutate the object but not reassign the caller's variable.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>How does HashMap work internally?</summary>
+          <div class="answer"><p>An array of buckets indexed by the key's hash. Collisions chain in a linked list that becomes a tree past 8 entries (Java 8+). It resizes at 75% load (default capacity 16).</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>ArrayList vs LinkedList — when each?</summary>
+          <div class="answer"><p>ArrayList for fast random access and mostly-append workloads; LinkedList only when you add/remove at the ends a lot. In practice ArrayList wins most of the time.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>Checked vs unchecked exceptions?</summary>
+          <div class="answer"><p>Checked (compile-time enforced, e.g. <code>IOException</code>) for recoverable external conditions; unchecked (<code>RuntimeException</code>) for programming errors like NPE.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>volatile vs synchronized?</summary>
+          <div class="answer"><p><code>volatile</code> guarantees visibility only; <code>synchronized</code> guarantees visibility + mutual exclusion. <code>volatile</code> alone can't make <code>i++</code> atomic.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>What is type erasure?</summary>
+          <div class="answer"><p>Generics are a compile-time feature. The compiler erases type parameters, so at runtime <code>List&lt;String&gt;</code> and <code>List&lt;Integer&gt;</code> are both just <code>List</code>.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>Intermediate vs terminal stream operations?</summary>
+          <div class="answer"><p>Intermediate ops (<code>map</code>, <code>filter</code>) are lazy and return a stream; a terminal op (<code>collect</code>, <code>reduce</code>, <code>forEach</code>) triggers evaluation and produces a result.</p></div>
+        </details>
+        <details class="q"><summary><span class="qmark">&gt;</span>run() vs start() on a Thread?</summary>
+          <div class="answer"><p><code>start()</code> creates a new thread and calls <code>run()</code> on it; calling <code>run()</code> directly just executes on the current thread — no concurrency.</p></div>
+        </details>
+      </div>
+    </div>
+
+    <!-- ===== PART 7 ===== -->
+    <div class="part">
+      <div class="part-head"><span class="part-num">PART 7</span><h2>Reference</h2></div>
+
+      <section class="card" id="cheatsheet">
+        <h3><span class="n">memorize</span>The facts interviewers probe</h3>
+        <div class="tbl-scroll"><table>
+          <thead><tr><th>Topic</th><th>Remember</th></tr></thead>
+          <tbody>
+            <tr><td>Runtime nesting</td><td>JDK &supe; JRE &supe; JVM</td></tr>
+            <tr><td>OOP pillars</td><td>Encapsulation, Inheritance, Polymorphism, Abstraction</td></tr>
+            <tr><td>Overload / override</td><td>Compile-time vs runtime</td></tr>
+            <tr><td>HashMap defaults</td><td>capacity 16, load factor 0.75, treeify at 8</td></tr>
+            <tr><td>Integer cache</td><td>&minus;128 to 127 cached</td></tr>
+            <tr><td>String builders</td><td>StringBuilder = fast; StringBuffer = synchronized</td></tr>
+            <tr><td>PECS</td><td>Producer <code>extends</code>, Consumer <code>super</code></td></tr>
+            <tr><td>equals/hashCode</td><td>Override both together</td></tr>
+            <tr><td>volatile</td><td>Visibility, not atomicity</td></tr>
+            <tr><td>Durability of concurrency</td><td>Executors over raw threads; Atomics for counters</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <div class="tips" id="final-tips">
+        <h3>Final tips for the interview</h3>
+        <ol>
+          <li>Explain <strong>OOP with a real example from your code</strong>, not textbook definitions.</li>
+          <li>Be ready to describe <strong>HashMap internals</strong> and the <strong>equals/hashCode contract</strong>.</li>
+          <li>Know <strong>stack vs heap</strong> and roughly how <strong>garbage collection</strong> works.</li>
+          <li>Distinguish <strong>volatile vs synchronized</strong> and visibility vs atomicity.</li>
+          <li>Show comfort with <strong>Streams, lambdas, and Optional</strong> — expected at 3+ years.</li>
+          <li>When unsure, reason about <strong>time/space complexity</strong> out loud.</li>
+        </ol>
+      </div>
+      <p class="signoff">// good luck — write once, ace anywhere</p>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  var toggle = document.querySelector('.toc-toggle');
+  var tocBody = document.getElementById('tocBody');
+  if (toggle) {
+    toggle.addEventListener('click', function () {
+      var open = tocBody.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    tocBody.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        if (window.matchMedia('(max-width:960px)').matches) {
+          tocBody.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  }
+
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var map = {};
+  links.forEach(function (l) {
+    var id = l.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if (el) map[id] = l;
+  });
+  var targets = Object.keys(map).map(function (id) { return document.getElementById(id); });
+  var current = null;
+  function setActive(id) {
+    if (current === id) return;
+    current = id;
+    links.forEach(function (l) { l.classList.remove('active'); });
+    if (map[id]) map[id].classList.add('active');
+  }
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) setActive(e.target.id); });
+  }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+  targets.forEach(function (t) { observer.observe(t); });
+</script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML — Interview Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f6f8;--surface:#ffffff;--ink:#15202e;--ink-soft:#3c4a5c;--muted:#6c7789;
+    --line:#e4e8ee;--line-strong:#cfd6df;--accent:#0e7c86;--accent-deep:#0a5b63;
+    --accent-wash:#e3f1f2;--amber:#b45309;--amber-wash:#fbf0e2;--code-bg:#111823;
+    --code-fg:#dbe3ec;--code-dim:#7c8ba0;--code-key:#7fd8c9;--code-str:#e0b878;
+    --code-com:#5e6b7e;--radius:10px;--maxw:1180px;--sidebar:262px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;font-size:16px;
+    line-height:1.62;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent-deep);text-decoration:none}
+  a:hover{text-decoration:underline}
+  :focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:3px}
+  .hero{background:var(--ink);color:#eef2f6;padding:56px 28px 46px;border-bottom:3px solid var(--accent)}
+  .hero-inner{max-width:var(--maxw);margin:0 auto}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--code-key);margin:0 0 14px}
+  .hero h1{font-family:"Space Grotesk",sans-serif;font-weight:700;
+    font-size:clamp(2rem,5vw,3.3rem);line-height:1.02;margin:0 0 14px;letter-spacing:-.02em}
+  .hero h1 .light{color:#9fb0c2;font-weight:500}
+  .hero p.sub{color:#aebccb;max-width:56ch;margin:0 0 30px;font-size:1.02rem}
+  .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+  .tags span{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:5px 11px;
+    border:1px solid #33445a;border-radius:100px;color:#c5d1de}
+  .pipe{margin:36px 0 4px;display:flex;align-items:stretch;gap:12px;flex-wrap:wrap;
+    font-family:"IBM Plex Mono",monospace}
+  .stage{display:flex;flex-direction:column;gap:3px;padding:11px 15px;border:1px solid #33445a;
+    border-radius:8px;background:#1a2534;min-width:104px}
+  .stage.lead{border-color:var(--accent);background:#12303266}
+  .st-file{color:var(--code-str);font-size:13px;font-weight:500}
+  .stage.lead .st-file{color:var(--code-key)}
+  .st-cap{color:var(--code-com);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase}
+  .pipe-arr{display:flex;align-items:center;color:var(--code-dim);font-size:12px;
+    letter-spacing:.04em;white-space:nowrap}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;display:grid;
+    grid-template-columns:var(--sidebar) 1fr;gap:44px;align-items:start}
+  .toc{position:sticky;top:0;max-height:100vh;overflow-y:auto;padding:34px 4px 40px}
+  .toc h2{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 14px;font-weight:600}
+  .toc ol{list-style:none;margin:0 0 22px;padding:0}
+  .toc .grp{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:.82rem;color:var(--ink);
+    text-transform:uppercase;letter-spacing:.05em;margin:18px 0 8px;padding-left:2px}
+  .toc a{display:block;color:var(--ink-soft);font-size:.9rem;line-height:1.35;
+    padding:5px 10px 5px 12px;border-left:2px solid transparent;border-radius:0 6px 6px 0}
+  .toc a:hover{background:#eaeef3;text-decoration:none}
+  .toc a.active{color:var(--accent-deep);border-left-color:var(--accent);
+    background:var(--accent-wash);font-weight:600}
+  main{padding:34px 0 90px;min-width:0}
+  .part{scroll-margin-top:20px;margin-bottom:16px}
+  .part-head{display:flex;align-items:baseline;gap:16px;margin:52px 0 6px;padding-top:26px;
+    border-top:1px solid var(--line-strong)}
+  .part:first-of-type .part-head{border-top:none;padding-top:0;margin-top:4px}
+  .part-num{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:12px;color:#fff;
+    background:var(--accent);padding:4px 9px;border-radius:6px;flex:none;letter-spacing:.05em}
+  .part-head h2{font-family:"Space Grotesk",sans-serif;font-weight:700;
+    font-size:clamp(1.4rem,3vw,2rem);letter-spacing:-.01em;margin:0;line-height:1.1}
+  section.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 30px;margin:18px 0;scroll-margin-top:20px}
+  section.card > h3{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:1.24rem;
+    margin:0 0 14px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:11px}
+  section.card > h3 .n{font-family:"IBM Plex Mono",monospace;font-size:.72em;color:var(--accent);
+    font-weight:600;flex:none}
+  h4{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:1rem;margin:22px 0 8px;color:var(--ink)}
+  p{margin:0 0 14px}
+  section.card p:last-child{margin-bottom:0}
+  strong{font-weight:600;color:var(--ink)}
+  code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:#eef1f5;color:#0c3f44;
+    padding:2px 6px;border-radius:5px;border:1px solid #e0e5ec}
+  ul,ol.list{margin:6px 0 16px;padding-left:22px}
+  li{margin:6px 0}
+  li::marker{color:var(--accent)}
+  .tbl-scroll{overflow-x:auto;margin:14px 0 18px;border-radius:8px;border:1px solid var(--line)}
+  table{border-collapse:collapse;width:100%;font-size:.92rem}
+  th,td{padding:11px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+  thead th{background:#f0f3f6;font-family:"IBM Plex Mono",monospace;font-size:.76rem;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--ink-soft);font-weight:600;border-bottom:1.5px solid var(--line-strong)}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:#f8fafb}
+  td code{background:#eef1f5}
+  .code{position:relative;background:var(--code-bg);border-radius:9px;margin:14px 0 18px;
+    overflow:hidden;border:1px solid #1e293a}
+  .code .lang{position:absolute;top:0;right:0;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--code-dim);background:#0b111a;
+    padding:5px 12px;border-radius:0 9px 0 9px}
+  pre{margin:0;padding:18px 20px;overflow-x:auto}
+  pre code{background:none;border:none;padding:0;color:var(--code-fg);font-size:13px;
+    line-height:1.6;white-space:pre}
+  .code .k{color:var(--code-key)}
+  .code .s{color:var(--code-str)}
+  .code .c{color:var(--code-com);font-style:italic}
+  .code .a{color:#9db4d0}
+  .note{border-left:3px solid var(--accent);background:var(--accent-wash);padding:14px 18px;
+    border-radius:0 8px 8px 0;margin:16px 0;font-size:.95rem}
+  .note.gold{border-left-color:var(--amber);background:var(--amber-wash)}
+  .note .lbl{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;font-weight:600;display:block;margin-bottom:4px;color:var(--accent-deep)}
+  .note.gold .lbl{color:var(--amber)}
+  .note p:last-child{margin-bottom:0}
+  .note ul{margin:0}
+  .qa{display:flex;flex-direction:column;gap:10px}
+  details.q{background:var(--surface);border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  details.q[open]{border-color:var(--line-strong)}
+  summary{cursor:pointer;list-style:none;padding:15px 20px;font-weight:600;display:flex;gap:12px;
+    align-items:flex-start;color:var(--ink)}
+  summary::-webkit-details-marker{display:none}
+  summary .qmark{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-weight:600;flex:none;
+    transition:transform .2s ease}
+  @media (prefers-reduced-motion: reduce){summary .qmark{transition:none}}
+  details.q[open] summary .qmark{transform:rotate(90deg);color:var(--amber)}
+  summary:hover{background:#f8fafb}
+  .answer{padding:0 20px 18px 47px;color:var(--ink-soft);font-size:.95rem}
+  .answer p{margin:0 0 10px}
+  .answer p:last-child{margin:0}
+  .flow{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--code-fg);
+    background:var(--code-bg);border-radius:9px;padding:20px;overflow-x:auto;line-height:1.9;
+    border:1px solid #1e293a}
+  .flow .box{color:var(--code-key)}
+  .flow .arr{color:var(--code-com)}
+  .flow .hl{color:var(--code-str)}
+  .tips{background:var(--ink);color:#e7edf3;border-radius:var(--radius);padding:30px 32px;margin:30px 0 0}
+  .tips h3{font-family:"Space Grotesk",sans-serif;color:#fff;margin:0 0 16px;font-size:1.25rem}
+  .tips ol{counter-reset:tp;list-style:none;padding:0;margin:0}
+  .tips li{counter-increment:tp;padding-left:40px;position:relative;margin:11px 0;color:#c6d2df}
+  .tips li::before{content:counter(tp);position:absolute;left:0;top:1px;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--ink);
+    background:var(--code-key);width:24px;height:24px;border-radius:6px;display:grid;place-items:center}
+  .tips strong{color:#fff}
+  .signoff{text-align:center;color:var(--muted);font-size:.85rem;margin:26px 0 0;
+    font-family:"IBM Plex Mono",monospace}
+  .toc-toggle{display:none}
+  @media (max-width:960px){
+    .wrap{grid-template-columns:1fr;gap:0;padding:0 18px}
+    .toc{position:static;max-height:none;padding:0;border:1px solid var(--line);border-radius:10px;
+      background:var(--surface);margin:22px 0 6px;overflow:hidden}
+    .toc-body{display:none;padding:6px 12px 16px}
+    .toc-body.open{display:block}
+    .toc-toggle{display:flex;width:100%;justify-content:space-between;align-items:center;background:none;
+      border:none;padding:15px 16px;cursor:pointer;font-family:"Space Grotesk",sans-serif;font-weight:600;
+      font-size:.95rem;color:var(--ink)}
+    .toc-toggle .chev{transition:transform .2s ease;color:var(--accent)}
+    .toc-toggle[aria-expanded="true"] .chev{transform:rotate(180deg)}
+    main{padding:14px 0 70px}
+    .hero{padding:44px 20px 38px}
+    section.card{padding:22px 18px}
+    .answer{padding-left:20px}
+  }
+  @media print{
+    body{background:#fff;font-size:11.5pt}
+    .hero{background:#fff;color:#000;border-bottom:2px solid #000;padding:0 0 18px}
+    .hero .eyebrow,.hero h1 .light,.hero p.sub{color:#333}
+    .hero h1{color:#000}
+    .tags,.pipe{display:none}
+    .wrap{display:block;padding:0;max-width:100%}
+    .toc{display:none}
+    .code,.flow{background:#f3f4f6;color:#111;border:1px solid #ccc}
+    .code .lang{background:#e5e7eb;color:#555}
+    pre code,.code .k,.code .s,.code .c,.code .a,.flow .box,.flow .arr,.flow .hl{color:#111}
+    .tips{background:#fff;color:#000;border:1px solid #000}
+    .tips h3,.tips strong,.tips li{color:#000}
+    .tips li::before{background:#000;color:#fff}
+    details.q{border:1px solid #bbb}
+    details.q .answer{display:block!important}
+    summary .qmark{transform:rotate(90deg)}
+    section.card{border:1px solid #ddd;break-inside:avoid}
+    .part-head{break-after:avoid}
+  }
+</style>
+</head>
+<body>
+<header class="hero"><div class="hero-inner"><p class="eyebrow">Interview Notes · Front-end</p><h1>HTML <span class="light">the structure of the web</span></h1><p class="sub">The markup that gives every page its skeleton &mdash; elements, semantics, forms, and accessibility, in plain language with snippets you can talk through.</p><div class="tags"><span>Fundamentals</span><span>Semantics</span><span>Forms</span><span>Metadata</span><span>Accessibility</span><span>Q&amp;A</span></div><div class="pipe" aria-hidden="true"><div class="stage lead"><span class="st-file">&lt;!DOCTYPE html&gt;</span><span class="st-cap">standards mode</span></div><span class="pipe-arr">&rarr;</span><div class="stage"><span class="st-file">&lt;html&gt;</span><span class="st-cap">root</span></div><span class="pipe-arr">&rarr;</span><div class="stage"><span class="st-file">&lt;head&gt;</span><span class="st-cap">metadata</span></div><span class="pipe-arr">+</span><div class="stage"><span class="st-file">&lt;body&gt;</span><span class="st-cap">content</span></div></div></div></header>
+<div class="wrap">
+<nav class="toc" aria-label="Table of contents"><button class="toc-toggle" aria-expanded="false" aria-controls="tocBody"><span>Contents</span><span class="chev">&#9662;</span></button><div class="toc-body" id="tocBody"><h2>On this page</h2><div class="grp">Part 1 · Fundamentals</div><ol><li><a href="#what">1. What HTML is</a></li><li><a href="#anatomy">2. Elements, tags &amp; attributes</a></li><li><a href="#block-inline">3. Block vs inline</a></li><li><a href="#doc">4. Document structure</a></li></ol><div class="grp">Part 2 · Structure</div><ol><li><a href="#semantic">5. Semantic HTML</a></li><li><a href="#text">6. Text, links &amp; images</a></li><li><a href="#lists-tables">7. Lists &amp; tables</a></li></ol><div class="grp">Part 3 · Forms</div><ol><li><a href="#forms">8. Forms &amp; inputs</a></li><li><a href="#validation">9. Validation</a></li></ol><div class="grp">Part 4 · Meta &amp; Media</div><ol><li><a href="#meta">10. Metadata &amp; SEO</a></li><li><a href="#media">11. Media &amp; embeds</a></li></ol><div class="grp">Part 5 · Accessibility</div><ol><li><a href="#a11y">12. Accessibility</a></li></ol><div class="grp">Part 6 · Q&amp;A</div><ol><li><a href="#quickfire">Quick-fire questions</a></li></ol><div class="grp">Part 7 · Reference</div><ol><li><a href="#cheatsheet">Cheat sheet</a></li><li><a href="#final-tips">Final tips</a></li></ol></div></nav>
+<main><div class="part"><div class="part-head"><span class="part-num">PART 1</span><h2>Fundamentals</h2></div><section class="card" id="what"><h3><span class="n">01</span>What HTML Is</h3><p><strong>HTML (HyperText Markup Language)</strong> is the markup language that structures web content. It's not a programming language &mdash; it describes <em>what</em> content is (a heading, a paragraph, a link), while CSS styles it and JavaScript adds behaviour.</p><div class='note'><span class='lbl'>The trio</span><p>HTML = structure, CSS = presentation, JavaScript = behaviour. Keeping them separated is a core best practice.</p></div></section><section class="card" id="anatomy"><h3><span class="n">02</span>Elements, Tags &amp; Attributes</h3><div class='code'><span class='lang'>html</span><pre><code>&lt;<span class='k'>a</span> <span class='a'>href</span>=<span class='s'>"/docs"</span> <span class='a'>target</span>=<span class='s'>"_blank"</span>&gt;Read docs&lt;/<span class='k'>a</span>&gt;</code></pre></div><ul><li><strong>Element</strong> = start tag + content + end tag.</li><li><strong>Tag</strong> = the <code>&lt;a&gt;</code> marker itself.</li><li><strong>Attribute</strong> = <code>name="value"</code> inside the start tag (here <code>href</code>, <code>target</code>).</li></ul><div class='note gold'><span class='lbl'>Void elements</span><p>Some elements have no content or closing tag: <code>&lt;img&gt;</code>, <code>&lt;br&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;hr&gt;</code>, <code>&lt;meta&gt;</code>, <code>&lt;link&gt;</code>.</p></div></section><section class="card" id="block-inline"><h3><span class="n">03</span>Block vs Inline</h3><div class='tbl-scroll'><table><thead><tr><th></th><th>Block</th><th>Inline</th></tr></thead><tbody><tr><td><strong>Width</strong></td><td>Fills the line</td><td>Only as wide as content</td></tr><tr><td><strong>New line</strong></td><td>Starts on its own line</td><td>Flows within text</td></tr><tr><td><strong>Examples</strong></td><td><code>div p h1 section ul</code></td><td><code>span a strong img</code></td></tr></tbody></table></div></section><section class="card" id="doc"><h3><span class="n">04</span>Document Structure</h3><div class='code'><span class='lang'>html</span><pre><code>&lt;!DOCTYPE html&gt;
+&lt;<span class='k'>html</span> <span class='a'>lang</span>=<span class='s'>"en"</span>&gt;
+  &lt;<span class='k'>head</span>&gt;
+    &lt;<span class='k'>meta</span> <span class='a'>charset</span>=<span class='s'>"UTF-8"</span>&gt;
+    &lt;<span class='k'>title</span>&gt;Page&lt;/<span class='k'>title</span>&gt;   <span class='c'>&lt;!-- metadata --&gt;</span>
+  &lt;/<span class='k'>head</span>&gt;
+  &lt;<span class='k'>body</span>&gt; ... &lt;/<span class='k'>body</span>&gt;      <span class='c'>&lt;!-- visible content --&gt;</span>
+&lt;/<span class='k'>html</span>&gt;</code></pre></div><div class='note'><span class='lbl'>Why the doctype</span><p><code>&lt;!DOCTYPE html&gt;</code> tells the browser to use standards mode. Without it, browsers fall back to quirks mode.</p></div></section></div><div class="part"><div class="part-head"><span class="part-num">PART 2</span><h2>Structure &amp; Semantics</h2></div><section class="card" id="semantic"><h3><span class="n">05</span>Semantic HTML</h3><p>Semantic elements describe their <em>meaning</em>, not just their look. They help accessibility, SEO, and readability.</p><div class='flow' aria-hidden='true'>&lt;<span class='box'>header</span>&gt;   site header / logo
+&lt;<span class='box'>nav</span>&gt;      navigation links
+&lt;<span class='box'>main</span>&gt;     the one main content area (once per page)
+  &lt;<span class='box'>section</span>&gt;  thematic grouping
+  &lt;<span class='box'>article</span>&gt;  self-contained content (post, card)
+  &lt;<span class='box'>aside</span>&gt;    side content / related
+&lt;<span class='box'>footer</span>&gt;   page footer</div><div class='note gold'><span class='lbl'>Say this</span><p>"Prefer <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;article&gt;</code> over a wall of <code>&lt;div&gt;</code>s &mdash; semantics give screen readers landmarks to navigate by."</p></div></section><section class="card" id="text"><h3><span class="n">06</span>Text, Links &amp; Images</h3><ul><li>Headings <code>&lt;h1&gt;</code>&ndash;<code>&lt;h6&gt;</code> convey hierarchy &mdash; one <code>&lt;h1&gt;</code> per page, don't skip levels for styling.</li><li>Links: <code>&lt;a href&gt;</code>; use <code>rel="noopener"</code> with <code>target="_blank"</code>.</li><li>Images: <code>&lt;img src alt&gt;</code> &mdash; <strong>always include <code>alt</code></strong> text (empty <code>alt=""</code> for purely decorative images).</li></ul></section><section class="card" id="lists-tables"><h3><span class="n">07</span>Lists &amp; Tables</h3><ul><li><code>&lt;ul&gt;</code> unordered, <code>&lt;ol&gt;</code> ordered, <code>&lt;dl&gt;</code> description list.</li><li>Tables are for <strong>tabular data</strong>, not layout: <code>&lt;table&gt;</code> &rarr; <code>&lt;thead&gt;</code>/<code>&lt;tbody&gt;</code> &rarr; <code>&lt;tr&gt;</code> &rarr; <code>&lt;th&gt;</code>/<code>&lt;td&gt;</code>.</li></ul></section></div><div class="part"><div class="part-head"><span class="part-num">PART 3</span><h2>Forms &amp; Inputs</h2></div><section class="card" id="forms"><h3><span class="n">08</span>Forms &amp; Inputs</h3><div class='code'><span class='lang'>html</span><pre><code>&lt;<span class='k'>form</span> <span class='a'>action</span>=<span class='s'>"/submit"</span> <span class='a'>method</span>=<span class='s'>"post"</span>&gt;
+  &lt;<span class='k'>label</span> <span class='a'>for</span>=<span class='s'>"email"</span>&gt;Email&lt;/<span class='k'>label</span>&gt;
+  &lt;<span class='k'>input</span> <span class='a'>id</span>=<span class='s'>"email"</span> <span class='a'>name</span>=<span class='s'>"email"</span> <span class='a'>type</span>=<span class='s'>"email"</span> <span class='a'>required</span>&gt;
+  &lt;<span class='k'>button</span> <span class='a'>type</span>=<span class='s'>"submit"</span>&gt;Send&lt;/<span class='k'>button</span>&gt;
+&lt;/<span class='k'>form</span>&gt;</code></pre></div><ul><li><code>method</code>: <strong>GET</strong> puts data in the URL (search, idempotent); <strong>POST</strong> sends it in the body (changes state).</li><li><code>name</code> is the key sent to the server; <code>id</code> links the <code>&lt;label&gt;</code> via <code>for</code> for accessibility.</li><li>Input types: <code>text email password number date checkbox radio file</code>&hellip;</li></ul></section><section class="card" id="validation"><h3><span class="n">09</span>Validation</h3><p>The browser can validate before submit using attributes &mdash; but you must <strong>always re-validate on the server</strong>.</p><ul><li><code>required</code>, <code>min</code>/<code>max</code>, <code>minlength</code>/<code>maxlength</code>, <code>pattern</code> (regex), correct <code>type</code>.</li></ul><div class='note'><span class='lbl'>Rule</span><p>Client-side validation is UX; server-side validation is security. Never trust the client.</p></div></section></div><div class="part"><div class="part-head"><span class="part-num">PART 4</span><h2>Metadata &amp; Media</h2></div><section class="card" id="meta"><h3><span class="n">10</span>Metadata &amp; SEO</h3><div class='code'><span class='lang'>html</span><pre><code>&lt;<span class='k'>meta</span> <span class='a'>charset</span>=<span class='s'>"UTF-8"</span>&gt;
+&lt;<span class='k'>meta</span> <span class='a'>name</span>=<span class='s'>"viewport"</span> <span class='a'>content</span>=<span class='s'>"width=device-width, initial-scale=1"</span>&gt;
+&lt;<span class='k'>meta</span> <span class='a'>name</span>=<span class='s'>"description"</span> <span class='a'>content</span>=<span class='s'>"Page summary for search results"</span>&gt;
+&lt;<span class='k'>meta</span> <span class='a'>property</span>=<span class='s'>"og:title"</span> <span class='a'>content</span>=<span class='s'>"..."</span>&gt; <span class='c'>&lt;!-- social preview --&gt;</span></code></pre></div><div class='note gold'><span class='lbl'>The must-have</span><p>The <strong>viewport</strong> meta tag is what makes a page responsive on mobile. Without it, phones render at desktop width.</p></div></section><section class="card" id="media"><h3><span class="n">11</span>Media &amp; Embeds</h3><ul><li><code>&lt;img&gt;</code> with <code>srcset</code> for responsive images; <code>loading="lazy"</code> to defer offscreen images.</li><li><code>&lt;video&gt;</code> / <code>&lt;audio&gt;</code> with <code>controls</code>.</li><li><code>&lt;iframe&gt;</code> embeds another document (maps, videos).</li><li><code>data-*</code> attributes store custom data readable from JS via <code>element.dataset</code>.</li></ul></section></div><div class="part"><div class="part-head"><span class="part-num">PART 5</span><h2>Accessibility</h2></div><section class="card" id="a11y"><h3><span class="n">12</span>Accessibility (a11y)</h3><ul><li>Use <strong>semantic elements</strong> &mdash; they come with built-in roles.</li><li>Every image needs <code>alt</code>; every input needs a <code>&lt;label&gt;</code>.</li><li>Use <strong>ARIA</strong> only to fill gaps semantics can't (e.g. <code>aria-label</code>, <code>aria-expanded</code>, <code>role</code>) &mdash; "no ARIA is better than bad ARIA."</li><li>Ensure keyboard operability and visible focus; maintain colour contrast.</li></ul></section></div><div class="part"><div class="part-head"><span class="part-num">PART 6</span><h2>Quick-Fire Q&amp;A</h2></div><p style='margin:0 0 6px;color:var(--ink-soft)' id='quickfire'>Tap a question to reveal the answer.</p><div class="qa"><details class="q"><summary><span class="qmark">&gt;</span>Is HTML a programming language?</summary><div class="answer"><p>No &mdash; it's a markup language for structuring content. It has no logic, loops, or variables.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>Difference between <code>id</code> and <code>class</code>?</summary><div class="answer"><p><code>id</code> is unique per page and used for one element; <code>class</code> is reusable across many. CSS specificity: id &gt; class.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>Why use semantic HTML?</summary><div class="answer"><p>Better accessibility (screen-reader landmarks), better SEO, and clearer, more maintainable markup than nested divs.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>What does the viewport meta tag do?</summary><div class="answer"><p>It tells mobile browsers to match the layout width to the device width, enabling responsive design.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>GET vs POST on a form?</summary><div class="answer"><p>GET appends data to the URL and is for safe, idempotent reads; POST sends data in the request body and is for actions that change state.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>Why is alt text important?</summary><div class="answer"><p>It describes images for screen-reader users and shows when an image fails to load; also helps SEO.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>What are void (empty) elements?</summary><div class="answer"><p>Elements with no content or closing tag, like <code>&lt;img&gt;</code>, <code>&lt;br&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;meta&gt;</code>.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>What is the DOM?</summary><div class="answer"><p>The Document Object Model &mdash; the browser's in-memory tree representation of the HTML that JavaScript can read and modify.</p></div></details></div></div><div class="part"><div class="part-head"><span class="part-num">PART 7</span><h2>Reference</h2></div><section class="card" id="cheatsheet"><h3><span class="n">memorize</span>Facts interviewers probe</h3><div class='tbl-scroll'><table><thead><tr><th>Topic</th><th>Remember</th></tr></thead><tbody><tr><td>The trio</td><td>HTML structure, CSS style, JS behaviour</td></tr><tr><td>Doctype</td><td><code>&lt;!DOCTYPE html&gt;</code> = standards mode</td></tr><tr><td>id vs class</td><td>id unique, class reusable</td></tr><tr><td>Semantic tags</td><td>header, nav, main, section, article, aside, footer</td></tr><tr><td>Void elements</td><td>img, br, input, hr, meta, link</td></tr><tr><td>Responsive</td><td>viewport meta tag is mandatory</td></tr><tr><td>Accessibility</td><td>alt text, labels, semantic first, ARIA to fill gaps</td></tr><tr><td>Validation</td><td>client = UX, server = security</td></tr></tbody></table></div></section><div class="tips" id="final-tips"><h3>Final tips for the interview</h3><ol><li>Lead with <strong>semantic, accessible markup</strong> &mdash; it signals maturity.</li><li>Know the <strong>document structure</strong> and why the doctype and viewport matter.</li><li>Explain the <strong>HTML/CSS/JS separation of concerns</strong>.</li><li>Be precise about <strong>id vs class</strong> and block vs inline.</li><li>Mention <strong>alt text and labels</strong> whenever forms or images come up.</li><li>Tie HTML to the <strong>DOM</strong> &mdash; interviewers bridge into JS from here.</li></ol></div></div><p class="signoff">// good luck — structure it well</p></main>
+</div>
+<script>
+  var toggle = document.querySelector('.toc-toggle');
+  var tocBody = document.getElementById('tocBody');
+  if (toggle) {
+    toggle.addEventListener('click', function () {
+      var open = tocBody.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    tocBody.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        if (window.matchMedia('(max-width:960px)').matches) {
+          tocBody.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  }
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var map = {};
+  links.forEach(function (l) {
+    var id = l.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if (el) map[id] = l;
+  });
+  var targets = Object.keys(map).map(function (id) { return document.getElementById(id); });
+  var current = null;
+  function setActive(id) {
+    if (current === id) return;
+    current = id;
+    links.forEach(function (l) { l.classList.remove('active'); });
+    if (map[id]) map[id].classList.add('active');
+  }
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) setActive(e.target.id); });
+  }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+  targets.forEach(function (t) { observer.observe(t); });
+</script>
+</body>
+</html>

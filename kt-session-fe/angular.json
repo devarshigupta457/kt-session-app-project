@@ -24,13 +24,28 @@
               "src/favicon.ico",
               "src/assets",
               {
-                "glob": "kafka.html",
-                "input": "src/app/courses",
+                "glob": "kafka-interview-notes.html",
+                "input": "src/app/course-html-page",
                 "output": "/"
-              },
-              {
-                "glob": "Java-interview.html",
-                "input": "src/app/courses",
+              },{
+                "glob": "git-interview-notes.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "javascript-interview-notes.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "css-interview-notes.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "html-interview-notes.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "core-java-interview-notes.html",
+                "input": "src/app/course-html-page",
                 "output": "/"
               }
             ],
@@ -99,13 +114,28 @@
               "src/favicon.ico",
               "src/assets",
               {
-                "glob": "kafka.html",
-                "input": "src/app/courses",
+                "glob": "kafka-interview-notes.html",
+                "input": "src/app/course-html-page",
                 "output": "/"
-              },
-              {
-                "glob": "Java-interview.html",
-                "input": "src/app/courses",
+              },{
+                "glob": "git-interview-notes.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "javascript-interview-notes.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "css-interview-notes.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "html-interview-notes.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "core-java-interview-notes.html",
+                "input": "src/app/course-html-page",
                 "output": "/"
               }
             ],
