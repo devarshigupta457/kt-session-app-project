@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 export interface AuthUser {
   userId?: number;
@@ -29,7 +30,7 @@ export class AuthService {
    * Adjust the endpoint / field names to match your backend.
    */
   login(username: string, password: string): Observable<AuthUser> {
-    return this.http.post<any>('/kt-session/login', { username, password }).pipe(
+    return this.http.post<any>('${environment.apiUrl}/kt-session/login', { username, password }).pipe(
       map(res => {
         const user: AuthUser = {
           userId: this.readUserId(res),
@@ -49,7 +50,7 @@ export class AuthService {
    * Expected response shape: { token?: string, role?: string }.
    */
   register(username: string, email: string, password: string, fullName: string): Observable<AuthUser> {
-    return this.http.post<any>('/kt-session/signup', { username, email, password, fullName }).pipe(
+    return this.http.post<any>(`${environment.apiUrl}/kt-session/signup`, { username, email, password, fullName }).pipe(
       map(res => {
         const user: AuthUser = {
           userId: this.readUserId(res),
