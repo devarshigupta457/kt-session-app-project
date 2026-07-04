@@ -30,7 +30,7 @@ export class AuthService {
    * Adjust the endpoint / field names to match your backend.
    */
   login(username: string, password: string): Observable<AuthUser> {
-    return this.http.post<any>('${environment.apiUrl}/kt-session/login', { username, password }).pipe(
+    return this.http.post<any>(`${environment.apiUrl}/kt-session/login`, { username, password }).pipe(
       map(res => {
         const user: AuthUser = {
           userId: this.readUserId(res),
