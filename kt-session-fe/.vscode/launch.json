@@ -4,10 +4,10 @@
   "configurations": [
     {
       "name": "ng serve",
-      "type": "pwa-chrome",
+      "type": "chrome",
       "request": "launch",
       "preLaunchTask": "npm: start",
-      "url": "http://localhost:8080/"
+      "url": "https://kt-session-app-project-production.up.railway.app"
     },
     {
       "name": "ng test",

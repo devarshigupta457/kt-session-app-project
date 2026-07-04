@@ -1,6 +1,9 @@
+//"target": "http://localhost:8080",
+
 {
+  
   "/kt-session": {
-    "target": "http://localhost:8080",
+    "target": "https://kt-session-app-project-production.up.railway.app",
     "secure": false,
     "changeOrigin": true
   }
