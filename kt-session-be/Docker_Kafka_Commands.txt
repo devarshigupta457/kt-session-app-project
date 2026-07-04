@@ -1,0 +1,43 @@
+Docker & Kafka Commands Cheat Sheet (KT Session)
+
+START DOCKER open -a Docker
+
+CHECK DOCKER docker –version docker compose version docker info
+
+GO TO PROJECT cd ~/Documents/kt-session-be
+
+START KAFKA docker compose up -d
+
+CHECK RUNNING CONTAINERS docker ps
+
+CHECK ALL CONTAINERS docker ps -a
+
+VIEW KAFKA LOGS docker logs kafka docker logs -f kafka
+
+OPEN KAFKA UI http://localhost:8081
+
+LIST TOPICS docker exec -it kafka kafka-topics.sh –bootstrap-server
+localhost:9092 –list
+
+CREATE TOPIC docker exec -it kafka kafka-topics.sh –bootstrap-server
+localhost:9092 –create –topic user-registration –partitions 1
+–replication-factor 1
+
+DESCRIBE TOPIC docker exec -it kafka kafka-topics.sh –bootstrap-server
+localhost:9092 –describe –topic user-registration
+
+PRODUCE MESSAGE docker exec -it kafka kafka-console-producer.sh
+–bootstrap-server localhost:9092 –topic user-registration
+
+CONSUME MESSAGE docker exec -it kafka kafka-console-consumer.sh
+–bootstrap-server localhost:9092 –topic user-registration
+–from-beginning
+
+RESTART KAFKA docker compose restart
+
+STOP KAFKA docker compose down
+
+STOP DOCKER osascript -e ‘quit app “Docker”’
+
+CLEANUP docker system prune -a docker image prune -a docker container
+prune
