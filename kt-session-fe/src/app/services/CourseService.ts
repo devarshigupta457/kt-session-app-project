@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http'
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Course {
   id: number;
@@ -27,27 +28,27 @@ export class CourseService {
 
  getCourses(): Observable<ApiResponse<Course[]>> {
   return this.http.get<ApiResponse<Course[]>>(
-    '/kt-session/fetchAllCourses'
+    `${environment.apiUrl}/kt-session/fetchAllCourses`
   );
 }
 
    addCourse(course: Course): Observable<ApiResponse<any>> {
   return this.http.post<ApiResponse<any>>(
-    '/kt-session/addCourse',
+    `${environment.apiUrl}/kt-session/addCourse`,
     course
   );
 }
 
   updateCourse(course: Course): Observable<ApiResponse<any>> {
   return this.http.put<ApiResponse<any>>(
-    `/kt-session/updateCourse/${course.id}`,
+    `${environment.apiUrl}/kt-session/updateCourse/${course.id}`,
     course
   );
 }
 
   deleteCourse(id: number): Observable<ApiResponse<any>> {
   return this.http.delete<ApiResponse<any>>(
-    `/kt-session/deleteCourse/${id}`
+    `${environment.apiUrl}/kt-session/deleteCourse/${id}`
   );
 }
 }

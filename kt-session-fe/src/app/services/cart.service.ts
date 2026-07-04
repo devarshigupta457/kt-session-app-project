@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
 export interface CartItem {
@@ -50,7 +51,7 @@ export class CartService {
       return of(null);
     }
 
-    return this.http.post<any>('/kt-session/addFavCourse', payload).pipe(
+    return this.http.post<any>(`${environment.apiUrl}/kt-session/addFavCourse`, payload).pipe(
       tap(() => {
         if (!this.isInCart(item.id)) {
           this.items = [...this.items, item];
@@ -65,7 +66,7 @@ export class CartService {
       return of(null);
     }
 
-    return this.http.request<any>('delete', '/kt-session/removeFavorite', { body: payload }).pipe(
+    return this.http.request<any>('delete', `${environment.apiUrl}/kt-session/removeFavorite`, { body: payload }).pipe(
       tap(() => {
         this.items = this.items.filter(i => i.id !== id);
       })
@@ -79,7 +80,7 @@ export class CartService {
       return of([]);
     }
 
-    return this.http.post<any>('/kt-session/fetchFavoriteCourse', { userId }).pipe(
+    return this.http.post<any>(`${environment.apiUrl}/kt-session/fetchFavoriteCourse`, { userId }).pipe(
       tap(response => {
         this.items = this.normalizeFavoriteResponse(response);
       })
