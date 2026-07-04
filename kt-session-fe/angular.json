@@ -47,6 +47,18 @@
                 "glob": "core-java-interview-notes.html",
                 "input": "src/app/course-html-page",
                 "output": "/"
+              },{
+                "glob": "angular-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "springbatch-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "springboot-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
               }
             ],
             "styles": [
@@ -135,6 +147,18 @@
                 "output": "/"
               },{
                 "glob": "core-java-interview-notes.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "angular-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "springbatch-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "springboot-guide.html",
                 "input": "src/app/course-html-page",
                 "output": "/"
               }

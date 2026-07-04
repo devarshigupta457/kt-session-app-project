@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spring Batch — Complete Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f6f8;--surface:#ffffff;--ink:#15202e;--ink-soft:#3c4a5c;--muted:#6c7789;
+    --line:#e4e8ee;--line-strong:#cfd6df;--accent:#0e7c86;--accent-deep:#0a5b63;
+    --accent-wash:#e3f1f2;--amber:#b45309;--amber-wash:#fbf0e2;--code-bg:#111823;
+    --code-fg:#dbe3ec;--code-dim:#7c8ba0;--code-key:#7fd8c9;--code-str:#e0b878;
+    --code-com:#5e6b7e;--radius:10px;--maxw:1180px;--sidebar:262px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;font-size:16px;
+    line-height:1.62;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent-deep);text-decoration:none}
+  a:hover{text-decoration:underline}
+  :focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:3px}
+  .hero{background:var(--ink);color:#eef2f6;padding:56px 28px 46px;border-bottom:3px solid var(--accent)}
+  .hero-inner{max-width:var(--maxw);margin:0 auto}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--code-key);margin:0 0 14px}
+  .hero h1{font-family:"Space Grotesk",sans-serif;font-weight:700;
+    font-size:clamp(2rem,5vw,3.3rem);line-height:1.02;margin:0 0 14px;letter-spacing:-.02em}
+  .hero h1 .light{color:#9fb0c2;font-weight:500}
+  .hero p.sub{color:#aebccb;max-width:56ch;margin:0 0 30px;font-size:1.02rem}
+  .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+  .tags span{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:5px 11px;
+    border:1px solid #33445a;border-radius:100px;color:#c5d1de}
+  .pipe{margin:36px 0 4px;display:flex;align-items:stretch;gap:12px;flex-wrap:wrap;
+    font-family:"IBM Plex Mono",monospace}
+  .stage{display:flex;flex-direction:column;gap:3px;padding:11px 15px;border:1px solid #33445a;
+    border-radius:8px;background:#1a2534;min-width:104px}
+  .stage.lead{border-color:var(--accent);background:#12303266}
+  .st-file{color:var(--code-str);font-size:13px;font-weight:500}
+  .stage.lead .st-file{color:var(--code-key)}
+  .st-cap{color:var(--code-com);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase}
+  .pipe-arr{display:flex;align-items:center;color:var(--code-dim);font-size:12px;
+    letter-spacing:.04em;white-space:nowrap}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;display:grid;
+    grid-template-columns:var(--sidebar) 1fr;gap:44px;align-items:start}
+  .toc{position:sticky;top:0;max-height:100vh;overflow-y:auto;padding:34px 4px 40px}
+  .toc h2{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 14px;font-weight:600}
+  .toc ol{list-style:none;margin:0 0 22px;padding:0}
+  .toc .grp{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:.82rem;color:var(--ink);
+    text-transform:uppercase;letter-spacing:.05em;margin:18px 0 8px;padding-left:2px}
+  .toc a{display:block;color:var(--ink-soft);font-size:.9rem;line-height:1.35;
+    padding:5px 10px 5px 12px;border-left:2px solid transparent;border-radius:0 6px 6px 0}
+  .toc a:hover{background:#eaeef3;text-decoration:none}
+  .toc a.active{color:var(--accent-deep);border-left-color:var(--accent);
+    background:var(--accent-wash);font-weight:600}
+  main{padding:34px 0 90px;min-width:0}
+  .part{scroll-margin-top:20px;margin-bottom:16px}
+  .part-head{display:flex;align-items:baseline;gap:16px;margin:52px 0 6px;padding-top:26px;
+    border-top:1px solid var(--line-strong)}
+  .part:first-of-type .part-head{border-top:none;padding-top:0;margin-top:4px}
+  .part-num{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:12px;color:#fff;
+    background:var(--accent);padding:4px 9px;border-radius:6px;flex:none;letter-spacing:.05em}
+  .part-head h2{font-family:"Space Grotesk",sans-serif;font-weight:700;
+    font-size:clamp(1.4rem,3vw,2rem);letter-spacing:-.01em;margin:0;line-height:1.1}
+  section.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 30px;margin:18px 0;scroll-margin-top:20px}
+  section.card > h3{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:1.24rem;
+    margin:0 0 14px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:11px}
+  section.card > h3 .n{font-family:"IBM Plex Mono",monospace;font-size:.72em;color:var(--accent);
+    font-weight:600;flex:none}
+  h4{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:1rem;margin:22px 0 8px;color:var(--ink)}
+  p{margin:0 0 14px}
+  section.card p:last-child{margin-bottom:0}
+  strong{font-weight:600;color:var(--ink)}
+  code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:#eef1f5;color:#0c3f44;
+    padding:2px 6px;border-radius:5px;border:1px solid #e0e5ec}
+  ul,ol.list{margin:6px 0 16px;padding-left:22px}
+  li{margin:6px 0}
+  li::marker{color:var(--accent)}
+  .tbl-scroll{overflow-x:auto;margin:14px 0 18px;border-radius:8px;border:1px solid var(--line)}
+  table{border-collapse:collapse;width:100%;font-size:.92rem}
+  th,td{padding:11px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+  thead th{background:#f0f3f6;font-family:"IBM Plex Mono",monospace;font-size:.76rem;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--ink-soft);font-weight:600;border-bottom:1.5px solid var(--line-strong)}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:#f8fafb}
+  td code{background:#eef1f5}
+  .code{position:relative;background:var(--code-bg);border-radius:9px;margin:14px 0 18px;
+    overflow:hidden;border:1px solid #1e293a}
+  .code .lang{position:absolute;top:0;right:0;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--code-dim);background:#0b111a;
+    padding:5px 12px;border-radius:0 9px 0 9px}
+  pre{margin:0;padding:18px 20px;overflow-x:auto}
+  pre code{background:none;border:none;padding:0;color:var(--code-fg);font-size:13px;
+    line-height:1.6;white-space:pre}
+  .code .k{color:var(--code-key)}
+  .code .s{color:var(--code-str)}
+  .code .c{color:var(--code-com);font-style:italic}
+  .code .a{color:#9db4d0}
+  .note{border-left:3px solid var(--accent);background:var(--accent-wash);padding:14px 18px;
+    border-radius:0 8px 8px 0;margin:16px 0;font-size:.95rem}
+  .note.gold{border-left-color:var(--amber);background:var(--amber-wash)}
+  .note .lbl{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;font-weight:600;display:block;margin-bottom:4px;color:var(--accent-deep)}
+  .note.gold .lbl{color:var(--amber)}
+  .note p:last-child{margin-bottom:0}
+  .note ul{margin:0}
+  .qa{display:flex;flex-direction:column;gap:10px}
+  details.q{background:var(--surface);border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  details.q[open]{border-color:var(--line-strong)}
+  summary{cursor:pointer;list-style:none;padding:15px 20px;font-weight:600;display:flex;gap:12px;
+    align-items:flex-start;color:var(--ink)}
+  summary::-webkit-details-marker{display:none}
+  summary .qmark{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-weight:600;flex:none;
+    transition:transform .2s ease}
+  @media (prefers-reduced-motion: reduce){summary .qmark{transition:none}}
+  details.q[open] summary .qmark{transform:rotate(90deg);color:var(--amber)}
+  summary:hover{background:#f8fafb}
+  .answer{padding:0 20px 18px 47px;color:var(--ink-soft);font-size:.95rem}
+  .answer p{margin:0 0 10px}
+  .answer p:last-child{margin:0}
+  .flow{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--code-fg);
+    background:var(--code-bg);border-radius:9px;padding:20px;overflow-x:auto;line-height:1.9;
+    border:1px solid #1e293a}
+  .flow .box{color:var(--code-key)}
+  .flow .arr{color:var(--code-com)}
+  .flow .hl{color:var(--code-str)}
+  .tips{background:var(--ink);color:#e7edf3;border-radius:var(--radius);padding:30px 32px;margin:30px 0 0}
+  .tips h3{font-family:"Space Grotesk",sans-serif;color:#fff;margin:0 0 16px;font-size:1.25rem}
+  .tips ol{counter-reset:tp;list-style:none;padding:0;margin:0}
+  .tips li{counter-increment:tp;padding-left:40px;position:relative;margin:11px 0;color:#c6d2df}
+  .tips li::before{content:counter(tp);position:absolute;left:0;top:1px;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--ink);
+    background:var(--code-key);width:24px;height:24px;border-radius:6px;display:grid;place-items:center}
+  .tips strong{color:#fff}
+  .signoff{text-align:center;color:var(--muted);font-size:.85rem;margin:26px 0 0;
+    font-family:"IBM Plex Mono",monospace}
+  .toc-toggle{display:none}
+  @media (max-width:960px){
+    .wrap{grid-template-columns:1fr;gap:0;padding:0 18px}
+    .toc{position:static;max-height:none;padding:0;border:1px solid var(--line);border-radius:10px;
+      background:var(--surface);margin:22px 0 6px;overflow:hidden}
+    .toc-body{display:none;padding:6px 12px 16px}
+    .toc-body.open{display:block}
+    .toc-toggle{display:flex;width:100%;justify-content:space-between;align-items:center;background:none;
+      border:none;padding:15px 16px;cursor:pointer;font-family:"Space Grotesk",sans-serif;font-weight:600;
+      font-size:.95rem;color:var(--ink)}
+    .toc-toggle .chev{transition:transform .2s ease;color:var(--accent)}
+    .toc-toggle[aria-expanded="true"] .chev{transform:rotate(180deg)}
+    main{padding:14px 0 70px}
+    .hero{padding:44px 20px 38px}
+    section.card{padding:22px 18px}
+    .answer{padding-left:20px}
+  }
+  @media print{
+    body{background:#fff;font-size:11.5pt}
+    .hero{background:#fff;color:#000;border-bottom:2px solid #000;padding:0 0 18px}
+    .hero .eyebrow,.hero h1 .light,.hero p.sub{color:#333}
+    .hero h1{color:#000}
+    .tags,.pipe{display:none}
+    .wrap{display:block;padding:0;max-width:100%}
+    .toc{display:none}
+    .code,.flow{background:#f3f4f6;color:#111;border:1px solid #ccc}
+    .code .lang{background:#e5e7eb;color:#555}
+    pre code,.code .k,.code .s,.code .c,.code .a,.flow .box,.flow .arr,.flow .hl{color:#111}
+    .tips{background:#fff;color:#000;border:1px solid #000}
+    .tips h3,.tips strong,.tips li{color:#000}
+    .tips li::before{background:#000;color:#fff}
+    details.q{border:1px solid #bbb}
+    details.q .answer{display:block!important}
+    summary .qmark{transform:rotate(90deg)}
+    section.card{border:1px solid #ddd;break-inside:avoid}
+    .part-head{break-after:avoid}
+  }
+</style>
+</head>
+<body>
+<header class="hero"><div class="hero-inner"><p class="eyebrow">In-Depth Guide · Backend</p><h1>Spring Batch <span class="light">robust bulk processing</span></h1><p class="sub">A deep guide to Spring Batch: the Job/Step domain model, chunk vs tasklet processing, readers/processors/writers, restartability, skip and retry, listeners, and scaling with partitioning &mdash; with the code and tradeoffs interviewers probe.</p><div class="tags"><span>Architecture</span><span>Chunks</span><span>Config</span><span>Reliability</span><span>Scaling</span><span>Q&amp;A</span></div><div class="pipe" aria-hidden="true"><div class="stage lead"><span class="st-file">Job</span><span class="st-cap">the run</span></div><span class="pipe-arr">&rarr;</span><div class="stage"><span class="st-file">Step</span><span class="st-cap">a phase</span></div><span class="pipe-arr">&rarr;</span><div class="stage"><span class="st-file">Reader</span><span class="st-cap">read</span></div><span class="pipe-arr">&rarr;</span><div class="stage"><span class="st-file">Processor</span><span class="st-cap">transform</span></div><span class="pipe-arr">&rarr;</span><div class="stage"><span class="st-file">Writer</span><span class="st-cap">write chunk</span></div></div></div></header>
+<div class="wrap">
+<nav class="toc" aria-label="Table of contents"><button class="toc-toggle" aria-expanded="false" aria-controls="tocBody"><span>Contents</span><span class="chev">&#9662;</span></button><div class="toc-body" id="tocBody"><h2>On this page</h2><div class="grp">Part 1 · Foundations</div><ol><li><a href="#what">1. What &amp; when</a></li><li><a href="#vs">2. Batch vs streaming</a></li></ol><div class="grp">Part 2 · Architecture</div><ol><li><a href="#domain">3. Domain model</a></li><li><a href="#meta">4. JobRepository &amp; metadata</a></li><li><a href="#context">5. ExecutionContext</a></li></ol><div class="grp">Part 3 · Processing</div><ol><li><a href="#chunk">6. Chunk-oriented steps</a></li><li><a href="#tasklet">7. Tasklet steps</a></li><li><a href="#rpw">8. Readers, processors, writers</a></li></ol><div class="grp">Part 4 · Configuration</div><ol><li><a href="#config">9. Job &amp; step config</a></li><li><a href="#launch">10. Launching &amp; parameters</a></li></ol><div class="grp">Part 5 · Reliability</div><ol><li><a href="#restart">11. Restartability</a></li><li><a href="#faulttol">12. Skip &amp; retry</a></li><li><a href="#listeners">13. Listeners</a></li></ol><div class="grp">Part 6 · Scaling</div><ol><li><a href="#scaling">14. Scaling strategies</a></li><li><a href="#partition">15. Partitioning</a></li></ol><div class="grp">Part 7 · Q&amp;A</div><ol><li><a href="#quickfire">Quick-fire questions</a></li></ol><div class="grp">Part 8 · Reference</div><ol><li><a href="#cheatsheet">Cheat sheet</a></li><li><a href="#final-tips">Final tips</a></li></ol></div></nav>
+<main><div class="part"><div class="part-head"><span class="part-num">PART 1</span><h2>Foundations</h2></div><section class="card" id="what"><h3><span class="n">01</span>What Spring Batch Is &amp; When to Use It</h3>
+<p><strong>Spring Batch</strong> is a framework for robust <strong>bulk processing</strong> &mdash; reading
+large volumes of records, transforming them, and writing them out, with first-class support for
+transactions, restart, skip/retry, logging and scaling.</p>
+<p>Typical jobs: nightly <strong>ETL</strong>, data migrations, generating reports/statements, importing
+files into a database, reconciling systems, purging/archiving old data.</p>
+<div class='note'><span class='lbl'>Why not a plain loop?</span><p>A hand-rolled loop over a million rows
+gives you no restart-after-failure, no commit batching, no skip/retry policy, no progress metadata, and no
+scaling model. Spring Batch provides all of that as infrastructure.</p></div>
+</section><section class="card" id="vs"><h3><span class="n">02</span>Batch vs Streaming (and Kafka)</h3>
+<div class='tbl-scroll'><table><thead><tr><th></th><th>Spring Batch</th><th>Streaming (e.g. Kafka)</th></tr></thead><tbody>
+<tr><td><strong>Data</strong></td><td>Bounded, finite dataset</td><td>Unbounded, continuous events</td></tr>
+<tr><td><strong>Trigger</strong></td><td>Scheduled / on-demand run</td><td>Always-on consumers</td></tr>
+<tr><td><strong>Latency</strong></td><td>High (minutes/hours)</td><td>Low (near real-time)</td></tr>
+<tr><td><strong>Fit</strong></td><td>Nightly ETL, migrations, reports</td><td>Live pipelines, event-driven</td></tr>
+</tbody></table></div>
+<div class='note gold'><span class='lbl'>They combine</span><p>A common pattern: a batch job produces or
+consumes files/DB rows, while Kafka handles the real-time path. Choose batch when work is periodic and
+bounded.</p></div>
+</section></div><div class="part"><div class="part-head"><span class="part-num">PART 2</span><h2>Core Architecture</h2></div><section class="card" id="domain"><h3><span class="n">03</span>The Domain Model</h3>
+<p>Learn these relationships &mdash; they come up in almost every Spring Batch interview.</p>
+<div class='flow' aria-hidden='true'><span class='box'>Job</span>  (a batch process definition)
+ <span class='arr'>|</span> run with <span class='hl'>JobParameters</span>
+ <span class='arr'>v</span>
+<span class='box'>JobInstance</span>  (a logical run, identified by job name + parameters)
+ <span class='arr'>|</span>
+ <span class='arr'>v</span>
+<span class='box'>JobExecution</span>  (one attempt; a restart is a new execution of the same instance)
+ <span class='arr'>|</span> contains one or more
+ <span class='arr'>v</span>
+<span class='box'>Step</span>  <span class='arr'>-&gt;</span>  <span class='box'>StepExecution</span>  (per-step attempt + read/write/skip counts)</div>
+<ul>
+<li><strong>Job</strong> = the whole process; composed of one or more <strong>Steps</strong>.</li>
+<li><strong>JobInstance</strong> = a specific logical run defined by job name + identifying JobParameters
+(e.g. <code>date=2026-07-05</code>). Re-running the <em>same</em> parameters resumes/blocks; new parameters =
+new instance.</li>
+<li><strong>JobExecution / StepExecution</strong> = a single attempt, holding status, timestamps, and counts.</li>
+</ul>
+</section><section class="card" id="meta"><h3><span class="n">04</span>JobRepository, JobLauncher &amp; Metadata Tables</h3>
+<ul>
+<li><strong>JobLauncher</strong> starts a Job with JobParameters.</li>
+<li><strong>JobRepository</strong> persists all execution metadata (status, counts, context) so jobs are
+observable and restartable.</li>
+</ul>
+<p>Spring Batch creates a set of metadata tables (<code>BATCH_JOB_INSTANCE</code>,
+<code>BATCH_JOB_EXECUTION</code>, <code>BATCH_STEP_EXECUTION</code>,
+<code>BATCH_JOB_EXECUTION_CONTEXT</code>&hellip;). Boot can auto-create them, but in production you usually
+run the vendor DDL yourself.</p>
+<div class='code'><span class='lang'>yaml</span><pre><code><span class='k'>spring</span>:
+  <span class='k'>batch</span>:
+    <span class='k'>jdbc</span>:
+      <span class='k'>initialize-schema</span>: always   <span class='c'># dev; use 'never' + manual DDL in prod</span>
+    <span class='k'>job</span>:
+      <span class='k'>enabled</span>: false             <span class='c'># don't auto-run jobs on startup</span></code></pre></div>
+</section><section class="card" id="context"><h3><span class="n">05</span>ExecutionContext (state for restart)</h3>
+<p>Each Step and Job has an <strong>ExecutionContext</strong> &mdash; a persisted key/value store the
+framework uses to remember progress (e.g. how many rows were read) so a restarted job can pick up where it
+left off. You can also stash your own state in it.</p>
+<div class='note'><span class='lbl'>Step vs Job context</span><p>Step-scoped context is for one step's
+progress; to pass data between steps, promote a key to the Job ExecutionContext (via an
+<code>ExecutionContextPromotionListener</code>).</p></div>
+</section></div><div class="part"><div class="part-head"><span class="part-num">PART 3</span><h2>Processing Models</h2></div><section class="card" id="chunk"><h3><span class="n">06</span>Chunk-Oriented Processing</h3>
+<p>The core model: read items one by one, process each, and <strong>write them in chunks</strong>. Each
+chunk is a single transaction &mdash; commit every N items.</p>
+<div class='flow' aria-hidden='true'>repeat until reader returns null:
+   read item  ->  process item  ->  add to chunk buffer
+   when buffer size == <span class='hl'>chunk(N)</span>:
+        write the whole chunk   ->  <span class='hl'>COMMIT</span> transaction
+        update read/write counts in StepExecution</div>
+<div class='code'><span class='lang'>java</span><pre><code>Step step = <span class='k'>new</span> StepBuilder(<span class='s'>"importStep"</span>, jobRepository)
+    .&lt;InputRow, OutputRow&gt;chunk(500, transactionManager)  <span class='c'>// commit interval</span>
+    .reader(reader())
+    .processor(processor())
+    .writer(writer())
+    .build();</code></pre></div>
+<div class='note gold'><span class='lbl'>Chunk size tradeoff</span><p>Bigger chunks = fewer commits and higher
+throughput, but more memory and a larger rollback on failure. Tune it (often 100&ndash;1000) and measure.
+The processor may return <code>null</code> to <strong>filter</strong> an item out.</p></div>
+</section><section class="card" id="tasklet"><h3><span class="n">07</span>Tasklet Steps</h3>
+<p>When a step is a single operation rather than an item pipeline (run a stored proc, delete a file, call a
+service, truncate a table), use a <strong>Tasklet</strong>.</p>
+<div class='code'><span class='lang'>java</span><pre><code>Step cleanup = <span class='k'>new</span> StepBuilder(<span class='s'>"cleanup"</span>, jobRepository)
+    .tasklet((contribution, chunkContext) -&gt; {
+        jdbc.update(<span class='s'>"DELETE FROM staging WHERE processed = 1"</span>);
+        <span class='k'>return</span> RepeatStatus.FINISHED;
+    }, transactionManager)
+    .build();</code></pre></div>
+<div class='note'><span class='lbl'>Chunk or tasklet?</span><p>Chunk = process a collection of items with
+read/process/write. Tasklet = a single, self-contained unit of work.</p></div>
+</section><section class="card" id="rpw"><h3><span class="n">08</span>Readers, Processors &amp; Writers</h3>
+<p>Rich set of built-in components; you rarely write I/O from scratch.</p>
+<div class='tbl-scroll'><table><thead><tr><th>Role</th><th>Built-ins</th></tr></thead><tbody>
+<tr><td><strong>ItemReader</strong></td><td><code>FlatFileItemReader</code> (CSV/fixed), <code>JdbcCursorItemReader</code>, <code>JdbcPagingItemReader</code>, <code>JpaPagingItemReader</code>, <code>StaxEventItemReader</code> (XML)</td></tr>
+<tr><td><strong>ItemProcessor</strong></td><td>Your transform/validate/filter logic; <code>CompositeItemProcessor</code> chains several</td></tr>
+<tr><td><strong>ItemWriter</strong></td><td><code>JdbcBatchItemWriter</code>, <code>JpaItemWriter</code>, <code>FlatFileItemWriter</code></td></tr>
+</tbody></table></div>
+<div class='code'><span class='lang'>java</span><pre><code><span class='a'>@Bean</span>
+FlatFileItemReader&lt;InputRow&gt; reader() {
+    <span class='k'>return new</span> FlatFileItemReaderBuilder&lt;InputRow&gt;()
+        .name(<span class='s'>"reader"</span>).resource(<span class='k'>new</span> ClassPathResource(<span class='s'>"orders.csv"</span>))
+        .delimited().names(<span class='s'>"id"</span>, <span class='s'>"customer"</span>, <span class='s'>"amount"</span>)
+        .targetType(InputRow.class).build();
+}
+<span class='a'>@Bean</span>
+ItemProcessor&lt;InputRow, OutputRow&gt; processor() {
+    <span class='k'>return</span> in -&gt; in.amount() &lt;= 0 ? <span class='k'>null</span>            <span class='c'>// null => filtered out</span>
+                              : <span class='k'>new</span> OutputRow(in.id(), in.amount());
+}</code></pre></div>
+<div class='note gold'><span class='lbl'>Restartable readers</span><p>Paging/cursor readers track their
+position in the ExecutionContext so a restart resumes cleanly. For scaling, prefer
+<code>JdbcPagingItemReader</code> (thread-safe) over cursor-based readers.</p></div>
+</section></div><div class="part"><div class="part-head"><span class="part-num">PART 4</span><h2>Configuration &amp; Launching</h2></div><section class="card" id="config"><h3><span class="n">09</span>Wiring a Job (Spring Batch 5 / Boot 3)</h3>
+<p>Modern config uses builders and injected <code>JobRepository</code> + <code>PlatformTransactionManager</code>.
+<code>@EnableBatchProcessing</code> is no longer required with Spring Boot 3 (Boot auto-configures the
+infrastructure).</p>
+<div class='code'><span class='lang'>java</span><pre><code><span class='a'>@Configuration</span>
+<span class='k'>public class</span> ImportJobConfig {
+
+    <span class='a'>@Bean</span>
+    Job importJob(JobRepository repo, Step importStep) {
+        <span class='k'>return new</span> JobBuilder(<span class='s'>"importJob"</span>, repo)
+            .incrementer(<span class='k'>new</span> RunIdIncrementer())   <span class='c'>// unique params each run</span>
+            .start(importStep)
+            .build();
+    }
+
+    <span class='a'>@Bean</span>
+    Step importStep(JobRepository repo, PlatformTransactionManager tx,
+                    ItemReader&lt;InputRow&gt; r, ItemProcessor&lt;InputRow,OutputRow&gt; p,
+                    ItemWriter&lt;OutputRow&gt; w) {
+        <span class='k'>return new</span> StepBuilder(<span class='s'>"importStep"</span>, repo)
+            .&lt;InputRow, OutputRow&gt;chunk(500, tx)
+            .reader(r).processor(p).writer(w)
+            .build();
+    }
+}</code></pre></div>
+</section><section class="card" id="launch"><h3><span class="n">10</span>Launching &amp; JobParameters</h3>
+<p>Run a job from a Boot app, on a schedule, or from the command line. Each run needs unique
+<strong>identifying</strong> parameters or Batch will refuse to re-run a completed instance.</p>
+<div class='code'><span class='lang'>java</span><pre><code><span class='a'>@Component</span>
+<span class='k'>public class</span> JobRunner <span class='k'>implements</span> ApplicationRunner {
+    <span class='k'>private final</span> JobLauncher launcher; <span class='k'>private final</span> Job importJob;
+    <span class='c'>// constructor omitted</span>
+    <span class='k'>public void</span> run(ApplicationArguments args) <span class='k'>throws</span> Exception {
+        JobParameters params = <span class='k'>new</span> JobParametersBuilder()
+            .addString(<span class='s'>"date"</span>, LocalDate.now().toString())
+            .addLong(<span class='s'>"run.id"</span>, System.currentTimeMillis())
+            .toJobParameters();
+        launcher.run(importJob, params);
+    }
+}</code></pre></div>
+<div class='note'><span class='lbl'>Scheduling</span><p>Trigger with <code>@Scheduled(cron="0 0 2 * * *")</code>
+for nightly runs, or Quartz for clustered scheduling. A <strong>JobParametersIncrementer</strong> (like
+<code>RunIdIncrementer</code>) auto-varies parameters so the same job can run repeatedly.</p></div>
+</section></div><div class="part"><div class="part-head"><span class="part-num">PART 5</span><h2>Reliability &amp; Fault Tolerance</h2></div><section class="card" id="restart"><h3><span class="n">11</span>Restartability</h3>
+<p>If a job fails midway, re-launching the <em>same JobInstance</em> resumes from the last committed chunk
+&mdash; completed steps are skipped and the failed step continues using its saved ExecutionContext.</p>
+<div class='note gold'><span class='lbl'>Key rule</span><p>Restart works because each chunk commits its
+progress transactionally. Make a step non-restartable with <code>.allowStartIfComplete(false)</code>, or
+cap attempts with <code>.startLimit(n)</code>. Design writers to be <strong>idempotent</strong> so a resumed
+chunk can't double-write.</p></div>
+</section><section class="card" id="faulttol"><h3><span class="n">12</span>Skip &amp; Retry</h3>
+<p>Fault-tolerant steps let a job survive bad records or transient errors instead of aborting.</p>
+<div class='code'><span class='lang'>java</span><pre><code><span class='k'>new</span> StepBuilder(<span class='s'>"step"</span>, repo)
+    .&lt;In,Out&gt;chunk(500, tx).reader(r).processor(p).writer(w)
+    .faultTolerant()
+    .skip(FlatFileParseException.class).skipLimit(50)   <span class='c'>// tolerate up to 50 bad rows</span>
+    .retry(DeadlockLoserDataAccessException.class).retryLimit(3) <span class='c'>// transient DB errors</span>
+    .build();</code></pre></div>
+<ul>
+<li><strong>Skip</strong> &mdash; discard an item that throws a listed exception, up to a limit; log it via a
+skip listener.</li>
+<li><strong>Retry</strong> &mdash; re-attempt an item on transient failures (deadlocks, timeouts) before
+giving up.</li>
+</ul>
+</section><section class="card" id="listeners"><h3><span class="n">13</span>Listeners</h3>
+<p>Hook into the lifecycle for logging, metrics, notifications, and cleanup.</p>
+<div class='tbl-scroll'><table><thead><tr><th>Listener</th><th>Fires</th></tr></thead><tbody>
+<tr><td><code>JobExecutionListener</code></td><td>before/after the whole job</td></tr>
+<tr><td><code>StepExecutionListener</code></td><td>before/after a step</td></tr>
+<tr><td><code>ChunkListener</code></td><td>around each chunk (incl. errors)</td></tr>
+<tr><td><code>ItemReadListener</code> / <code>ItemProcessListener</code> / <code>ItemWriteListener</code></td><td>around each item op</td></tr>
+<tr><td><code>SkipListener</code></td><td>when an item is skipped &mdash; record the bad record</td></tr>
+</tbody></table></div>
+</section></div><div class="part"><div class="part-head"><span class="part-num">PART 6</span><h2>Scaling &amp; Performance</h2></div><section class="card" id="scaling"><h3><span class="n">14</span>Scaling Strategies</h3>
+<p>When one thread is too slow, Spring Batch offers several models, in rough order of complexity:</p>
+<div class='tbl-scroll'><table><thead><tr><th>Strategy</th><th>What it does</th></tr></thead><tbody>
+<tr><td><strong>Multi-threaded step</strong></td><td>Process chunks on a thread pool within one step. Simple, but the reader must be thread-safe and ordering is lost.</td></tr>
+<tr><td><strong>Parallel steps</strong></td><td>Run independent steps concurrently via a split flow.</td></tr>
+<tr><td><strong>Async processor/writer</strong></td><td><code>AsyncItemProcessor</code> processes items on a pool; the writer unwraps futures.</td></tr>
+<tr><td><strong>Partitioning</strong></td><td>Split data into partitions, each handled by its own step instance (local threads or remote workers).</td></tr>
+<tr><td><strong>Remote chunking</strong></td><td>A master reads; workers process/write over messaging. Network-heavy.</td></tr>
+</tbody></table></div>
+</section><section class="card" id="partition"><h3><span class="n">15</span>Partitioning</h3>
+<p>The most scalable model: a <strong>Partitioner</strong> divides the input (e.g. by ID range or file) into
+partitions, and a <strong>PartitionHandler</strong> runs a worker step for each &mdash; locally on threads or
+remotely across nodes.</p>
+<div class='flow' aria-hidden='true'><span class='box'>Manager Step</span>
+   Partitioner -> creates {p0: ids 1-10k, p1: 10k-20k, ...}
+        <span class='arr'>|</span> distributes to
+        <span class='arr'>v</span>
+   <span class='box'>Worker Step</span> x N   (each a full reader/processor/writer over its slice)</div>
+<div class='note gold'><span class='lbl'>Why it scales best</span><p>Each partition has an independent
+ExecutionContext, so partitions restart and scale independently. Ideal for large datasets that split cleanly
+by key range or file.</p></div>
+</section></div><div class="part"><div class="part-head"><span class="part-num">PART 7</span><h2>Quick-Fire Q&amp;A</h2></div><p style='margin:0 0 6px;color:var(--ink-soft)' id='quickfire'>Tap a question to reveal the answer.</p><div class="qa"><details class="q"><summary><span class="qmark">&gt;</span>What problem does Spring Batch solve?</summary><div class="answer"><p>Robust bulk processing: transactional chunking, restart-after-failure, skip/retry, metadata/monitoring, and scaling &mdash; things a plain loop lacks.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>Job vs JobInstance vs JobExecution?</summary><div class="answer"><p>Job is the definition; JobInstance is a logical run identified by job name + identifying parameters; JobExecution is a single attempt of that instance (a restart is a new execution).</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>What is chunk-oriented processing?</summary><div class="answer"><p>Read-process-write with items grouped into chunks; each chunk of N items is written and committed in one transaction.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>Chunk vs tasklet?</summary><div class="answer"><p>Chunk processes a stream of items (reader/processor/writer); tasklet is a single self-contained operation like running a query or deleting a file.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>How does restart work?</summary><div class="answer"><p>Each chunk commits progress to the JobRepository and ExecutionContext, so re-launching the same instance resumes from the last committed point and skips completed steps.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>Skip vs retry?</summary><div class="answer"><p>Skip discards bad items (bad data) up to a limit; retry re-attempts items on transient errors (deadlocks/timeouts) before failing.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>What does the JobRepository do?</summary><div class="answer"><p>Persists all job/step execution metadata and context into the BATCH_* tables, enabling monitoring and restart.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>How do you ensure a job can re-run?</summary><div class="answer"><p>Vary identifying JobParameters (e.g. a RunIdIncrementer or a date) &mdash; Batch blocks re-running a completed instance with identical parameters.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>What scaling options exist?</summary><div class="answer"><p>Multi-threaded step, parallel steps, async processor/writer, partitioning (local or remote), and remote chunking &mdash; partitioning scales best.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>Why make writers idempotent?</summary><div class="answer"><p>On restart a partially processed chunk may be re-run, so idempotent writes prevent duplicates.</p></div></details></div></div><div class="part"><div class="part-head"><span class="part-num">PART 8</span><h2>Reference</h2></div><section class="card" id="cheatsheet"><h3><span class="n">memorize</span>Facts interviewers probe</h3>
+<div class='tbl-scroll'><table><thead><tr><th>Topic</th><th>Remember</th></tr></thead><tbody>
+<tr><td>Domain</td><td>Job &rarr; JobInstance &rarr; JobExecution; Step &rarr; StepExecution</td></tr>
+<tr><td>Chunk model</td><td>read &rarr; process &rarr; write N &rarr; commit</td></tr>
+<tr><td>Processor null</td><td>filters the item out</td></tr>
+<tr><td>Tasklet</td><td>single unit of work</td></tr>
+<tr><td>Restart</td><td>resumes via committed ExecutionContext</td></tr>
+<tr><td>Fault tolerance</td><td>skip (bad data), retry (transient)</td></tr>
+<tr><td>Uniqueness</td><td>identifying JobParameters + incrementer</td></tr>
+<tr><td>Scaling</td><td>partitioning scales best</td></tr>
+<tr><td>Metadata</td><td>JobRepository + BATCH_* tables</td></tr>
+<tr><td>Boot 3</td><td>@EnableBatchProcessing no longer required</td></tr>
+</tbody></table></div>
+</section><div class="tips" id="final-tips"><h3>Final tips for the interview</h3><ol><li>Draw the <strong>Job/Instance/Execution + Step</strong> model &mdash; the anchor question.</li><li>Explain the <strong>chunk transaction</strong> and how commit interval affects throughput vs memory.</li><li>Distinguish <strong>chunk vs tasklet</strong> with concrete examples.</li><li>Nail <strong>restartability</strong>: committed chunks + idempotent writers.</li><li>Separate <strong>skip (bad data) from retry (transient errors)</strong>.</li><li>Reach for <strong>partitioning</strong> when asked how to scale a huge dataset.</li></ol></div></div><p class="signoff">// good luck — chunk it, commit it, restart it</p></main>
+</div>
+<script>
+  var toggle = document.querySelector('.toc-toggle');
+  var tocBody = document.getElementById('tocBody');
+  if (toggle) {
+    toggle.addEventListener('click', function () {
+      var open = tocBody.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    tocBody.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        if (window.matchMedia('(max-width:960px)').matches) {
+          tocBody.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  }
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var map = {};
+  links.forEach(function (l) {
+    var id = l.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if (el) map[id] = l;
+  });
+  var targets = Object.keys(map).map(function (id) { return document.getElementById(id); });
+  var current = null;
+  function setActive(id) {
+    if (current === id) return;
+    current = id;
+    links.forEach(function (l) { l.classList.remove('active'); });
+    if (map[id]) map[id].classList.add('active');
+  }
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) setActive(e.target.id); });
+  }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+  targets.forEach(function (t) { observer.observe(t); });
+</script>
+</body>
+</html>
