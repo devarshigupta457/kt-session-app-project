@@ -53,10 +53,10 @@ public class UserServiceImpl implements UserService {
 //                        savedUser.getEmail()
 //                )
 //        );
-        // emailService.sendRegistrationEmail(
-        //         user.getEmail(),
-        //         user.getFullName()
-        // );
+        emailService.sendRegistrationEmail(
+                user.getEmail(),
+                user.getFullName()
+        );
 
         LoginResponse response = modelMapper.map(savedUser, LoginResponse.class);
         response.setMessage("Registration Successful");
