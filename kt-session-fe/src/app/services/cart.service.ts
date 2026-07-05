@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, of, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
@@ -21,28 +21,29 @@ interface FavoritePayload {
 })
 export class CartService {
 
-  private items: CartItem[] = [];
+  private itemsSubject = new BehaviorSubject<CartItem[]>([]);
+  items$ = this.itemsSubject.asObservable();
 
   constructor(private http: HttpClient, private auth: AuthService) {
     this.auth.user$.subscribe(user => {
       if (user?.userId) {
         this.fetchFavorites().subscribe({ error: () => undefined });
       } else {
-        this.items = [];
+        this.itemsSubject.next([]);
       }
     });
   }
 
   getItems(): CartItem[] {
-    return this.items;
+    return this.itemsSubject.value;
   }
 
   getCount(): number {
-    return this.items.length;
+    return this.itemsSubject.value.length;
   }
 
   isInCart(id: string): boolean {
-    return this.items.some(i => i.id === id);
+    return this.itemsSubject.value.some(i => i.id === id);
   }
 
   addItem(item: CartItem): Observable<any> {
@@ -54,7 +55,7 @@ export class CartService {
     return this.http.post<any>(`${environment.apiUrl}/kt-session/addFavCourse`, payload).pipe(
       tap(() => {
         if (!this.isInCart(item.id)) {
-          this.items = [...this.items, item];
+          this.itemsSubject.next([...this.itemsSubject.value, item]);
         }
       })
     );
@@ -68,7 +69,7 @@ export class CartService {
 
     return this.http.request<any>('delete', `${environment.apiUrl}/kt-session/removeFavorite`, { body: payload }).pipe(
       tap(() => {
-        this.items = this.items.filter(i => i.id !== id);
+        this.itemsSubject.next(this.itemsSubject.value.filter(i => i.id !== id));
       })
     );
   }
@@ -76,13 +77,13 @@ export class CartService {
   fetchFavorites(): Observable<CartItem[]> {
     const userId = this.auth.currentUser?.userId;
     if (!userId) {
-      this.items = [];
+      this.itemsSubject.next([]);
       return of([]);
     }
 
     return this.http.post<any>(`${environment.apiUrl}/kt-session/fetchFavoriteCourse`, { userId }).pipe(
       tap(response => {
-        this.items = this.normalizeFavoriteResponse(response);
+        this.itemsSubject.next(this.normalizeFavoriteResponse(response));
       })
     );
   }

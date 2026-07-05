@@ -39,7 +39,7 @@ export class AddCourseModalComponent implements OnInit, OnDestroy {
   }
 
   private emptyCourse(): Course {
-    return { id: 0, title: '', description: '', price: '', link: '', trending: false };
+    return { id: '0', title: '', description: '', price: '', link: '', trending: false };
   }
 
   @HostListener('document:keydown.escape')

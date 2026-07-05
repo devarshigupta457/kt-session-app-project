@@ -8,7 +8,7 @@ import { AddFormService } from '../services/add-form.service';
 import { AuthService } from '../services/auth.service';
 
 interface Course {
-  id: number;
+  id: string;
   title: string;
   description: string;
   price: string;
@@ -60,7 +60,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
   private fallbackCourses(): Course[] {
     return [
       {
-        id: 1,
+        id: '1',
         title: 'Apache Kafka — Interview Notes',
         description: 'Core concepts, Spring Boot integration, and hands-on implementation.',
         price: 'Free',
@@ -68,7 +68,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
         trending: true
       },
       {
-        id: 2,
+        id: '2',
         title: 'Git — Interview Notes',
         description: 'Core concepts, Apache Kafka integration, and hands-on implementation.',
         price: 'Free',

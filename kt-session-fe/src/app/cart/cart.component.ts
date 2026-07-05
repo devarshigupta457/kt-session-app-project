@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { CartService, CartItem } from '../services/cart.service';
 import { Course } from '../services/CourseService';
 import { Router } from '@angular/router';
@@ -12,14 +13,15 @@ import { Router } from '@angular/router';
 export class CartComponent implements OnInit {
 
   courses: Course[] = [];
+  items$: Observable<CartItem[]>;
   loading = false;
   error = '';
 
-
   constructor(public cartService: CartService,
         private router: Router,
-    
-  ) {}
+  ) {
+    this.items$ = this.cartService.items$;
+  }
 
   ngOnInit(): void {
     this.loading = true;
@@ -35,11 +37,7 @@ export class CartComponent implements OnInit {
     });
   }
 
-  get items(): CartItem[] {
-    return this.cartService.getItems();
-  }
-
-  remove(id: number): void {
+  remove(id: string): void {
     this.cartService.removeItem(id).subscribe({
       error: () => {
         this.error = 'Could not remove this course from favourites. Please try again.';
