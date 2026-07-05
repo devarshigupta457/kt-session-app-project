@@ -7,6 +7,7 @@ import com.project.ktsession.KTSession.entity.User;
 import com.project.ktsession.KTSession.dto.event.UserRegisteredEvent;
 import com.project.ktsession.KTSession.exception.BadRequestException;
 import com.project.ktsession.KTSession.exception.ResourceNotFoundException;
+import com.project.ktsession.KTSession.service.EmailService;
 import com.project.ktsession.KTSession.service.kafka.KafkaProducerService;
 import com.project.ktsession.KTSession.repository.UserRepository;
 import com.project.ktsession.KTSession.service.UserService;
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final KafkaProducerService kafkaProducerService;
+    private final EmailService emailService;
 
     @Override
     public LoginResponse signup(SignupRequest request) {
@@ -44,12 +46,17 @@ public class UserServiceImpl implements UserService {
         User savedUser = repository.save(user);
 
         // Publish Kafka event
-        // kafkaProducerService.publish(
-        //         new UserRegisteredEvent(
-        //                 savedUser.getFullName(),
-        //                 savedUser.getEmail()
-        //         )
-        // );
+
+//        kafkaProducerService.publish(
+//                new UserRegisteredEvent(
+//                        savedUser.getFullName(),
+//                        savedUser.getEmail()
+//                )
+//        );
+        emailService.sendRegistrationEmail(
+                user.getEmail(),
+                user.getFullName()
+        );
 
         LoginResponse response = modelMapper.map(savedUser, LoginResponse.class);
         response.setMessage("Registration Successful");
