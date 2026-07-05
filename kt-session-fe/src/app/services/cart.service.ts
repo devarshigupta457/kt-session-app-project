@@ -5,7 +5,7 @@ import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
 export interface CartItem {
-  id: number;
+  id: string;
   title: string;
   price: string;
   link: string;
@@ -13,7 +13,7 @@ export interface CartItem {
 
 interface FavoritePayload {
   userId: number;
-  courseId: number;
+  courseId: string;
 }
 
 @Injectable({
@@ -41,7 +41,7 @@ export class CartService {
     return this.items.length;
   }
 
-  isInCart(id: number): boolean {
+  isInCart(id: string): boolean {
     return this.items.some(i => i.id === id);
   }
 
@@ -60,7 +60,7 @@ export class CartService {
     );
   }
 
-  removeItem(id: number): Observable<any> {
+  removeItem(id: string): Observable<any> {
     const payload = this.buildPayload(id);
     if (!payload) {
       return of(null);
@@ -87,7 +87,7 @@ export class CartService {
     );
   }
 
-  private buildPayload(courseId: number): FavoritePayload | null {
+  private buildPayload(courseId: string): FavoritePayload | null {
     const userId = this.auth.currentUser?.userId;
     return userId ? { userId, courseId } : null;
   }
@@ -102,11 +102,11 @@ export class CartService {
     return favorites.map((favorite: any) => {
       const course = favorite.course || favorite;
       return {
-        id: Number(course.id ?? course.courseId ?? favorite.courseId),
+        id: String(course.id ?? course.courseId ?? favorite.courseId ?? ''),
         title: String(course.title ?? course.courseTitle ?? ''),
         price: String(course.price ?? ''),
         link: String(course.link ?? '')
       };
-    }).filter((item: CartItem) => item.id && item.title);
+    }).filter((item: CartItem) => item.id.trim().length > 0 && item.title.trim().length > 0);
   }
 }
