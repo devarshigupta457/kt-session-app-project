@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export interface Course {
-  id: number;
+  id: string;
     title: string;
     price: string;
     description: string;
@@ -46,7 +46,7 @@ export class CourseService {
   );
 }
 
-  deleteCourse(id: number): Observable<ApiResponse<any>> {
+  deleteCourse(id: string): Observable<ApiResponse<any>> {
   return this.http.delete<ApiResponse<any>>(
     `${environment.apiUrl}/kt-session/deleteCourse/${id}`
   );

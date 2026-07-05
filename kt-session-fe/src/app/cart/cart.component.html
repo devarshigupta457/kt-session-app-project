@@ -3,15 +3,20 @@
 
   <p *ngIf="loading" class="cart-empty">Loading your favourites...</p>
   <p *ngIf="error" class="cart-error">{{ error }}</p>
-  <p *ngIf="!loading && !items.length" class="cart-empty">You have not saved any course to Favourites...</p>
 
-  <ul class="cart-list" *ngIf="!loading && items.length">
-    <li *ngFor="let item of items" class="cart-item">
-      <div>
-        <span class="cart-title">{{ item.title }}</span>
-        <span class="cart-price">₹{{ item.price }}</span>
-      </div>
-      <button class="cart-remove" (click)="remove(item.id)">Remove</button>
-    </li>
-  </ul>
+  <ng-container *ngIf="!loading">
+    <ng-container *ngIf="items$ | async as items">
+      <p *ngIf="!items.length" class="cart-empty">You have not saved any course to Favourites...</p>
+
+      <ul class="cart-list" *ngIf="items.length">
+        <li *ngFor="let item of items" class="cart-item">
+          <div>
+            <span class="cart-title">{{ item.title }}</span>
+            <span class="cart-price">₹{{ item.price }}</span>
+          </div>
+          <button class="cart-remove" (click)="remove(item.id)">Remove</button>
+        </li>
+      </ul>
+    </ng-container>
+  </ng-container>
 </div>
