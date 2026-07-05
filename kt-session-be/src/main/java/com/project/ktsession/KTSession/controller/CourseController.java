@@ -56,7 +56,6 @@ public class CourseController {
      */
     @GetMapping("/fetchAllCourses")
     public ResponseEntity<ApiResponse<List<CourseResponse>>> getAllCourses() {
-
         List<CourseResponse> response = courseService.getAllCourses();
 
         ApiResponse<List<CourseResponse>> apiResponse =

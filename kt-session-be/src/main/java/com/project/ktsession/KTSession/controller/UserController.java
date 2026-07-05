@@ -44,7 +44,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginResponse>> login(
              @RequestBody LoginRequest request) {
-
+        System.out.println("request"+request.toString());
         LoginResponse response = userService.login(request);
 
         ApiResponse<LoginResponse> apiResponse =

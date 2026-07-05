@@ -2,12 +2,16 @@ package com.project.ktsession.KTSession.service.impl;
 
 import com.project.ktsession.KTSession.service.EmailService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender mailSender;
@@ -19,7 +23,7 @@ public class EmailServiceImpl implements EmailService {
 
         message.setTo(email);
         message.setSubject("Welcome to KT Session – Registration Successful");
-
+        log.info("EmailService: Sent mail");
         message.setText(
                 "Dear " + fullName + ",\n\n" +
                         "Welcome to KT Session!\n\n" +

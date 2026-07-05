@@ -5,34 +5,41 @@
 
   <div class="course-grid">
     <div class="course-card" *ngFor="let course of courses" (click)="openCourse(course)">
-        
+      <button
+        class="icon-btn course-fav"
+        [class.added]="isInCart(course)"
+        (click)="addToCart(course, $event)"
+        [attr.aria-label]="isInCart(course) ? 'Remove from favourites' : 'Add to favourites'">
+        <span class="icon">{{ isInCart(course) ? '★' : '☆' }}</span>
+        <span class="sr-only">{{ isInCart(course) ? 'Added to favourites' : 'Add to favourites' }}</span>
+      </button>
       <h3>{{ course.title }}</h3>
       <p>{{ course.description }}</p>
       <div class="course-footer">
         <span class="price">₹{{ course.price }}</span>
         <div class="course-actions">
           <button
-            class="cart-btn"
-            [class.added]="isInCart(course)"
-            (click)="addToCart(course, $event)">
-            {{ isInCart(course) ? 'Added ✓' : 'Favourites' }}
-          </button>
-          <button
-            class="open-btn"
-            (click)="openCourse(course, $event)">
-            Open Course
+            class="icon-btn open-btn"
+            (click)="openCourse(course, $event)"
+            aria-label="Open course">
+            <span class="icon">▶</span>
+            <span class="sr-only">Open course</span>
           </button>
           <button
             *ngIf="auth.isAdmin$ | async"
-            class="edit-btn"
-            (click)="editCourse(course, $event)">
-            Edit
+            class="icon-btn edit-btn"
+            (click)="editCourse(course, $event)"
+            aria-label="Edit course">
+            <span class="icon">✏️</span>
+            <span class="sr-only">Edit course</span>
           </button>
           <button
             *ngIf="auth.isAdmin$ | async"
-            class="delete-btn"
-            (click)="deleteCourse(course, $event)">
-            Delete
+            class="icon-btn delete-btn"
+            (click)="deleteCourse(course, $event)"
+            aria-label="Delete course">
+            <span class="icon">🗑️</span>
+            <span class="sr-only">Delete course</span>
           </button>
         </div>
       </div>
@@ -45,7 +52,10 @@
     <ul class="trending-list">
       <li *ngFor="let t of trendingCourses">
         <span>{{ t.title }}</span>
-        <button (click)="openCourse(t, $event)">Open</button>
+        <button class="icon-btn trending-open-btn" (click)="openCourse(t, $event)" aria-label="Open trending course">
+          <span class="icon">🔗</span>
+          <span class="sr-only">Open</span>
+        </button>
       </li>
     </ul>
   </div>
