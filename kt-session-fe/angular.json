@@ -59,6 +59,26 @@
                 "glob": "springboot-guide.html",
                 "input": "src/app/course-html-page",
                 "output": "/"
+              },{
+                "glob": "database-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "mysql-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "postgresql-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "python-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "oracle-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
               }
             ],
             "styles": [
@@ -159,6 +179,26 @@
                 "output": "/"
               },{
                 "glob": "springboot-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "database-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "mysql-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "postgresql-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "python-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "oracle-guide.html",
                 "input": "src/app/course-html-page",
                 "output": "/"
               }
