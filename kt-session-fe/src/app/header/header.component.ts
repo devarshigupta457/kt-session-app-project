@@ -9,13 +9,20 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  showProfile = false;
 
   constructor(public cartService: CartService, public auth: AuthService, private router: Router){}
+
   ngOnInit(): void {
 
   }
 
+  toggleProfile(): void {
+    this.showProfile = !this.showProfile;
+  }
+
   logout(): void {
+    this.showProfile = false;
     this.auth.logout();
     this.router.navigate(['/']);
   }

@@ -47,12 +47,13 @@
 .nav ul{
     display: inline-flex;
     list-style-type: none;
-    margin: 0%;
-    padding: 0%;
+    margin: 0;
+    padding: 0;
+    align-items: center;
 }
 .nav li{
     padding-left: 15px;
-    padding-top: 15px;
+    padding-top: 0;
 }
 .nav li a{
     position: relative;
@@ -92,6 +93,77 @@
     transform: translateY(-2px) scale(1.12);
     opacity: 0.85;
 }
+.nav-profile {
+    position: relative;
+}
+.profile-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: #f4f5f6;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.profile-button:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.18);
+}
+.profile-icon {
+    font-size: 1rem;
+}
+.profile-panel {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 12px);
+    width: 220px;
+    background: #fff;
+    color: #102a43;
+    border-radius: 14px;
+    border: 1px solid rgba(23, 64, 100, 0.15);
+    box-shadow: 0 24px 48px rgba(23, 64, 100, 0.16);
+    padding: 14px;
+    z-index: 1000;
+    animation: popDown 0.22s ease-out;
+}
+.profile-line {
+    margin: 0 0 10px;
+    font-size: 0.95rem;
+    line-height: 1.35;
+}
+.profile-line:last-child {
+    margin-bottom: 0;
+}
+.logout-inline {
+    width: 100%;
+    border: none;
+    background: #174064;
+    color: #fff;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.logout-inline:hover {
+    background-color: #102a43;
+    transform: translateY(-1px);
+}
+@keyframes popDown {
+    from {
+        opacity: 0;
+        transform: translateY(-6px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
 .nav .nav-search{
     flex:1;
     display: flex;
