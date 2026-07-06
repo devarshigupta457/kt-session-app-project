@@ -45,6 +45,20 @@ export class AuthService {
   }
 
   /**
+   * Verifies the OTP sent to the user's email.
+   */
+  verifyOtp(email: string, otp: number): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/kt-session/verify-otp`, { email, otp });
+  }
+
+  /**
+   * Sends signup data and triggers OTP delivery to the user's email.
+   */
+  sendSignupOtp(username: string, email: string, password: string, fullName: string): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/kt-session/signup`, { username, email, password, fullName });
+  }
+
+  /**
    * Registers a new user. The backend assigns the role (defaults to USER);
    * never trust a client-supplied role.
    * Expected response shape: { token?: string, role?: string }.
