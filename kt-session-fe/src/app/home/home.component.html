@@ -1,25 +1,83 @@
 <section class="hero">
-    <h1 class="home-head-line">
-        <span class="marquee"><span class="marquee-track">Welcome to the KTSession page&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;Welcome to the KTSession page&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;</span></span>
-    </h1>
-    <p class="hero-sub">Learn in-demand tech skills with structured courses and real, practitioner-written interview notes.</p>
-    <div class="hero-actions">
-        <a class="hero-cta" routerLink="/courses">Browse Courses</a>
-        <button *ngIf="auth.isAdmin$ | async" type="button" class="hero-cta hero-cta-secondary" (click)="addNewCourse()">+ Add Course</button>
+    <div class="hero-copy">
+        <p class="eyebrow">Learn Better. Interview Better.</p>
+        <h1 class="home-head-line">KTSession helps you master tech concepts with ready-made courses, curated notes, and career-ready practice.</h1>
+        <p class="hero-sub">Explore expert-written course notes, favourite the best materials, and prepare for interviews with confidence.</p>
+        <div class="hero-actions">
+            <a class="hero-cta" routerLink="/courses">Browse Courses</a>
+            <button *ngIf="auth.isAdmin$ | async" type="button" class="hero-cta hero-cta-secondary" (click)="addNewCourse()">+ Add Course</button>
+        </div>
+    </div>
+    <div class="hero-panel">
+        <div class="hero-panel-card">
+            <span class="panel-number">150+</span>
+            <p>Industry-approved course notes</p>
+        </div>
+        <div class="hero-panel-card">
+            <span class="panel-number">90%</span>
+            <p>Students improved interview readiness</p>
+        </div>
+        <div class="hero-panel-card">
+            <span class="panel-number">8k</span>
+            <p>Active learners across skills</p>
+        </div>
+    </div>
+</section>
+
+<section class="content-block filled-section">
+    <div class="content-copy">
+        <span class="section-label">Why KTSession</span>
+        <h2>Designed for learners who want clarity, speed, and practical outcomes.</h2>
+        <p>Get structured learning paths, real course templates, and note summaries that make it easy to revise fast. KTSession is built for busy learners who need results without fluff.</p>
+    </div>
+    <div class="content-grid">
+        <article class="content-card">
+            <h3>Fast course discovery</h3>
+            <p>Find the most relevant notes and courses in technology domains like Java, Kafka, Spring Boot, and databases with a single click.</p>
+        </article>
+        <article class="content-card">
+            <h3>Clear interview preparation</h3>
+            <p>Every course comes with concise notes and practical examples shaped for interviews, so you can review quickly and answer with confidence.</p>
+        </article>
+        <article class="content-card">
+            <h3>Seller-powered content</h3>
+            <p>Sellers can upload and manage course templates, making KTSession a community-driven library of real learning material.</p>
+        </article>
     </div>
 </section>
 
 <section class="features">
     <div class="feature-card">
         <h3>📚 Curated Notes</h3>
-        <p>Interview-ready notes for Kafka, Java, and more — written plainly, with code you can actually talk through.</p>
+        <p>Interview-ready notes for Kafka, Java, and more — short, practical, and easy to review.</p>
     </div>
     <div class="feature-card">
         <h3>🛒 Simple Enrollment</h3>
-        <p>Add a course to your cart and start learning in seconds — no clutter, no friction.</p>
+        <p>Add a course to your favourites and start learning in seconds — no clutter, no friction.</p>
     </div>
     <div class="feature-card">
-        <h3>🧑‍💻 Built by Sellers</h3>
-        <p>Instructors list and manage their own courses through the Seller portal.</p>
+        <h3>🧑‍💻 Seller Templates</h3>
+        <p>Course templates and content authored directly by sellers, designed for real-world preparation.</p>
+    </div>
+</section>
+
+<section class="template-showcase">
+    <div class="showcase-copy">
+        <span class="section-label">Featured Templates</span>
+        <h2>Sample Course formats made for fast learning.</h2>
+    </div>
+    <div class="template-grid">
+        <article class="template-card">
+            <h4>Java Interview Notes</h4>
+            <p>Core Java concepts condensed into practical summaries and code examples.</p>
+        </article>
+        <article class="template-card">
+            <h4>Kafka Concepts</h4>
+            <p>Understand messaging, producers, consumers, and common interview questions.</p>
+        </article>
+        <article class="template-card">
+            <h4>Database Fundamentals</h4>
+            <p>SQL and database architecture notes that are easy to memorize and use.</p>
+        </article>
     </div>
 </section>
