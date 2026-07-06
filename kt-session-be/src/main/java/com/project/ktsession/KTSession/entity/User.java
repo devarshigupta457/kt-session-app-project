@@ -2,6 +2,8 @@ package com.project.ktsession.KTSession.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -26,7 +28,16 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private boolean enabled = true;
+    private boolean enabled = false;
+
+    @Column(name = "EMAIL_VERIFIED")
+    private boolean emailVerified = false;
+
+    @Column(name = "EMAIL_OTP")
+    private String emailOtp;
+
+    @Column(name = "OTP_EXPIRY")
+    private LocalDateTime otpExpiry;
 
     public User() {
     }
@@ -97,5 +108,44 @@ public class User {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+    public String getEmailOtp() {
+        return emailOtp;
+    }
+
+    public void setEmailOtp(String emailOtp) {
+        this.emailOtp = emailOtp;
+    }
+
+    public LocalDateTime getOtpExpiry() {
+        return otpExpiry;
+    }
+
+    public void setOtpExpiry(LocalDateTime otpExpiry) {
+        this.otpExpiry = otpExpiry;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", role='" + role + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", email='" + email + '\'' +
+                ", enabled=" + enabled +
+                ", emailVerified=" + emailVerified +
+                ", emailOtp='" + emailOtp + '\'' +
+                ", otpExpiry=" + otpExpiry +
+                '}';
     }
 }

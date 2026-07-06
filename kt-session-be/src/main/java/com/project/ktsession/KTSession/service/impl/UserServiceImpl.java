@@ -2,6 +2,7 @@ package com.project.ktsession.KTSession.service.impl;
 
 import com.project.ktsession.KTSession.dto.request.LoginRequest;
 import com.project.ktsession.KTSession.dto.request.SignupRequest;
+import com.project.ktsession.KTSession.dto.request.VerifyOtpRequest;
 import com.project.ktsession.KTSession.dto.response.LoginResponse;
 import com.project.ktsession.KTSession.entity.User;
 import com.project.ktsession.KTSession.dto.event.UserRegisteredEvent;
@@ -16,6 +17,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -25,6 +28,11 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final KafkaProducerService kafkaProducerService;
     private final EmailService emailService;
+
+    private String generateOtp() {
+        return String.format("%06d",
+                new java.util.Random().nextInt(1000000));
+    }
 
     @Override
     public LoginResponse signup(SignupRequest request) {
@@ -41,25 +49,26 @@ public class UserServiceImpl implements UserService {
 
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole("USER");
-        user.setEnabled(true);
+
+        user.setEnabled(false);
+        user.setEmailVerified(false);
+
+
+        String otp = generateOtp();
+
+        user.setEmailOtp(otp);
+        user.setOtpExpiry(LocalDateTime.now().plusMinutes(10));
 
         User savedUser = repository.save(user);
 
-        // Publish Kafka event
-
-//        kafkaProducerService.publish(
-//                new UserRegisteredEvent(
-//                        savedUser.getFullName(),
-//                        savedUser.getEmail()
-//                )
-//        );
-        emailService.sendRegistrationEmail(
-                user.getEmail(),
-                user.getFullName()
+        emailService.sendOtpEmail(
+                savedUser.getEmail(),
+                savedUser.getFullName(),
+                otp
         );
 
         LoginResponse response = modelMapper.map(savedUser, LoginResponse.class);
-        response.setMessage("Registration Successful");
+        response.setMessage("OTP sent successfully to your email.");
 
         return response;
     }
@@ -71,13 +80,64 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Invalid Username"));
 
+
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new BadRequestException("Invalid Password");
+        }
+
+        if (!user.isEmailVerified()) {
+            throw new BadRequestException(
+                    "Please verify your email first.");
         }
 
         LoginResponse response = modelMapper.map(user, LoginResponse.class);
         response.setMessage("Login Successful");
 
         return response;
+
     }
+
+    @Override
+    public void verifyOtp(VerifyOtpRequest request) {
+
+        User user = repository.findByEmail(request.getEmail())
+                .orElseThrow(() ->
+                        new BadRequestException("User not found"));
+
+        if (user.getOtpExpiry() == null ||
+                user.getOtpExpiry().isBefore(LocalDateTime.now())) {
+            throw new BadRequestException("OTP has expired.");
+        }
+
+        if (user.getEmailOtp() == null ||
+                !user.getEmailOtp().equals(request.getOtp())) {
+            throw new BadRequestException("Invalid OTP.");
+        }
+
+        // Activate account
+        user.setEnabled(true);
+        user.setEmailVerified(true);
+
+        // Clear OTP after successful verification
+        user.setEmailOtp(null);
+        user.setOtpExpiry(null);
+
+        repository.save(user);
+
+        // Send Welcome Email
+        emailService.sendRegistrationEmail(
+                user.getEmail(),
+                user.getFullName()
+        );
+
+        // Publish Kafka Event (Optional)
+        // kafkaProducerService.publish(
+        //         new UserRegisteredEvent(
+        //                 user.getFullName(),
+        //                 user.getEmail()
+        //         )
+        // );
+    }
+
+
 }

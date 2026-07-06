@@ -14,6 +14,7 @@ import { CourseViewComponent } from './course-view/course-view.component';
 import { AddCourseModalComponent } from './add-course-modal/add-course-modal.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
+import { VerifyOtpComponent } from './verify-otp/verify-otp.component';
 import { CartComponent } from './cart/cart.component';
 
 @NgModule({
@@ -27,6 +28,7 @@ import { CartComponent } from './cart/cart.component';
     AddCourseModalComponent,
     LoginComponent,
     SignupComponent,
+    VerifyOtpComponent,
     CartComponent
   ],
   imports: [

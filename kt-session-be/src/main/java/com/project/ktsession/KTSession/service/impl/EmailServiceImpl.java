@@ -107,6 +107,66 @@ public class EmailServiceImpl implements EmailService {
             throw new RuntimeException("Failed to send email: " + e.getMessage());
         }
     }
+
+    @Override
+    public void sendOtpEmail(String email, String fullName, String otp) {
+
+        String url = "https://api.brevo.com/v3/smtp/email";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("api-key", apiKey);
+
+        String htmlContent = """
+            <html>
+            <body style="font-family: Arial, sans-serif; color:#333;">
+
+                <h2>Verify Your Email</h2>
+
+                <p>Hi <b>%s</b>,</p>
+
+                <p>Thank you for registering with <b>KT Session</b>.</p>
+
+                <p>Your Email Verification OTP is:</p>
+
+                <h1 style="color:#0d6efd;">%s</h1>
+
+                <p>This OTP is valid for <b>10 minutes</b>.</p>
+
+                <p>Please do not share this OTP with anyone.</p>
+
+                <br>
+
+                <p>Regards,<br>
+                <b>KT Session Team</b></p>
+
+            </body>
+            </html>
+            """.formatted(fullName, otp);
+
+        Map<String, Object> body = Map.of(
+                "sender", Map.of(
+                        "name", senderName,
+                        "email", senderEmail
+                ),
+                "to", List.of(
+                        Map.of("email", email)
+                ),
+                "subject", "KT Session - Email Verification OTP",
+                "htmlContent", htmlContent
+        );
+
+        HttpEntity<Map<String, Object>> request =
+                new HttpEntity<>(body, headers);
+
+        try {
+            restTemplate.postForEntity(url, request, String.class);
+            log.info("OTP email sent successfully.");
+        } catch (Exception e) {
+            log.error("Failed to send OTP email", e);
+            throw new RuntimeException("Failed to send OTP email");
+        }
+    }
 }
 //    private final JavaMailSender mailSender;
 //

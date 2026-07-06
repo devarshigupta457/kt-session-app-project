@@ -2,6 +2,7 @@ package com.project.ktsession.KTSession.controller;
 
 import com.project.ktsession.KTSession.dto.request.LoginRequest;
 import com.project.ktsession.KTSession.dto.request.SignupRequest;
+import com.project.ktsession.KTSession.dto.request.VerifyOtpRequest;
 import com.project.ktsession.KTSession.dto.response.ApiResponse;
 import com.project.ktsession.KTSession.dto.response.LoginResponse;
 import com.project.ktsession.KTSession.service.UserService;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/kt-session")
@@ -37,6 +39,24 @@ public class UserController {
 
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
+
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<ApiResponse<String>> verifyOtp(
+            @RequestBody VerifyOtpRequest request) {
+
+        userService.verifyOtp(request);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "OTP verified successfully. You can now login.",
+                        "VERIFIED"
+                )
+        );
+    }
+
+
 
     /**
      * User Login

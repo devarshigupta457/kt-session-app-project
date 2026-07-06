@@ -5,6 +5,7 @@ import { CoursesComponent } from './courses/courses.component';
 import { CourseViewComponent } from './course-view/course-view.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
+import { VerifyOtpComponent } from './verify-otp/verify-otp.component';
 import { CartComponent } from './cart/cart.component';
 import { AuthGuard } from './services/auth.guard';
 
@@ -34,6 +35,11 @@ const routes: Routes = [
     path:'signup',
     component:SignupComponent,
     data:{ animation:'signup' },
+  },
+  {
+    path:'verify-otp',
+    component:VerifyOtpComponent,
+    data:{ animation:'verify-otp' },
   },
   {
     path:'cart',
