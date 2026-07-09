@@ -79,6 +79,14 @@
                 "glob": "oracle-guide.html",
                 "input": "src/app/course-html-page",
                 "output": "/"
+              },{
+                "glob": "microservices-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "system-design-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
               }
             ],
             "styles": [
@@ -199,6 +207,14 @@
                 "output": "/"
               },{
                 "glob": "oracle-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "microservices-guide.html",
+                "input": "src/app/course-html-page",
+                "output": "/"
+              },{
+                "glob": "system-design-guide.html",
                 "input": "src/app/course-html-page",
                 "output": "/"
               }

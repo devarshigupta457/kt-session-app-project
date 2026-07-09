@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microservices — Complete Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4f6f8;--surface:#ffffff;--ink:#15202e;--ink-soft:#3c4a5c;--muted:#6c7789;
+    --line:#e4e8ee;--line-strong:#cfd6df;--accent:#0e7c86;--accent-deep:#0a5b63;
+    --accent-wash:#e3f1f2;--amber:#b45309;--amber-wash:#fbf0e2;--code-bg:#111823;
+    --code-fg:#dbe3ec;--code-dim:#7c8ba0;--code-key:#7fd8c9;--code-str:#e0b878;
+    --code-com:#5e6b7e;--radius:10px;--maxw:1180px;--sidebar:262px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;font-size:16px;
+    line-height:1.62;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent-deep);text-decoration:none}
+  a:hover{text-decoration:underline}
+  :focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:3px}
+  .hero{background:var(--ink);color:#eef2f6;padding:56px 28px 46px;border-bottom:3px solid var(--accent)}
+  .hero-inner{max-width:var(--maxw);margin:0 auto}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--code-key);margin:0 0 14px}
+  .hero h1{font-family:"Space Grotesk",sans-serif;font-weight:700;
+    font-size:clamp(2rem,5vw,3.3rem);line-height:1.02;margin:0 0 14px;letter-spacing:-.02em}
+  .hero h1 .light{color:#9fb0c2;font-weight:500}
+  .hero p.sub{color:#aebccb;max-width:56ch;margin:0 0 30px;font-size:1.02rem}
+  .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+  .tags span{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:5px 11px;
+    border:1px solid #33445a;border-radius:100px;color:#c5d1de}
+  .pipe{margin:36px 0 4px;display:flex;align-items:stretch;gap:12px;flex-wrap:wrap;
+    font-family:"IBM Plex Mono",monospace}
+  .stage{display:flex;flex-direction:column;gap:3px;padding:11px 15px;border:1px solid #33445a;
+    border-radius:8px;background:#1a2534;min-width:104px}
+  .stage.lead{border-color:var(--accent);background:#12303266}
+  .st-file{color:var(--code-str);font-size:13px;font-weight:500}
+  .stage.lead .st-file{color:var(--code-key)}
+  .st-cap{color:var(--code-com);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase}
+  .pipe-arr{display:flex;align-items:center;color:var(--code-dim);font-size:12px;
+    letter-spacing:.04em;white-space:nowrap}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;display:grid;
+    grid-template-columns:var(--sidebar) 1fr;gap:44px;align-items:start}
+  .toc{position:sticky;top:0;max-height:100vh;overflow-y:auto;padding:34px 4px 40px}
+  .toc h2{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 14px;font-weight:600}
+  .toc ol{list-style:none;margin:0 0 22px;padding:0}
+  .toc .grp{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:.82rem;color:var(--ink);
+    text-transform:uppercase;letter-spacing:.05em;margin:18px 0 8px;padding-left:2px}
+  .toc a{display:block;color:var(--ink-soft);font-size:.9rem;line-height:1.35;
+    padding:5px 10px 5px 12px;border-left:2px solid transparent;border-radius:0 6px 6px 0}
+  .toc a:hover{background:#eaeef3;text-decoration:none}
+  .toc a.active{color:var(--accent-deep);border-left-color:var(--accent);
+    background:var(--accent-wash);font-weight:600}
+  main{padding:34px 0 90px;min-width:0}
+  .part{scroll-margin-top:20px;margin-bottom:16px}
+  .part-head{display:flex;align-items:baseline;gap:16px;margin:52px 0 6px;padding-top:26px;
+    border-top:1px solid var(--line-strong)}
+  .part:first-of-type .part-head{border-top:none;padding-top:0;margin-top:4px}
+  .part-num{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:12px;color:#fff;
+    background:var(--accent);padding:4px 9px;border-radius:6px;flex:none;letter-spacing:.05em}
+  .part-head h2{font-family:"Space Grotesk",sans-serif;font-weight:700;
+    font-size:clamp(1.4rem,3vw,2rem);letter-spacing:-.01em;margin:0;line-height:1.1}
+  section.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 30px;margin:18px 0;scroll-margin-top:20px}
+  section.card > h3{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:1.24rem;
+    margin:0 0 14px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:11px}
+  section.card > h3 .n{font-family:"IBM Plex Mono",monospace;font-size:.72em;color:var(--accent);
+    font-weight:600;flex:none}
+  h4{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:1rem;margin:22px 0 8px;color:var(--ink)}
+  p{margin:0 0 14px}
+  section.card p:last-child{margin-bottom:0}
+  strong{font-weight:600;color:var(--ink)}
+  code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:#eef1f5;color:#0c3f44;
+    padding:2px 6px;border-radius:5px;border:1px solid #e0e5ec}
+  ul,ol.list{margin:6px 0 16px;padding-left:22px}
+  li{margin:6px 0}
+  li::marker{color:var(--accent)}
+  .tbl-scroll{overflow-x:auto;margin:14px 0 18px;border-radius:8px;border:1px solid var(--line)}
+  table{border-collapse:collapse;width:100%;font-size:.92rem}
+  th,td{padding:11px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+  thead th{background:#f0f3f6;font-family:"IBM Plex Mono",monospace;font-size:.76rem;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--ink-soft);font-weight:600;border-bottom:1.5px solid var(--line-strong)}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:#f8fafb}
+  td code{background:#eef1f5}
+  .code{position:relative;background:var(--code-bg);border-radius:9px;margin:14px 0 18px;
+    overflow:hidden;border:1px solid #1e293a}
+  .code .lang{position:absolute;top:0;right:0;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--code-dim);background:#0b111a;
+    padding:5px 12px;border-radius:0 9px 0 9px}
+  pre{margin:0;padding:18px 20px;overflow-x:auto}
+  pre code{background:none;border:none;padding:0;color:var(--code-fg);font-size:13px;
+    line-height:1.6;white-space:pre}
+  .code .k{color:var(--code-key)}
+  .code .s{color:var(--code-str)}
+  .code .c{color:var(--code-com);font-style:italic}
+  .code .a{color:#9db4d0}
+  .note{border-left:3px solid var(--accent);background:var(--accent-wash);padding:14px 18px;
+    border-radius:0 8px 8px 0;margin:16px 0;font-size:.95rem}
+  .note.gold{border-left-color:var(--amber);background:var(--amber-wash)}
+  .note .lbl{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;font-weight:600;display:block;margin-bottom:4px;color:var(--accent-deep)}
+  .note.gold .lbl{color:var(--amber)}
+  .note p:last-child{margin-bottom:0}
+  .note ul{margin:0}
+  .qa{display:flex;flex-direction:column;gap:10px}
+  details.q{background:var(--surface);border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  details.q[open]{border-color:var(--line-strong)}
+  summary{cursor:pointer;list-style:none;padding:15px 20px;font-weight:600;display:flex;gap:12px;
+    align-items:flex-start;color:var(--ink)}
+  summary::-webkit-details-marker{display:none}
+  summary .qmark{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-weight:600;flex:none;
+    transition:transform .2s ease}
+  @media (prefers-reduced-motion: reduce){summary .qmark{transition:none}}
+  details.q[open] summary .qmark{transform:rotate(90deg);color:var(--amber)}
+  summary:hover{background:#f8fafb}
+  .answer{padding:0 20px 18px 47px;color:var(--ink-soft);font-size:.95rem}
+  .answer p{margin:0 0 10px}
+  .answer p:last-child{margin:0}
+  .flow{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--code-fg);
+    background:var(--code-bg);border-radius:9px;padding:20px;overflow-x:auto;line-height:1.9;
+    border:1px solid #1e293a}
+  .flow .box{color:var(--code-key)}
+  .flow .arr{color:var(--code-com)}
+  .flow .hl{color:var(--code-str)}
+  .tips{background:var(--ink);color:#e7edf3;border-radius:var(--radius);padding:30px 32px;margin:30px 0 0}
+  .tips h3{font-family:"Space Grotesk",sans-serif;color:#fff;margin:0 0 16px;font-size:1.25rem}
+  .tips ol{counter-reset:tp;list-style:none;padding:0;margin:0}
+  .tips li{counter-increment:tp;padding-left:40px;position:relative;margin:11px 0;color:#c6d2df}
+  .tips li::before{content:counter(tp);position:absolute;left:0;top:1px;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--ink);
+    background:var(--code-key);width:24px;height:24px;border-radius:6px;display:grid;place-items:center}
+  .tips strong{color:#fff}
+  .signoff{text-align:center;color:var(--muted);font-size:.85rem;margin:26px 0 0;
+    font-family:"IBM Plex Mono",monospace}
+  .toc-toggle{display:none}
+  @media (max-width:960px){
+    .wrap{grid-template-columns:1fr;gap:0;padding:0 18px}
+    .toc{position:static;max-height:none;padding:0;border:1px solid var(--line);border-radius:10px;
+      background:var(--surface);margin:22px 0 6px;overflow:hidden}
+    .toc-body{display:none;padding:6px 12px 16px}
+    .toc-body.open{display:block}
+    .toc-toggle{display:flex;width:100%;justify-content:space-between;align-items:center;background:none;
+      border:none;padding:15px 16px;cursor:pointer;font-family:"Space Grotesk",sans-serif;font-weight:600;
+      font-size:.95rem;color:var(--ink)}
+    .toc-toggle .chev{transition:transform .2s ease;color:var(--accent)}
+    .toc-toggle[aria-expanded="true"] .chev{transform:rotate(180deg)}
+    main{padding:14px 0 70px}
+    .hero{padding:44px 20px 38px}
+    section.card{padding:22px 18px}
+    .answer{padding-left:20px}
+  }
+  @media print{
+    body{background:#fff;font-size:11.5pt}
+    .hero{background:#fff;color:#000;border-bottom:2px solid #000;padding:0 0 18px}
+    .hero .eyebrow,.hero h1 .light,.hero p.sub{color:#333}
+    .hero h1{color:#000}
+    .tags,.pipe{display:none}
+    .wrap{display:block;padding:0;max-width:100%}
+    .toc{display:none}
+    .code,.flow{background:#f3f4f6;color:#111;border:1px solid #ccc}
+    .code .lang{background:#e5e7eb;color:#555}
+    pre code,.code .k,.code .s,.code .c,.code .a,.flow .box,.flow .arr,.flow .hl{color:#111}
+    .tips{background:#fff;color:#000;border:1px solid #000}
+    .tips h3,.tips strong,.tips li{color:#000}
+    .tips li::before{background:#000;color:#fff}
+    details.q{border:1px solid #bbb}
+    details.q .answer{display:block!important}
+    summary .qmark{transform:rotate(90deg)}
+    section.card{border:1px solid #ddd;break-inside:avoid}
+    .part-head{break-after:avoid}
+  }
+</style>
+</head>
+<body>
+<header class="hero"><div class="hero-inner"><p class="eyebrow">In-Depth Guide · Architecture</p><h1>Microservices <span class="light">small services, explained simply</span></h1><p class="sub">A deep, plain-English guide to microservices: monolith vs services, how to split, communication, data and sagas, resilience patterns like circuit breakers, and how to operate them &mdash; every concept with a real-world analogy.</p><div class="tags"><span>Basics</span><span>Communication</span><span>Data</span><span>Resilience</span><span>Operate</span><span>Q&amp;A</span></div><div class="pipe" aria-hidden="true"><div class="stage lead"><span class="st-file">Client</span><span class="st-cap">request</span></div><span class="pipe-arr">&rarr;</span><div class="stage"><span class="st-file">API Gateway</span><span class="st-cap">front door</span></div><span class="pipe-arr">&rarr;</span><div class="stage"><span class="st-file">Services</span><span class="st-cap">small &amp; focused</span></div><span class="pipe-arr">&rarr;</span><div class="stage"><span class="st-file">DB per service</span><span class="st-cap">own data</span></div></div></div></header>
+<div class="wrap">
+<nav class="toc" aria-label="Table of contents"><button class="toc-toggle" aria-expanded="false" aria-controls="tocBody"><span>Contents</span><span class="chev">&#9662;</span></button><div class="toc-body" id="tocBody"><h2>On this page</h2><div class="grp">Part 1 · Basics</div><ol><li><a href="#what">1. What &amp; why (vs monolith)</a></li><li><a href="#when">2. When to use (and not)</a></li><li><a href="#split">3. How to split</a></li></ol><div class="grp">Part 2 · Communication</div><ol><li><a href="#comm">4. Sync vs async</a></li><li><a href="#gateway">5. API gateway</a></li><li><a href="#discovery">6. Service discovery</a></li></ol><div class="grp">Part 3 · Data</div><ol><li><a href="#data">7. Database per service</a></li><li><a href="#saga">8. Saga &amp; transactions</a></li><li><a href="#outbox">9. Outbox &amp; eventual consistency</a></li><li><a href="#cqrs">10. CQRS &amp; event sourcing</a></li></ol><div class="grp">Part 4 · Resilience</div><ol><li><a href="#resilience">11. Failure handling</a></li><li><a href="#circuit">12. Circuit breaker</a></li><li><a href="#idem">13. Idempotency</a></li></ol><div class="grp">Part 5 · Operate</div><ol><li><a href="#observ">14. Observability</a></li><li><a href="#deploy">15. Deployment</a></li><li><a href="#config">16. Config &amp; security</a></li></ol><div class="grp">Part 6 · Q&amp;A</div><ol><li><a href="#quickfire">Quick-fire questions</a></li></ol><div class="grp">Part 7 · Reference</div><ol><li><a href="#cheatsheet">Cheat sheet</a></li><li><a href="#final-tips">Final tips</a></li></ol></div></nav>
+<main><div class="part"><div class="part-head"><span class="part-num">PART 1</span><h2>The Basics</h2></div><section class="card" id="what"><h3><span class="n">01</span>What Are Microservices? (vs a Monolith)</h3>
+<p>A <strong>monolith</strong> is one big application where all the code &mdash; users, orders, payments,
+notifications &mdash; is built and deployed as a single unit. <strong>Microservices</strong> split that into
+many small, independent services, each owning one job and deployable on its own.</p>
+<div class='note'><span class='lbl'>Layman analogy</span><p>A monolith is <strong>one giant kitchen</strong>
+cooking every dish &mdash; if the dessert station catches fire, the whole kitchen shuts. Microservices are a
+<strong>food court</strong>: separate stalls (pizza, sushi, coffee), each with its own staff and till. One
+stall closing doesn't stop the others, and you can upgrade the coffee stall without touching the pizza one.</p></div>
+<div class='tbl-scroll'><table><thead><tr><th></th><th>Monolith</th><th>Microservices</th></tr></thead><tbody>
+<tr><td><strong>Deploy</strong></td><td>All at once</td><td>Each service independently</td></tr>
+<tr><td><strong>Scale</strong></td><td>Whole app</td><td>Only the busy service</td></tr>
+<tr><td><strong>Tech</strong></td><td>One stack</td><td>Different stack per service</td></tr>
+<tr><td><strong>Failure</strong></td><td>Can take everything down</td><td>Isolated to one service</td></tr>
+<tr><td><strong>Complexity</strong></td><td>Simple to start</td><td>Distributed-systems overhead</td></tr>
+</tbody></table></div>
+</section><section class="card" id="when"><h3><span class="n">02</span>When to Use Them (and When Not To)</h3>
+<p>Microservices are a solution to <strong>scale and team</strong> problems, not a default.</p>
+<ul>
+<li><strong>Use when</strong>: large app, many teams that keep stepping on each other, parts that need to
+scale differently (e.g. checkout gets 10x traffic on sale day), or you need independent release cadence.</li>
+<li><strong>Avoid when</strong>: small app or small team, early-stage product still finding its shape, or you
+can't yet afford the operational cost (monitoring, CI/CD, on-call).</li>
+</ul>
+<div class='note gold'><span class='lbl'>Honest take</span><p>"Start with a well-structured monolith; split into
+microservices when a real pain (scaling, team friction) appears." Premature microservices add network calls,
+data-consistency headaches, and ops burden for little benefit.</p></div>
+</section><section class="card" id="split"><h3><span class="n">03</span>How to Split the System</h3>
+<p>The hard part isn't the code &mdash; it's drawing the boundaries. Split by <strong>business
+capability</strong>, not by technical layer.</p>
+<ul>
+<li><strong>By business capability / bounded context</strong> (from Domain-Driven Design): Orders, Payments,
+Inventory, Notifications &mdash; each a service.</li>
+<li>Each service owns its <strong>own data</strong> and exposes a clear API. No other service reaches into
+its tables.</li>
+<li>Aim for <strong>high cohesion</strong> (related things together) and <strong>loose coupling</strong>
+(services barely depend on each other's internals).</li>
+</ul>
+<div class='note'><span class='lbl'>Anti-pattern</span><p>Don't split by layer (a "database service", a
+"controller service"). That just spreads one feature across many services &mdash; every change touches all of
+them. This is called a <strong>distributed monolith</strong>: all the pain, none of the benefit.</p></div>
+</section></div><div class="part"><div class="part-head"><span class="part-num">PART 2</span><h2>How Services Talk</h2></div><section class="card" id="comm"><h3><span class="n">04</span>Synchronous vs Asynchronous Communication</h3>
+<div class='tbl-scroll'><table><thead><tr><th></th><th>Synchronous (REST/gRPC)</th><th>Asynchronous (messaging)</th></tr></thead><tbody>
+<tr><td><strong>Style</strong></td><td>Call and wait for a reply</td><td>Send a message, move on</td></tr>
+<tr><td><strong>Coupling</strong></td><td>Caller needs callee up now</td><td>Decoupled; callee can be down</td></tr>
+<tr><td><strong>Use for</strong></td><td>Immediate answer (get profile)</td><td>Events, background work (order placed)</td></tr>
+</tbody></table></div>
+<div class='note'><span class='lbl'>Layman analogy</span><p>Synchronous = a <strong>phone call</strong>: you
+wait on the line for the answer. Asynchronous = <strong>texting</strong>: you send it and carry on; they
+reply when they can. Messaging (like Kafka/RabbitMQ) is texting for services &mdash; the sender doesn't wait,
+so a slow or down service can't block the caller.</p></div>
+<div class='note gold'><span class='lbl'>Rule of thumb</span><p>Prefer async events for cross-service workflows
+&mdash; they keep services independent and resilient. Use sync calls only when you truly need an immediate
+answer.</p></div>
+</section><section class="card" id="gateway"><h3><span class="n">05</span>The API Gateway</h3>
+<p>An <strong>API Gateway</strong> is the single front door for clients. Instead of a mobile app knowing 20
+service addresses, it calls one gateway, which routes to the right service.</p>
+<div class='note'><span class='lbl'>Layman analogy</span><p>It's the <strong>receptionist</strong> at a big
+office. You don't wander the building looking for the right person &mdash; you tell reception who you need and
+they direct you. The gateway also checks your ID (auth), stops troublemakers (rate limiting), and logs
+visitors.</p></div>
+<p>Typical gateway jobs: routing, authentication, rate limiting, request aggregation (combine several service
+calls into one response), SSL termination, and logging.</p>
+</section><section class="card" id="discovery"><h3><span class="n">06</span>Service Discovery</h3>
+<p>Services start, stop, and move (especially in the cloud), so their addresses change. <strong>Service
+discovery</strong> lets a service find others by <em>name</em> instead of a hard-coded IP.</p>
+<div class='note'><span class='lbl'>Layman analogy</span><p>A <strong>phone directory</strong>. You look up
+"Payments" by name and get its current number, instead of memorising a number that keeps changing. A
+<strong>service registry</strong> (e.g. Eureka, Consul, or Kubernetes' built-in DNS) keeps this directory up
+to date as services come and go.</p></div>
+<p>Paired with a <strong>load balancer</strong>, discovery also spreads requests across the multiple copies
+(instances) of a service.</p>
+</section></div><div class="part"><div class="part-head"><span class="part-num">PART 3</span><h2>Managing Data</h2></div><section class="card" id="data"><h3><span class="n">07</span>Database per Service</h3>
+<p>The golden rule: each service owns its <strong>own private database</strong>. Others may only get that
+data by calling the service's API &mdash; never by querying its tables directly.</p>
+<div class='note gold'><span class='lbl'>Why so strict?</span><p>If two services share a database, changing a
+table breaks both &mdash; you've secretly rebuilt the monolith. Private data lets each team evolve their
+schema freely. The tradeoff: data is now spread out, so you can't just do a <code>JOIN</code> across
+services.</p></div>
+</section><section class="card" id="saga"><h3><span class="n">08</span>Distributed Transactions &amp; the Saga Pattern</h3>
+<p>In a monolith, one database transaction can update everything atomically. Across services with separate
+databases, there's no single transaction. The <strong>Saga pattern</strong> solves this with a sequence of
+local transactions, each with a <strong>compensating action</strong> to undo it if a later step fails.</p>
+<div class='note'><span class='lbl'>Layman analogy</span><p>Booking a holiday: reserve flight &rarr; reserve
+hotel &rarr; reserve car. If the car booking fails, you don't have one big "undo" &mdash; you
+<strong>cancel the hotel</strong> and <strong>cancel the flight</strong> (compensating actions), step by step,
+to get back to a clean state.</p></div>
+<div class='tbl-scroll'><table><thead><tr><th>Style</th><th>How it coordinates</th></tr></thead><tbody>
+<tr><td><strong>Choreography</strong></td><td>No central boss; each service reacts to events and emits the next event. Simple, but the flow is spread out and hard to follow.</td></tr>
+<tr><td><strong>Orchestration</strong></td><td>A central "orchestrator" tells each service what to do next. Clearer flow and easier to debug, but one more component.</td></tr>
+</tbody></table></div>
+</section><section class="card" id="outbox"><h3><span class="n">09</span>Eventual Consistency &amp; the Outbox Pattern</h3>
+<p>Since data lives in many services, they can be briefly out of sync but converge shortly after &mdash; this
+is <strong>eventual consistency</strong>. Most systems accept it (your bank balance updating a few seconds
+after a transfer is fine).</p>
+<p><strong>The dual-write problem</strong>: a service often must both save to its DB <em>and</em> publish an
+event. If it saves but crashes before publishing, the rest of the system never hears about it.</p>
+<div class='note gold'><span class='lbl'>Outbox pattern (the fix)</span><p>Write the data <em>and</em> the
+event into the <strong>same database transaction</strong> (the event goes into an "outbox" table). A separate
+process then reads the outbox and publishes the events reliably. Now the save and the "intent to publish"
+succeed or fail together.</p></div>
+</section><section class="card" id="cqrs"><h3><span class="n">10</span>CQRS &amp; Event Sourcing</h3>
+<ul>
+<li><strong>CQRS</strong> (Command Query Responsibility Segregation) &mdash; separate the <em>write</em> model
+from the <em>read</em> model. Writes go to one place; reads come from a separate, query-optimised view. Useful
+when reads and writes have very different shapes or scale.</li>
+<li><strong>Event sourcing</strong> &mdash; instead of storing only the current state, store the full
+<em>sequence of events</em>. Current state is rebuilt by replaying them.</li>
+</ul>
+<div class='note'><span class='lbl'>Layman analogy</span><p>Event sourcing is your <strong>bank
+statement</strong>: the bank doesn't just store "balance = 500"; it stores every deposit and withdrawal, and
+the balance is the sum. You get a perfect audit trail and can reconstruct the balance at any past moment.</p></div>
+<div class='note gold'><span class='lbl'>Caution</span><p>These are powerful but add real complexity. Reach for
+them only when the problem genuinely needs them &mdash; not by default.</p></div>
+</section></div><div class="part"><div class="part-head"><span class="part-num">PART 4</span><h2>Resilience (Designing for Failure)</h2></div><section class="card" id="resilience"><h3><span class="n">11</span>Failure Is Normal &mdash; Plan for It</h3>
+<p>In a distributed system, networks drop, services slow down, and instances die. Good microservices assume
+failure and contain it. Core techniques:</p>
+<ul>
+<li><strong>Timeouts</strong> &mdash; never wait forever for a reply; give up after, say, 2 seconds.</li>
+<li><strong>Retries with backoff</strong> &mdash; retry a transient failure, but wait longer each time (and
+add jitter) so you don't stampede a struggling service.</li>
+<li><strong>Bulkhead</strong> &mdash; isolate resources so one failing dependency can't drown the whole
+service (like watertight compartments in a ship &mdash; one floods, the ship stays afloat).</li>
+<li><strong>Fallback</strong> &mdash; a graceful degraded response (show cached prices if the pricing service
+is down).</li>
+</ul>
+</section><section class="card" id="circuit"><h3><span class="n">12</span>The Circuit Breaker</h3>
+<p>A <strong>circuit breaker</strong> stops a service from repeatedly calling a dependency that's clearly
+failing, giving it time to recover and failing fast instead of piling on.</p>
+<div class='note'><span class='lbl'>Layman analogy</span><p>It's the <strong>electrical fuse</strong> in your
+house. If there's a dangerous surge, the breaker <em>trips</em> (cuts the circuit) to prevent a fire, rather
+than letting current keep flowing into the fault.</p></div>
+<div class='flow' aria-hidden='true'><span class='box'>CLOSED</span>  requests flow normally
+   <span class='arr'>| too many failures</span>
+   <span class='arr'>v</span>
+<span class='box'>OPEN</span>    fail fast for a cooldown period (don't even try)
+   <span class='arr'>| after cooldown</span>
+   <span class='arr'>v</span>
+<span class='box'>HALF-OPEN</span>  let a few test requests through
+   success -&gt; back to CLOSED ;  failure -&gt; back to OPEN</div>
+</section><section class="card" id="idem"><h3><span class="n">13</span>Idempotency</h3>
+<p>With retries and at-least-once messaging, the same request can arrive twice. An
+<strong>idempotent</strong> operation produces the same result whether it runs once or five times &mdash; so
+duplicates don't cause double charges.</p>
+<div class='note'><span class='lbl'>Layman analogy</span><p>A lift (elevator) call button: pressing it five
+times doesn't call five lifts. The system remembers "already requested."</p></div>
+<div class='note gold'><span class='lbl'>How</span><p>Give each request a unique <strong>idempotency key</strong>;
+the service records processed keys and ignores repeats. Essential for payments and any "at-least-once"
+messaging.</p></div>
+</section></div><div class="part"><div class="part-head"><span class="part-num">PART 5</span><h2>Operating Microservices</h2></div><section class="card" id="observ"><h3><span class="n">14</span>Observability (Logs, Metrics, Tracing)</h3>
+<p>When a request hops through ten services, you need to see what happened. Three pillars:</p>
+<ul>
+<li><strong>Centralized logging</strong> &mdash; all services ship logs to one place (e.g. ELK stack) so you
+search everything together.</li>
+<li><strong>Metrics</strong> &mdash; numbers over time (latency, error rate, throughput) via Prometheus +
+Grafana dashboards.</li>
+<li><strong>Distributed tracing</strong> &mdash; a <strong>correlation/trace ID</strong> attached to a
+request and passed to every service, so you can follow one request end-to-end (Jaeger, Zipkin).</li>
+</ul>
+<div class='note'><span class='lbl'>Layman analogy</span><p>The trace ID is a <strong>parcel tracking
+number</strong>. One number lets you see every depot the parcel passed through and where it got delayed &mdash;
+without it, a lost parcel among ten depots is a nightmare to trace.</p></div>
+</section><section class="card" id="deploy"><h3><span class="n">15</span>Deployment: Containers &amp; Orchestration</h3>
+<ul>
+<li><strong>Docker</strong> packages a service with everything it needs into a <strong>container</strong> &mdash;
+"it runs the same on my laptop and in production."</li>
+<li><strong>Kubernetes</strong> orchestrates many containers: scheduling, scaling up/down, restarting crashed
+ones, and rolling out new versions.</li>
+</ul>
+<div class='note'><span class='lbl'>Layman analogy</span><p>A container is a <strong>shipping container</strong>:
+standard box, moves the same on any truck, ship, or crane. Kubernetes is the <strong>port operator</strong>
+deciding where each container goes, adding more when busy, and replacing damaged ones.</p></div>
+<p>Safe release strategies: <strong>blue-green</strong> (run new version alongside old, then switch traffic)
+and <strong>canary</strong> (send a small % of traffic to the new version first, watch, then ramp up).</p>
+</section><section class="card" id="config"><h3><span class="n">16</span>Configuration &amp; Security</h3>
+<ul>
+<li><strong>Externalized/central config</strong> &mdash; keep settings outside the code (a config server or
+Kubernetes ConfigMaps/Secrets) so you change them without redeploying, and per environment.</li>
+<li><strong>Security</strong> &mdash; the API gateway handles authentication; services trust a signed
+<strong>JWT</strong> passed along. Internally, services use TLS (encrypted traffic) &mdash; often a
+<strong>service mesh</strong> (like Istio) handles this transparently.</li>
+</ul>
+<div class='note gold'><span class='lbl'>Zero trust</span><p>Don't assume "inside the network = safe." Each
+service verifies the caller's token and permissions, so a breach of one service doesn't hand over everything.</p></div>
+</section></div><div class="part"><div class="part-head"><span class="part-num">PART 6</span><h2>Quick-Fire Q&amp;A</h2></div><p style='margin:0 0 6px;color:var(--ink-soft)' id='quickfire'>Tap a question to reveal the answer.</p><div class="qa"><details class="q"><summary><span class="qmark">&gt;</span>Monolith vs microservices in one line?</summary><div class="answer"><p>A monolith is one deployable unit (one big kitchen); microservices are many small, independently deployable services (a food court of stalls).</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>When should you NOT use microservices?</summary><div class="answer"><p>Small apps/teams, early-stage products, or when you can't afford the ops overhead. Start with a good monolith and split when real pain appears.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>How do you decide service boundaries?</summary><div class="answer"><p>By business capability / bounded context, with each service owning its own data &mdash; high cohesion, loose coupling. Splitting by technical layer creates a distributed monolith.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>Why database per service?</summary><div class="answer"><p>So teams can change their schema independently; a shared DB re-couples services. The cost is no cross-service joins and needing sagas for consistency.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>What is a Saga?</summary><div class="answer"><p>A sequence of local transactions across services, each with a compensating action to undo it if a later step fails &mdash; like cancelling a hotel if the flight booking fails.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>Choreography vs orchestration?</summary><div class="answer"><p>Choreography: services react to each other's events, no central boss. Orchestration: a central coordinator directs each step &mdash; clearer but adds a component.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>What problem does the outbox pattern solve?</summary><div class="answer"><p>The dual-write problem &mdash; writing to the DB and publishing an event atomically. The event is saved in the same transaction (an outbox table) and published later reliably.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>What is a circuit breaker?</summary><div class="answer"><p>A safety mechanism that stops calling a failing dependency (trips open), fails fast during a cooldown, then tests recovery (half-open) &mdash; like an electrical fuse.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>Why is idempotency important?</summary><div class="answer"><p>Retries and at-least-once messaging can deliver duplicates; idempotent operations produce the same result on repeats, preventing double charges. Use idempotency keys.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>How do you debug a request across many services?</summary><div class="answer"><p>Distributed tracing with a correlation/trace ID passed through every service, plus centralized logs and metrics &mdash; like a parcel tracking number.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>Sync vs async communication?</summary><div class="answer"><p>Sync (REST/gRPC) waits for a reply (phone call); async (messaging) sends and moves on (texting). Prefer async events for resilient cross-service workflows.</p></div></details><details class="q"><summary><span class="qmark">&gt;</span>What is a distributed monolith?</summary><div class="answer"><p>Microservices so tightly coupled (shared DB, layer-based split) that they must be deployed together &mdash; all the complexity of distribution with none of the independence.</p></div></details></div></div><div class="part"><div class="part-head"><span class="part-num">PART 7</span><h2>Reference</h2></div><section class="card" id="cheatsheet"><h3><span class="n">memorize</span>Facts interviewers probe</h3>
+<div class='tbl-scroll'><table><thead><tr><th>Topic</th><th>Remember</th></tr></thead><tbody>
+<tr><td>Boundaries</td><td>business capability, own data</td></tr>
+<tr><td>Communication</td><td>async events for workflows, sync for immediate answers</td></tr>
+<tr><td>Gateway</td><td>single front door: routing, auth, rate limit</td></tr>
+<tr><td>Data</td><td>database per service; eventual consistency</td></tr>
+<tr><td>Transactions</td><td>Saga + compensating actions</td></tr>
+<tr><td>Dual write</td><td>Outbox pattern</td></tr>
+<tr><td>Resilience</td><td>timeout, retry+backoff, circuit breaker, bulkhead</td></tr>
+<tr><td>Duplicates</td><td>idempotency keys</td></tr>
+<tr><td>Debugging</td><td>trace/correlation IDs</td></tr>
+<tr><td>Ops</td><td>Docker + Kubernetes, canary/blue-green</td></tr>
+</tbody></table></div>
+</section><div class="tips" id="final-tips"><h3>Final tips for the interview</h3><ol><li>Frame microservices as a <strong>solution to scale/team pain</strong>, not a default.</li><li>Draw boundaries by <strong>business capability</strong>; avoid the distributed monolith.</li><li>Explain <strong>database per service</strong> and the eventual-consistency tradeoff.</li><li>Know <strong>Saga + compensating actions</strong> and the <strong>outbox pattern</strong>.</li><li>Cover <strong>resilience</strong>: timeouts, retries, circuit breaker, idempotency.</li><li>Mention <strong>tracing, containers, and canary releases</strong> for real-world credibility.</li></ol></div></div><p class="signoff">// good luck — think food court, not kitchen</p></main>
+</div>
+<script>
+  var toggle = document.querySelector('.toc-toggle');
+  var tocBody = document.getElementById('tocBody');
+  if (toggle) {
+    toggle.addEventListener('click', function () {
+      var open = tocBody.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    tocBody.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        if (window.matchMedia('(max-width:960px)').matches) {
+          tocBody.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  }
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var map = {};
+  links.forEach(function (l) {
+    var id = l.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if (el) map[id] = l;
+  });
+  var targets = Object.keys(map).map(function (id) { return document.getElementById(id); });
+  var current = null;
+  function setActive(id) {
+    if (current === id) return;
+    current = id;
+    links.forEach(function (l) { l.classList.remove('active'); });
+    if (map[id]) map[id].classList.add('active');
+  }
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) setActive(e.target.id); });
+  }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+  targets.forEach(function (t) { observer.observe(t); });
+</script>
+</body>
+</html>
