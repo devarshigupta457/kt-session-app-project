@@ -2,24 +2,22 @@
     <div class="nav-brand">
         <img src="assets/logo/1779300745807.jpg" alt="KTSession logo" class="logo">
         <h1>KTSession</h1>
-    </div>
-    <ul>
-        <li><a routerLink="/">Home</a></li>
-        <li><a routerLink="/courses">Courses</a></li>
-        <li><a routerLink="/cart">Favourites ({{ cartService.getCount() }})</a></li>
-        <li *ngIf="!(auth.user$ | async)"><a routerLink="/login">Login</a></li>
-        <li *ngIf="!(auth.user$ | async)"><a routerLink="/signup">Sign Up</a></li>
-        <li *ngIf="auth.user$ | async as user" class="nav-profile">
-            <button type="button" class="profile-button" (click)="toggleProfile()" aria-label="Open user profile">
-                <span class="profile-icon">👤</span>
-            </button>
-            <div class="profile-panel" *ngIf="showProfile">
-                <p class="profile-line"><strong>{{ user.username }}</strong></p>
-                <p class="profile-line">Role: {{ user.role }}</p>
-                <p class="profile-line">ID: {{ user.userId || 'N/A' }}</p>
-                <button type="button" class="logout-inline" (click)="logout()">Logout</button>
-            </div>
-        </li>
-
-    </ul>
+        <button class="menu-toggle" (click)="isMenuOpen = !isMenuOpen" [attr.aria-expanded]="isMenuOpen">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+            <!-- Menu Links -->
+        </div>
+        <ul [class.active]="isMenuOpen">
+            <li><a routerLink="/" (click)="isMenuOpen = false">Home</a></li>
+            <li><a routerLink="/courses" (click)="isMenuOpen = false">Courses</a></li>
+            <li><a routerLink="/cart" (click)="isMenuOpen = false">Favourites ({{ cartService.getCount() }})</a></li>
+            <li *ngIf="!(auth.user$ | async)"><a routerLink="/login" (click)="isMenuOpen = false">Login</a></li>
+            <li *ngIf="!(auth.user$ | async)"><a routerLink="/signup" (click)="isMenuOpen = false">Sign Up</a></li>
+            <li *ngIf="auth.user$ | async as user">
+                <a href="javascript:void(0)" (click)="logout(); isMenuOpen = false">Logout ({{ user.username }})</a>
+            </li>
+        </ul>
+<!-- Mobile Hamburger Toggle Button -->
 </nav>

@@ -1,1 +1,126 @@
-/* Component styles moved to src/styles.css to satisfy Angular component style budget. */
+/* Base navigation styling adjustments */
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 5%;
+    background: #174064;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    z-index: 1000;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-brand .logo {
+    height: 44px;
+    width: 44px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.nav h1 {
+    color: #f4f5f6;
+    margin: 0;
+    font-size: clamp(1.4rem, 5vw, 40px);
+}
+
+.nav ul {
+    display: inline-flex;
+    align-items: center;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    gap: 20px;
+}
+
+.nav li a {
+    position: relative;
+    text-decoration: none;
+    color: #f4f5f6;
+    padding-bottom: 3px;
+}
+
+/* Hide hamburger toggle on desktop */
+.menu-toggle {
+    display: none;
+    margin-left: auto;   /* Pushes it to the right */
+    display: none;   
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+    height: 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+}
+
+.menu-toggle .bar {
+    height: 2px;
+    width: 100%;
+    background-color: #f4f5f6;
+    transition: all 0.3s ease;
+}
+
+/* Mobile & Tablet view transitions (adjust breakpoint as needed) */
+@media (max-width: 768px) {
+    .nav-brand .logo {
+        height: 34px;
+        width: 34px;
+    }
+
+    /* Show the hamburger menu icon */
+    .menu-toggle {
+        display: flex;
+    }
+
+    /* Shift the menus into a collapsing drawer underneath the bar */
+    .nav ul {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        position: absolute;
+        top: 100%; /* Spans right below the header bar */
+        left: 0;
+        width: 100%;
+        background: #174064;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+        padding: 20px 5%;
+        box-sizing: border-box;
+        gap: 16px;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.3s ease-in-out, opacity 0.2s ease;
+        pointer-events: none;
+    }
+
+    /* When class .active is dynamically applied via Angular */
+    .nav ul.active {
+        max-height: 400px; /* Big enough to comfortably fit all items */
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .nav li {
+        width: 100%;
+        padding: 5px 0;
+    }
+
+    .nav-social {
+        margin-top: 10px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(244, 245, 246, 0.2);
+        width: 100%;
+    }
+}
