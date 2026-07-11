@@ -754,3 +754,21 @@
 
     margin-bottom:8px;
 }
+.title-section-supp{
+        display: none;
+    }
+
+
+@media (max-width: 768px) {
+    .ide-container{
+        display: none;
+    }
+    .title-section-supp{
+        display: contents;
+        text-align: center;
+        padding: 50px 50px 50px;
+        position: relative;
+        background: linear-gradient(180deg, #416ba3 0%, #4b75a6 100%);
+        overflow: hidden;
+    }
+}
