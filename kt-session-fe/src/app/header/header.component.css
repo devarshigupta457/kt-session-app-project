@@ -209,3 +209,55 @@
         width: 100%;
     }
 }
+
+
+
+
+.logo-title {
+    font-size: 2rem;
+    font-weight: 800;
+    font-family: 'Poppins', sans-serif;
+    color: #ffffff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+
+    text-shadow:
+        0 0 5px #ffffff,
+        0 0 10px #ffffff,
+        0 0 20px #ffffff,
+        0 0 40px #ffffff;
+
+    animation: glow 2s ease-in-out infinite alternate,
+               float 3s ease-in-out infinite;
+}
+
+@keyframes glow {
+    from {
+        text-shadow:
+            0 0 1px #ffffff,
+            0 0 1px #ffffff,
+            0 0 1px #ffffff;
+    }
+
+    to {
+        text-shadow:
+            0 0 1px #ffffff,
+            0 0 2px #ffffff,
+            0 0 2px #ffffff,
+            0 0 1px #ffffff;
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(5);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+
+    100% {
+        transform: translateY(5);
+    }
+}

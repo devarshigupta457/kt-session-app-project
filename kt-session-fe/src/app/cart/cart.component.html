@@ -1,22 +1,82 @@
-<div class="cart-wrap">
-  <h1>Your Favourite Courses, It's a great way to keep track of your learning!</h1>
+<div class="cart-wrap" >
+  
+  <div class="page-header">
+    <h1>⭐️ Your Favourite Courses</h1>
+    <p>Keep your favourite interview notes in one place.</p>
+  </div>
 
-  <p *ngIf="loading" class="cart-empty">Loading your favourites...</p>
-  <p *ngIf="error" class="cart-error">{{ error }}</p>
+  <p *ngIf="loading" class="cart-empty">
+    Loading your favourite courses...
+  </p>
+
+  <p *ngIf="error" class="cart-error">
+    {{ error }}
+  </p>
 
   <ng-container *ngIf="!loading">
-    <ng-container *ngIf="items$ | async as items">
-      <p *ngIf="!items.length" class="cart-empty">You have not saved any course to Favourites...</p>
 
-      <ul class="cart-list" *ngIf="items.length">
-        <li *ngFor="let item of items" class="cart-item">
-          <div>
-            <span class="cart-title">{{ item.title }}</span>
-            <span class="cart-price">₹{{ item.price }}</span>
+    <ng-container *ngIf="items$ | async as items">
+
+      <div class="empty-state" *ngIf="!items.length">
+
+        <h2>No Favourite Courses</h2>
+
+        <p>
+          Browse courses and add them to your favourites.
+        </p>
+
+        <a routerLink="/courses" class="browse-btn">
+          Browse Courses
+        </a>
+
+      </div>
+
+      <div class="cart-list" *ngIf="items.length">
+
+        <div
+          class="cart-item"
+          *ngFor="let item of items">
+        
+          <div class="course-icon">
+
+            {{ item.title.split(' ')[0] }}
+
           </div>
-          <button class="cart-remove" (click)="remove(item.id)">Remove</button>
-        </li>
-      </ul>
+
+          <div class="course-content">
+
+            <h3>{{ item.title }}</h3>
+
+            <p>
+              Interview Notes • Beginner Friendly
+            </p>
+
+          </div>
+
+          <div class="course-footer">
+
+            <span class="price">
+
+              {{ item.price == null ? 'FREE' : ('₹' + item.price) }}
+
+            </span>
+
+            <button
+              class="cart-remove"
+              (click)="remove(item.id)">
+
+              Remove
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </ng-container>
+
   </ng-container>
+
 </div>

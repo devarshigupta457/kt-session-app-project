@@ -1,56 +1,330 @@
-.cart-wrap {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 32px 24px;
+:host{
+    display:block;
+    background:#f6f9fc;
+    min-height:100vh;
 }
 
-.cart-wrap h1 {
-  color: #174064;
-  margin-bottom: 20px;
+/* Page */
+
+.cart-wrap{
+
+    width:95%;
+    max-width:1450px;
+    margin:auto;
+
+    padding:50px 0;
 }
 
-.cart-empty {
-  color: #667;
+/* Heading */
+
+.page-header{
+
+    margin-bottom:35px;
 }
 
-.cart-error {
-  color: #c0392b;
-  font-weight: 600;
+.page-header h1{
+
+    color:#174064;
+
+    font-size:2.4rem;
+
+    font-weight:700;
+
+    margin-bottom:10px;
 }
 
-.cart-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.page-header p{
+
+    color:#6b7280;
+
+    font-size:17px;
 }
 
-.cart-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 18px;
-  border: 1px solid #e0e6ec;
-  border-radius: 10px;
-  background: #fff;
+/* Horizontal Scroll */
+
+.cart-list{
+
+    display:flex;
+
+    gap:28px;
+
+    overflow-x:auto;
+
+    overflow-y:hidden;
+
+    scroll-behavior:smooth;
+
+    padding-bottom:20px;
+
+    scrollbar-width:none;
 }
 
-.cart-title {
-  font-weight: 600;
-  margin-right: 12px;
+.cart-list::-webkit-scrollbar{
+
+    display:none;
 }
 
-.cart-price {
-  color: #174064;
+/* Card */
+
+.cart-item{
+
+    flex:0 0 300px;
+
+    height:270px;
+
+    background:white;
+
+    border-radius:22px;
+
+    padding:25px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    border:1px solid #e5e7eb;
+
+    box-shadow:
+
+    0 12px 30px rgba(23,64,100,.08);
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
 }
 
-.cart-remove {
-  border: none;
-  background: #c0392b;
-  color: #fff;
-  padding: 8px 14px;
-  border-radius: 8px;
-  cursor: pointer;
+/* Animated border */
+
+.cart-item::before{
+
+  pointer-events: none;
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+
+    linear-gradient(
+        135deg,
+        transparent,
+        rgba(37,99,235,.06),
+        transparent
+    );
+
+    opacity:0;
+
+    transition:.4s;
+}
+
+.cart-item:hover{
+
+    transform:
+
+    translateY(-10px);
+
+    box-shadow:
+
+    0 20px 40px rgba(23,64,100,.18);
+}
+
+.cart-item:hover::before{
+
+    opacity:1;
+}
+
+/* Icon */
+
+.course-icon{
+
+    width:auto;
+
+    height:70px;
+
+    border-radius:18px;
+
+    background:
+
+    linear-gradient(
+    135deg,
+    #174064,
+    #174064);
+
+    color:white;
+
+    font-size:30px;
+
+    font-weight:bold;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    box-shadow:
+
+    0 8px 18px rgba(37,99,235,.25);
+}
+
+/* Title */
+
+.course-content{
+
+    flex:1;
+
+    margin-top:20px;
+}
+
+.course-content h3{
+
+    color:#174064;
+
+    font-size:22px;
+
+    margin-bottom:10px;
+
+    line-height:1.4;
+}
+
+.course-content p{
+
+    color:#6b7280;
+
+    font-size:15px;
+}
+
+/* Footer */
+
+.course-footer{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-top:20px;
+}
+
+.price{
+
+    font-size:22px;
+
+    font-weight:700;
+
+    color:#174064;
+}
+
+.cart-remove{
+
+    border:none;
+
+    background:#ef4444;
+
+    color:white;
+
+    padding:11px 22px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.cart-remove:hover{
+
+    background:#dc2626;
+
+    transform:scale(1.05);
+}
+
+/* Empty */
+
+.empty-state{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:70px;
+
+    text-align:center;
+
+    box-shadow:
+
+    0 10px 30px rgba(0,0,0,.05);
+}
+
+.browse-btn{
+
+    display:inline-block;
+
+    margin-top:25px;
+
+    background:#174064;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:14px 26px;
+
+    border-radius:10px;
+
+    transition:.3s;
+}
+
+.browse-btn:hover{
+
+    background:#2563eb;
+}
+
+/* Messages */
+
+.cart-empty,
+.cart-error{
+
+    font-size:18px;
+
+    margin-top:30px;
+}
+
+.cart-error{
+
+    color:#dc2626;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+.page-header h1{
+
+font-size:32px;
+
+}
+
+.cart-item{
+
+flex:0 0 260px;
+
+height:250px;
+
+}
+
+.course-content h3{
+
+font-size:19px;
+
+}
 }

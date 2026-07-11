@@ -19,6 +19,10 @@ export class AddFormService {
     this.openState.next(true);
   }
 
+  getCourse(): number {
+    return this.editCourse.value ? 1 : 0;
+  }
+
   openForEdit(course: Course): void {
     this.editCourse.next(course);
     this.openState.next(true);
