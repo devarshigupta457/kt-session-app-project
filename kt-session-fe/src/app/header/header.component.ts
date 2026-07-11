@@ -4,15 +4,21 @@ import { CartService } from '../services/cart.service';
 import { AuthService } from '../services/auth.service';
 
 @Component({
+  
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
   isMenuOpen: boolean = false;
+    showProfile = false;
   constructor(public cartService: CartService, public auth: AuthService, private router: Router){}
   ngOnInit(): void {
 
+  }
+
+  toggleProfile(): void {
+    this.showProfile = !this.showProfile;
   }
 
   logout(): void {
