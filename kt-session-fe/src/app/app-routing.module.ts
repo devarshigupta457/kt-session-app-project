@@ -8,12 +8,19 @@ import { SignupComponent } from './signup/signup.component';
 import { VerifyOtpComponent } from './verify-otp/verify-otp.component';
 import { CartComponent } from './cart/cart.component';
 import { AuthGuard } from './services/auth.guard';
+import { CodeEditorComponent } from './pages/code-editor/code-editor.component';
+
+
 
 const routes: Routes = [
+  
   {
     path:'',
     component:HomeComponent,
     data:{ animation:'home' },
+  },{
+    path: 'code-editor',
+    component: CodeEditorComponent
   },
   {
     path:'courses',
