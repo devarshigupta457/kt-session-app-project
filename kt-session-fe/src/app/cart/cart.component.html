@@ -35,7 +35,7 @@
 
         <div
           class="cart-item"
-          *ngFor="let item of items">
+          *ngFor="let item of items" (click)="openCourse(item.link)">
         
           <div class="course-icon">
 
@@ -79,4 +79,45 @@
 
   </ng-container>
 
+  
+  <section class="learning-info">
+  
+      <h2>🚀 Continue Your Learning Journey with KTSession</h2>
+  
+      <p>
+          Every course in your favourites is carefully selected to help you become
+          interview-ready. Master Java, Spring Boot, Microservices, SQL, Kafka,
+          Hibernate, and other backend technologies through structured notes,
+          real-world examples, coding exercises, and interview-focused questions.
+      </p>
+  
+      <div class="info-grid">
+  
+          <div class="info-card">
+              <span>📘</span>
+              <h3>Interview Focused</h3>
+              <p>Learn concepts that are frequently asked in real Java backend interviews.</p>
+          </div>
+  
+          <div class="info-card">
+              <span>💻</span>
+              <h3>Hands-on Examples</h3>
+              <p>Understand every topic with practical examples and production-ready code.</p>
+          </div>
+  
+          <div class="info-card">
+              <span>🎯</span>
+              <h3>Structured Learning</h3>
+              <p>Follow a step-by-step roadmap from Core Java to System Design.</p>
+          </div>
+  
+          <div class="info-card">
+              <span>🏆</span>
+              <h3>Career Growth</h3>
+              <p>Prepare confidently for interviews and advance your backend development career.</p>
+          </div>
+  
+      </div>
+  
+  </section>
 </div>
