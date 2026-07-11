@@ -23,6 +23,8 @@ export class CartComponent implements OnInit {
     this.items$ = this.cartService.items$;
   }
 
+  
+
   ngOnInit(): void {
     this.loading = true;
     this.error = '';
@@ -45,8 +47,7 @@ export class CartComponent implements OnInit {
     });
   }
 
-  openCourse(course: Course, event?: Event): void {
-    event?.stopPropagation();
-    this.router.navigate(['/course-view'], { queryParams: { src: course.link } });
+  openCourse(link: string): void {
+    this.router.navigate(['/courses'+ link]);
   }
 }
