@@ -557,7 +557,7 @@ color:  #174064;
     }
     .nav-brand{
         width: 100%;
-        justify-content: space-between;
+        /* justify-content: space-between; */
     }
     .nav-brand .logo{
         height: 38px;

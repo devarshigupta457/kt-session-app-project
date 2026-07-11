@@ -52,6 +52,8 @@
 /* Hide hamburger toggle on desktop */
 .menu-toggle {
     display: none;
+    margin-left: auto;   /* Pushes it to the right */
+    display: none;   
     flex-direction: column;
     justify-content: space-between;
     width: 24px;
