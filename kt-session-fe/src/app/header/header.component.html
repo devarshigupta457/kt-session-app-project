@@ -25,5 +25,6 @@
         <li><a routerLink="/cart" (click)="isMenuOpen = false">Favourites ({{ cartService.getCount() }})</a></li>
         <li *ngIf="!(auth.user$ | async)"><a routerLink="/login" (click)="isMenuOpen = false">Login</a></li>
         <li *ngIf="!(auth.user$ | async)"><a routerLink="/signup" (click)="isMenuOpen = false">Sign Up</a></li>
+        <li><a routerLink="/code-editor" (click)="isMenuOpen = false">KTS Playground</a></li>
     </ul>
 </nav>

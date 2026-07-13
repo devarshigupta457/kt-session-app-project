@@ -16,6 +16,7 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { VerifyOtpComponent } from './verify-otp/verify-otp.component';
 import { CartComponent } from './cart/cart.component';
+import { CodeEditorComponent } from './pages/code-editor/code-editor.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { CartComponent } from './cart/cart.component';
     LoginComponent,
     SignupComponent,
     VerifyOtpComponent,
-    CartComponent
+    CartComponent,
+    CodeEditorComponent
   ],
   imports: [
     BrowserModule,

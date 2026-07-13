@@ -1,0 +1,774 @@
+/* ===========================================
+   KTSession IDE Theme
+=========================================== */
+
+:root{
+    --primary:#174064;
+    --secondary:#2563EB;
+    --accent:#4F9CFF;
+    --success:#16A34A;
+    --danger:#DC2626;
+
+    --bg:#F4F7FC;
+    --card:#FFFFFF;
+
+    --text:#1E293B;
+    --muted:#64748B;
+
+    --border:#E2E8F0;
+
+    --terminal:#111827;
+
+    --shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+.ide-container{
+
+    width:100%;
+
+    min-height:100vh;
+
+    padding:25px;
+
+    background:linear-gradient(
+        180deg,
+        #f7faff 0%,
+        #edf4ff 100%
+    );
+}
+
+/* ================= HEADER ================= */
+
+.ide-header{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:20px 30px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    box-shadow:var(--shadow);
+
+    margin-bottom:25px;
+
+    transition:.3s;
+}
+
+.ide-header:hover{
+
+    transform:translateY(-2px);
+}
+
+.header-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+}
+
+.logo-circle{
+
+    width:60px;
+
+    height:60px;
+
+    border-radius:16px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    color:white;
+
+    font-size:26px;
+
+    box-shadow:0 8px 20px rgba(37,99,235,.25);
+}
+
+.title-section h2{
+
+    color:var(--primary);
+
+    font-size:26px;
+
+    font-weight:700;
+}
+
+.title-section p{
+
+    color:var(--muted);
+
+    margin-top:4px;
+
+    font-size:14px;
+}
+
+.header-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+}
+
+.language-select{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+}
+
+.language-select label{
+
+    font-size:12px;
+
+    color:var(--muted);
+
+    font-weight:600;
+}
+
+.language-select select{
+
+    height:44px;
+
+    border-radius:10px;
+
+    border:1px solid var(--border);
+
+    padding:0 16px;
+
+    outline:none;
+
+    font-size:15px;
+
+    min-width:150px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.language-select select:hover{
+
+    border-color:var(--secondary);
+}
+
+/* ================= BUTTONS ================= */
+
+.btn{
+
+    height:45px;
+
+    padding:0 24px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    transition:.25s;
+
+    font-size:15px;
+}
+
+.btn i{
+
+    font-size:14px;
+}
+
+.btn-light{
+
+    background:#EEF3F9;
+
+    color:var(--primary);
+}
+
+.btn-light:hover{
+
+    background:#E3ECF9;
+    transform:translateY(-2px);
+}
+
+.btn-success{
+
+    background:var(--success);
+
+    color:green;
+}
+
+.btn-success:hover{
+
+    background:#14803C;
+    color: white;
+    transform:translateY(-2px);
+
+    box-shadow:0 10px 20px rgba(22,163,74,.25);
+}
+
+.btn-primary{
+
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    color:white;
+}
+
+.btn-primary:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 10px 25px rgba(23,64,100,.25);
+}
+
+/* ================= BODY ================= */
+
+.ide-body{
+
+    display:grid;
+
+    grid-template-columns:360px 1fr;
+
+    gap:25px;
+
+    margin-bottom:25px;
+}
+
+/* ================= SIDEBAR ================= */
+
+.problem-panel{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:var(--shadow);
+
+    overflow:auto;
+
+    max-height:760px;
+}
+
+.problem-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+}
+
+.difficulty{
+
+    padding:8px 16px;
+
+    border-radius:25px;
+
+    font-size:13px;
+
+    font-weight:700;
+}
+
+.easy{
+
+    background:#DCFCE7;
+
+    color:#15803D;
+}
+
+.points{
+
+    color:var(--secondary);
+
+    font-weight:700;
+}
+
+.problem-panel h2{
+
+    color:var(--primary);
+
+    margin-bottom:15px;
+
+    line-height:1.4;
+}
+
+.problem-panel p{
+
+    color:#475569;
+
+    line-height:1.8;
+
+    margin-bottom:20px;
+}
+
+.section{
+
+    margin-top:28px;
+}
+
+.section h3{
+
+    color:var(--primary);
+
+    margin-bottom:12px;
+
+    font-size:17px;
+
+    position:relative;
+
+    padding-left:12px;
+}
+
+.section h3::before{
+
+    content:"";
+
+    width:4px;
+
+    height:18px;
+
+    background:var(--secondary);
+
+    position:absolute;
+
+    left:0;
+
+    top:2px;
+
+    border-radius:20px;
+}
+
+.section pre{
+
+    background:#EEF4FF;
+
+    padding:16px;
+
+    border-radius:10px;
+
+    font-size:14px;
+
+    color:#174064;
+
+    overflow:auto;
+}
+
+.section ul{
+
+    padding-left:20px;
+
+    color:#475569;
+}
+
+.section li{
+
+    margin:10px 0;
+}
+
+/* ================= TAGS ================= */
+
+.tags{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+}
+
+.tags span{
+
+    background:#E8F0FF;
+
+    color:var(--secondary);
+
+    padding:8px 14px;
+
+    border-radius:25px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.tags span:hover{
+
+    background:var(--secondary);
+
+    color:white;
+}
+
+/* ================= EDITOR ================= */
+
+.editor-panel{
+
+    background:white;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    display:flex;
+
+    flex-direction:column;
+
+    box-shadow:var(--shadow);
+
+    min-height:760px;
+}
+
+.editor-header{
+
+    height:60px;
+
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    color:white;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 24px;
+
+    font-weight:600;
+}
+
+.editor-actions{
+
+    font-size:14px;
+
+    opacity:.9;
+}
+
+#editor{
+
+    flex:1;
+
+    background:#1E1E1E;
+}
+
+
+/* ============================
+   CONSOLE OUTPUT
+============================ */
+
+.terminal {
+
+    margin-top: 25px;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    background: #0d1117;
+
+    box-shadow: 0 15px 35px rgba(0,0,0,.15);
+
+    border: 1px solid #1f2937;
+}
+
+.terminal-header {
+
+    height: 55px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 0 20px;
+
+    background: linear-gradient(
+        135deg,
+        #1f2937,
+        #111827
+    );
+
+    color: white;
+
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.terminal-header div{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-weight:600;
+
+    font-size:15px;
+}
+
+.terminal-header i{
+
+    color:#22c55e;
+}
+
+.terminal-header button{
+
+    background:#374151;
+
+    border:none;
+
+    color:white;
+
+    padding:8px 18px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.terminal-header button:hover{
+
+    background:#2563EB;
+}
+
+.terminal-body{
+
+    background:#0d1117;
+
+    min-height:220px;
+
+    max-height:350px;
+
+    overflow:auto;
+
+    padding:25px;
+}
+
+.terminal-body pre{
+
+    margin:0;
+
+    color:#22c55e;
+
+    font-size:15px;
+
+    line-height:1.8;
+
+    font-family:"JetBrains Mono",
+    "Fira Code",
+    Consolas,
+    monospace;
+
+    white-space:pre-wrap;
+
+    word-break:break-word;
+}
+
+/* Fake terminal prompt */
+
+.terminal-body pre::before{
+
+    content:"KTSession > ";
+
+    color:#60a5fa;
+
+    font-weight:bold;
+}
+
+/* Scrollbar */
+
+.terminal-body::-webkit-scrollbar{
+
+    width:8px;
+}
+
+.terminal-body::-webkit-scrollbar-thumb{
+
+    background:#374151;
+
+    border-radius:10px;
+}
+
+.terminal-body::-webkit-scrollbar-thumb:hover{
+
+    background:#4b5563;
+}
+
+/* ===========================================
+   STATUS BAR
+=========================================== */
+
+.stats-bar{
+
+    margin-top:20px;
+
+    background:linear-gradient(135deg,#174064,#174064);
+
+    border-radius:16px;
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:20px;
+
+    padding:18px 25px;
+
+    color:white;
+
+    box-shadow:0 12px 30px rgba(23,64,100,.20);
+
+    overflow:hidden;
+}
+
+.stats-bar div{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:15px;
+
+    border-radius:12px;
+
+    background:rgba(255,255,255,.08);
+
+    backdrop-filter:blur(8px);
+
+    transition:.3s;
+}
+
+.stats-bar div:hover{
+
+    transform:translateY(-4px);
+
+    background:rgba(255,255,255,.15);
+}
+
+.stats-bar strong{
+
+    font-size:13px;
+
+    font-weight:600;
+
+    color:#DCEBFF;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    margin-bottom:8px;
+}
+
+.stats-bar div{
+
+    font-size:18px;
+
+    font-weight:700;
+}
+
+.stats-bar div:nth-child(1)::before{
+
+    content:"🟢";
+
+    font-size:18px;
+
+    margin-bottom:8px;
+}
+
+.stats-bar div:nth-child(2)::before{
+
+    content:"☕";
+
+    font-size:18px;
+
+    margin-bottom:8px;
+}
+
+.stats-bar div:nth-child(3)::before{
+
+    content:"⚡";
+
+    font-size:18px;
+
+    margin-bottom:8px;
+}
+
+.stats-bar div:nth-child(4)::before{
+
+    content:"💾";
+
+    font-size:18px;
+
+    margin-bottom:8px;
+}
+.title-section-supp{
+        display: none;
+    }
+
+
+@media (max-width: 768px) {
+    .ide-container{
+        display: none;
+    }
+    .title-section-supp{
+        display: contents;
+        text-align: center;
+        padding: 50px 50px 50px;
+        position: relative;
+        background: linear-gradient(180deg, #416ba3 0%, #4b75a6 100%);
+        overflow: hidden;
+    }
+}
