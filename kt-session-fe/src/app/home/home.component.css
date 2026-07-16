@@ -1,1 +1,257 @@
 /* home component styles moved to global styles.css to satisfy Angular component budget */
+.kts-found{
+    display: flex;
+    width: auto;
+    justify-content: space-around;
+    align-items: center;
+    padding: 5% 5% 5% 5%;
+    background: #174064;
+    color: white;
+    text-align: center;
+    position: relative;
+    background: linear-gradient(5deg, #f5f7f8 ,#174064 ,#174064 0%, #f5f7f8 80%);
+    overflow: hidden;
+}
+/* 5e90c9 */
+.founder{
+    color: white;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border:1px solid;
+}
+
+.founder:hover{
+    color: black;
+    border-radius: 50%;
+    border:1px solid;
+    transform:scale(1.2);
+}
+
+@media (max-width: 760px) {
+  .kts-found{ 
+      flex-direction: column;
+    flex-wrap: wrap;
+  }
+}
+
+/* ===========================
+   ABOUT SECTION
+=========================== */
+
+.KTS-about {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 50px;
+    background: linear-gradient(135deg, #ffffff 0%, #f7fbff 100%);
+    border-radius: 24px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+    animation: fadeUp 0.8s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.KTS-about::before {
+    content: "";
+    position: absolute;
+    top: -120px;
+    right: -120px;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: rgba(37, 99, 235, 0.08);
+}
+
+.KTS-about::after {
+    content: "";
+    position: absolute;
+    bottom: -100px;
+    left: -100px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: rgba(79, 156, 255, 0.08);
+}
+
+/* ===========================
+   MAIN HEADING
+=========================== */
+
+.KTS-about h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #174064;
+    margin-top: 40px;
+    margin-bottom: 18px;
+    position: relative;
+    display: inline-block;
+}
+
+.KTS-about h1:first-child {
+    margin-top: 0;
+}
+
+.KTS-about h1::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 70px;
+    height: 4px;
+    border-radius: 20px;
+    background: linear-gradient(90deg, #174064, #174064, #174064);
+}
+
+/* ===========================
+   TAGLINE
+=========================== */
+
+.KTS-about p:first-of-type {
+    font-size: 1.35rem;
+    color: #174064;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+/* ===========================
+   PARAGRAPHS
+=========================== */
+
+.KTS-about p {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: #4b5563;
+    margin-bottom: 25px;
+}
+
+/* ===========================
+   OFFER LIST
+=========================== */
+
+.KTS-about p:nth-of-type(2) {
+    background: #f8fbff;
+    border-left: 5px solid #174064;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+/* ===========================
+   HOVER EFFECT
+=========================== */
+
+.KTS-about:hover {
+    transform: translateY(-6px);
+    transition: all .35s ease;
+    box-shadow: 0 30px 60px rgba(0,0,0,.12);
+}
+
+/* ===========================
+   ANIMATION
+=========================== */
+
+@keyframes fadeUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media (max-width:1024px){
+
+    .KTS-about{
+        margin:40px 25px;
+        padding:40px;
+    }
+
+}
+
+@media (max-width:768px){
+
+    .KTS-about{
+
+        margin:30px 15px;
+        padding:30px 20px;
+
+    }
+
+    .KTS-about h1{
+
+        font-size:1.8rem;
+
+    }
+
+    .KTS-about p:first-of-type{
+
+        font-size:1.15rem;
+
+    }
+
+    .KTS-about p{
+
+        font-size:1rem;
+        line-height:1.8;
+
+    }
+
+}
+
+@media (max-width:480px){
+
+    .KTS-about{
+
+        padding:22px 18px;
+        border-radius:16px;
+
+    }
+
+    .KTS-about h1{
+
+        font-size:1.5rem;
+
+    }
+
+    .KTS-about p{
+
+        font-size:.95rem;
+
+    }
+
+}
+
+.offer-list {
+    list-style: none;
+    padding: 25px;
+    margin: 0;
+    background: #f8fbff;
+    border-left: 5px solid #174064;
+    border-radius: 12px;
+}
+
+.offer-list li {
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 18px;
+    color: #374151;
+    line-height: 1.7;
+    font-size: 1.02rem;
+}
+
+.offer-list li::before {
+    content: "✔";
+    position: absolute;
+    left: 0;
+    color: #10b981;
+    font-weight: bold;
+    font-size: 18px;
+}
