@@ -149,12 +149,7 @@
 
     border-radius:18px;
 
-    background:
-
-    linear-gradient(
-    135deg,
-    #174064,
-    #174064);
+    background: linear-gradient(180deg, #9bc6ec 0%, #174064  ,#174064, #174064 100%);
 
     color:white;
 
@@ -226,7 +221,7 @@
 
     border:none;
 
-    background:#ef4444;
+    background:#cc1f1f;
 
     color:white;
 
@@ -243,7 +238,7 @@
 
 .cart-remove:hover{
 
-    background:#dc2626;
+    background: #f42c2c;
 
     transform:scale(1.05);
 }
@@ -334,7 +329,9 @@ font-size:19px;
 
     margin-top:70px;
 
-    background:linear-gradient(135deg,#174064,#174064);
+    background: linear-gradient(170deg, #f5f7f8 ,#174064 ,#174064 0%, #f5f7f8 120%);
+
+    /* background: linear-gradient(180deg, #9bc6ec 0%, #2667a0  ,#235e93, #174064 100%); */
 
     color:white;
 
@@ -342,7 +339,7 @@ font-size:19px;
 
     border-radius:20px;
 
-    box-shadow:0 15px 40px rgba(23,64,100,.15);
+    box-shadow:0 15px 40px rgba(154, 167, 178, 0.15);
 }
 
 .learning-info h2{
