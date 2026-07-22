@@ -6,7 +6,8 @@
     align-items: center;
     padding: 5% 5% 5% 5%;
     background: #174064;
-    color: white;
+    color: #174064;
+    font-weight: bolder;
     text-align: center;
     position: relative;
     background: linear-gradient(5deg, #f5f7f8 ,#174064 ,#174064 0%, #f5f7f8 80%);
@@ -143,6 +144,7 @@
     transform: translateY(-6px);
     transition: all .35s ease;
     box-shadow: 0 30px 60px rgba(0,0,0,.12);
+    
 }
 
 /* ===========================
