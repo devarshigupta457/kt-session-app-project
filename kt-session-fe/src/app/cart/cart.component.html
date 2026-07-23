@@ -35,8 +35,7 @@
 
         <div
           class="cart-item"
-          *ngFor="let item of items" (click)="openCourse(item.link)">
-        
+          *ngFor="let item of items" (click)="openCourse(item.link)" (click)="alert(item.link)">
           <div class="course-icon">
 
             {{ item.title.split(' ')[0] }}

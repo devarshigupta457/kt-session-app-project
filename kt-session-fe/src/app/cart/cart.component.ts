@@ -50,4 +50,15 @@ export class CartComponent implements OnInit {
   openCourse(link: string): void {
     this.router.navigate(['/courses'+ link]);
   }
+
+  alert(link: string): void {
+    // alert('You are about to be redirected to an external site: ' + link);
+    this.router.navigate(['/course-view'], {
+      queryParams: { src: link }
+    });
+    
+  }
+
+
+
 }

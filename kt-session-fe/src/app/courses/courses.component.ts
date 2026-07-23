@@ -104,7 +104,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
   openCourse(course: Course, event?: Event): void {
     event?.stopPropagation();
     this.router.navigate(['/course-view'], {
-      queryParams: { src: course.link }
+      queryParams: { src: course.link}
     });
   }
 
