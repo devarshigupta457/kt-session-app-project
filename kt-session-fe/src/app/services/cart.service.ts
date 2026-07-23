@@ -73,20 +73,37 @@ export class CartService {
       })
     );
   }
+private favouritesLoaded = false;
 
   fetchFavorites(): Observable<CartItem[]> {
-    const userId = this.auth.currentUser?.userId;
-    if (!userId) {
-      this.itemsSubject.next([]);
-      return of([]);
-    }
 
-    return this.http.post<any>(`${environment.apiUrl}/kt-session/fetchFavoriteCourse`, { userId }).pipe(
+  const userId = this.auth.currentUser?.userId;
+  
+
+  if (!userId) {
+    this.itemsSubject.next([]);
+    this.favouritesLoaded = false;
+    return of([]);
+  }
+
+  if (this.favouritesLoaded) {
+    return of(this.itemsSubject.value);
+  }
+
+  return this.http.post<any>(
+      `${environment.apiUrl}/kt-session/fetchFavoriteCourse`,
+      { userId }
+    )
+    .pipe(
       tap(response => {
-        this.itemsSubject.next(this.normalizeFavoriteResponse(response));
+        this.itemsSubject.next(
+          this.normalizeFavoriteResponse(response)
+        );
+
+        this.favouritesLoaded = true;
       })
     );
-  }
+}
 
   private buildPayload(courseId: string): FavoritePayload | null {
     const userId = this.auth.currentUser?.userId;
